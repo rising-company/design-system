@@ -1,0 +1,164 @@
+# Rising Company Design System
+
+> Mission control / technical HUD aesthetic — dark backgrounds, monospace system labels, mint-green accents, scanline textures, generous spacing.
+
+## Fonts
+
+Import: https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Rajdhani:wght@300;500;700&display=swap
+
+- Display/Content: "Rajdhani", sans-serif — weights 300, 500, 700
+- System/Technical: "Share Tech Mono", monospace
+
+## Colors
+
+### Backgrounds
+- Base: #0a0c10 — page background
+- Surface: #0d1117 — cards, panels, elevated containers
+- Surface Hover: #0f1520 — interactive surface hover state
+- Inset: #0a1410 — badge backgrounds, recessed areas
+
+### Borders
+- Default: #1a2a20 — card borders, dividers
+- Hover: #2a4a38 — card hover borders
+- Subtle: #1a3020 — badge borders, faint separators
+- Grid: #111820 — background structural lines
+
+### Text
+- Heading: #e8f4ff — page titles, card titles, tooltip names
+- Body: #c8d8e8 — primary body text, legend labels
+- Muted: #6a8a80 — descriptions, secondary body text
+- Subtle: #4a6a5a — subtitles, secondary mono text
+- Label: #3a5a50 — section titles, stat labels, control hints
+- Dim: #2a3a30 — footer text, lowest emphasis
+
+### Accents
+- Primary (Mint): #3af0a0 — eyebrows, stat values, active highlights
+- Secondary (Blue): #2a7adf — gradient endpoints, secondary accent
+- Danger (Red): #cc2200 — error/danger states
+- Warning (Amber): #ddaa30 — warning/caution states
+
+### Accent Derivatives
+- Primary @ 25% alpha: #3af0a040 — corner bracket borders
+- Primary @ 31% alpha: #3af0a050 — tooltip borders
+- Gradient: linear-gradient(90deg, #3af0a0, #2a7adf) — card hover top-border
+
+## Text Styles
+
+| Style | Family | Size | Weight | Letter-Spacing | Transform | Color |
+|---|---|---|---|---|---|---|
+| Eyebrow | Share Tech Mono | 10px | normal | 4px | uppercase | #3af0a0 |
+| Page Title | Rajdhani | 36px | 700 | 3px | uppercase | #e8f4ff |
+| Section Heading | Rajdhani | 28px | 700 | 2px | none | #e8f4ff |
+| Card Title | Rajdhani | 20px | 700 | 1px | none | #e8f4ff |
+| Body | Rajdhani | 13px | 400 | normal | none | #6a8a80 |
+| Stat Value | Share Tech Mono | 16px | normal | 1px | none | #3af0a0 |
+| Subtitle | Share Tech Mono | 11px | normal | 2px | none | #4a6a5a |
+| Section Label | Share Tech Mono | 9px | normal | 4px | uppercase | #3a5a50 |
+| Badge | Share Tech Mono | 9px | normal | 1px | none | #3a5a50 |
+| Footer | Share Tech Mono | 9px | normal | 2px | none | #2a3a30 |
+
+## Spacing
+
+- Page: 48px — header, main, side padding
+- Section: 32px — between major sections
+- Element: 24px — card padding, footer vertical padding
+- Grid: 16px — grid gap between cards
+- Inline: 12px — gap between badges
+- Tight: 8px — between related text elements
+
+## Border Radius
+
+- Card: 6px — cards, panels
+- Tooltip: 4px — tooltips, floating elements
+- Badge: 3px — badges, small tags
+
+## Transitions
+
+All interactive transitions: 0.2s default easing. Properties: border-color, background, color, opacity.
+
+## Visual Effects
+
+### Scanlines (required on every page)
+Fixed overlay, pointer-events: none, z-index: 100:
+```css
+background: repeating-linear-gradient(
+  to bottom,
+  transparent 0px, transparent 3px,
+  rgba(0,0,0,0.04) 3px, rgba(0,0,0,0.04) 4px
+);
+```
+
+### Corner Brackets
+32x32px L-shaped borders at viewport corners. Border color: #3af0a040. Positioned 16px from edges. Use border-top + border-left for top-left, etc.
+
+### Card Hover Gradient
+2px bar at card top: linear-gradient(90deg, #3af0a0, #2a7adf). Hidden (opacity: 0) by default, opacity: 1 on hover.
+
+## Components
+
+### Card
+Structure: eyebrow tag → title → description → badge row
+- Container: background #0d1117, border 1px solid #1a2a20, border-radius 6px, padding 24px
+- Hover: background #0f1520, border-color #2a4a38, gradient top-bar opacity 1
+- Gradient bar: position absolute, top 0, left 0, right 0, height 2px
+- Arrow indicator: position absolute, bottom 24px, right 24px, mono font, color #1a3a2a → #3af0a0 on hover
+
+### Badge
+- Font: Share Tech Mono, 9px, letter-spacing 1px
+- Background: #0a1410, border: 1px solid #1a3020, border-radius 3px, padding 3px 7px
+
+### Stats Panel
+Vertical stack of stat rows:
+- Label: Share Tech Mono, 9px, letter-spacing 2px, uppercase, color #3a5a50
+- Value: Share Tech Mono, 16px, letter-spacing 1px, color #3af0a0
+
+### Tooltip
+- Background: rgba(10, 12, 16, 0.92), border: 1px solid #3af0a050, border-radius 4px, padding 8px 12px
+- Name: 13px, font-weight 700, color #e8f4ff, letter-spacing 1px
+- Material line: Share Tech Mono, 9px, color #3af0a0, letter-spacing 2px
+- Description: 11px, color #7a9a9a, line-height 1.4
+
+### Header
+- Structure: eyebrow → page title → subtitle
+- Padding: 48px 48px 32px, border-bottom: 1px solid #1a2a20
+
+### Footer
+- Font: Share Tech Mono, 9px, color #2a3a30, letter-spacing 2px
+- Padding: 24px 48px, border-top: 1px solid #1a2a20
+
+### Grid Layout
+- display: grid
+- grid-template-columns: repeat(auto-fill, minmax(280px, 1fr))
+- gap: 16px
+
+### HUD Overlay
+Full-viewport overlay with pointer-events: none containing:
+- Scanlines layer
+- 4 corner brackets (tl, tr, bl, br)
+- Content blocks positioned absolute (title top-left, stats top-right, legend bottom-left, controls bottom-right)
+
+## Voice & Tone
+
+### // Prefix Convention
+Eyebrow text, section labels, legend titles, and footers use the "//" prefix. Signals system commentary — framing/annotating, not informing. Examples: "// RV Power Systems", "// Materials", "// Diagrams"
+
+### Case Rules
+- Uppercase: eyebrows, section labels, page titles, stat labels
+- Normal case: card titles, body text, descriptions, tooltip content
+
+### Font Roles
+- Share Tech Mono: HUD readouts — labels, stats, badges, eyebrows, footers, metadata
+- Rajdhani: human content — titles, descriptions, body text
+
+### Copy Style
+- Terse technical fragments, not full sentences
+- Em dashes (—) over commas for joining
+- Middle dot (·) as inline separator: "SYSTEM A · SYSTEM B"
+- No exclamation marks. No emoji. No casual language.
+
+### Layout Philosophy
+- Dark-first: background is a feature, not empty space. 48px page margins.
+- Sparse grids: auto-fill responsive, ample gap. Content breathes.
+- Layered depth: Base → Surface → Surface Hover. Elevation through background shifts, not shadows.
+- Subtle interaction: 0.2s transitions, border shifts, gradient reveals. Nothing bounces.
+- Scanlines always present on every page.
