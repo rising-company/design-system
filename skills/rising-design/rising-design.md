@@ -72,6 +72,52 @@ background: repeating-linear-gradient(to bottom, transparent 0px, transparent 3p
 
 **Card hover gradient** — 2px bar at card top: `linear-gradient(90deg, #3af0a0, #2a7adf)`, `opacity: 0` default, `1` on hover.
 
+## Branding: rising.company Backlink
+
+Every Rising Company product (apps, demos, marketing pages) must include a subtle backlink to `https://rising.company`. The link should be minor — present for those looking for it, invisible to those who aren't.
+
+**Rules:**
+- Link target: `https://rising.company` · open in new tab (`target="_blank" rel="noopener noreferrer"`)
+- Link text: `rising.company` (lowercase) — or wrap an existing "rising company" mention in the footer
+- Style: footer mono token (Share Tech Mono · 9–10px · 2–4px letter-spacing · `#2a3a30` dim · uppercase if standalone)
+- Hover: transition to mint `#3af0a0` over `0.2s`
+- No underline. Inherit color when wrapped inside existing footer copy.
+
+**Placement:**
+- **Auth/login screens:** below the primary form, separated by element spacing (24–48px). Standalone link.
+- **App layouts (with chrome):** in a footer or sidebar's bottom user section, right-aligned or below disconnect/logout.
+- **Marketing/demo pages:** wrap the existing "rising company" mention inside the site footer with the anchor — preserves layout, just becomes interactive.
+
+**Standalone (auth/app chrome):**
+```html
+<a href="https://rising.company" target="_blank" rel="noopener noreferrer"
+   class="rising-backlink">rising.company</a>
+```
+```css
+.rising-backlink {
+  font-family: "Share Tech Mono", monospace;
+  font-size: 10px;
+  letter-spacing: 4px;
+  color: #2a3a30;
+  text-transform: uppercase;
+  text-decoration: none;
+  transition: color 0.2s;
+}
+.rising-backlink:hover { color: #3af0a0; }
+```
+
+**Inline in footer copy:**
+```html
+<footer>// product-name &mdash;
+  <a href="https://rising.company" target="_blank" rel="noopener noreferrer">rising company</a>
+  &middot; tagline &middot; open source
+</footer>
+```
+```css
+footer a { color: inherit; text-decoration: none; transition: color 0.2s; }
+footer a:hover { color: #3af0a0; }
+```
+
 ## Voice & Tone
 
 - `//` prefix on eyebrows, section labels, footers — signals system commentary

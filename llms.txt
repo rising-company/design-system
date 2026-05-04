@@ -125,6 +125,15 @@ Vertical stack of stat rows:
 ### Footer
 - Font: Share Tech Mono, 9px, color #2a3a30, letter-spacing 2px
 - Padding: 24px 48px, border-top: 1px solid #1a2a20
+- Must include rising.company backlink — wrap "rising company" mention in `<a href="https://rising.company" target="_blank" rel="noopener noreferrer">`. Anchor inherits color, no underline, transitions to #3af0a0 on hover.
+
+### Rising Company Backlink (required branding)
+Every Rising Company product must include a subtle backlink to https://rising.company:
+- Target: https://rising.company, opens in new tab (target="_blank" rel="noopener noreferrer")
+- Text: "rising.company" (lowercase, standalone) or wrap an existing "rising company" mention in footer copy
+- Style: footer mono token — Share Tech Mono, 9–10px, 2–4px letter-spacing, color #2a3a30, uppercase if standalone
+- Hover: transition color to #3af0a0 over 0.2s, no underline
+- Placement: auth/login screens (below the form, 24–48px gap), app layouts (footer or sidebar bottom, near logout), marketing/demo pages (inline within site footer copy)
 
 ### Grid Layout
 - display: grid

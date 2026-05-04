@@ -297,12 +297,15 @@ header p {
 
 ## Footer
 
-Minimal mono-text footer. Used at the bottom of index/landing pages with a subtle top border.
+Minimal mono-text footer. Used at the bottom of index/landing pages with a subtle top border. The "rising company" mention must be a backlink to `https://rising.company` (see "Branding: rising.company Backlink" in `rising-design.md`).
 
 ### HTML
 
 ```html
-<footer>// site-name &mdash; hint one &middot; hint two &middot; hint three</footer>
+<footer>// site-name &mdash;
+  <a href="https://rising.company" target="_blank" rel="noopener noreferrer">rising company</a>
+  &middot; hint one &middot; hint two
+</footer>
 ```
 
 ### CSS
@@ -315,6 +318,16 @@ footer {
   font-size: 9px;
   color: #2a3a30;
   letter-spacing: 2px;
+}
+
+footer a {
+  color: inherit;
+  text-decoration: none;
+  transition: color 0.2s;
+}
+
+footer a:hover {
+  color: #3af0a0;
 }
 ```
 
