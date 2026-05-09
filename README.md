@@ -2,7 +2,7 @@
 
 Mission control / technical HUD aesthetic — dark backgrounds, monospace system labels, mint-green accents, scanline textures, generous spacing.
 
-Live: <https://design.rising.company>
+Live: <https://design-system.rising.company>
 
 ## What's here
 
