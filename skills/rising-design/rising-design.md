@@ -28,7 +28,7 @@ Import: https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Rajdhani
 
 **Borders:** Default `#1a2a20` · Hover `#2a4a38` · Subtle `#1a3020` · Grid `#111820`
 
-**Text:** Heading `#e8f4ff` · Body `#c8d8e8` · Muted `#6a8a80` · Subtle `#4a6a5a` · Label `#3a5a50` · Dim `#2a3a30`
+**Text:** Heading `#e8f4ff` · Body `#c8d8e8` · Muted `#84a89a` · Subtle `#6a8a7a` · Label `#4a6a5c` · Dim `#2a3a30`
 
 **Accents:** Primary (Mint) `#3af0a0` · Secondary (Blue) `#2a7adf` · Danger `#cc2200` · Warning `#ddaa30`
 
@@ -42,12 +42,12 @@ Import: https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Rajdhani
 | Page Title | Rajdhani | 36px | 700 | 3px | upper | #e8f4ff |
 | Section Heading | Rajdhani | 28px | 700 | 2px | — | #e8f4ff |
 | Card Title | Rajdhani | 20px | 700 | 1px | — | #e8f4ff |
-| Body | Rajdhani | 13px | 400 | — | — | #6a8a80 |
+| Body | Rajdhani | 14px | 400 | — | — | #84a89a |
 | Stat Value | Mono | 16px | — | 1px | — | #3af0a0 |
-| Subtitle | Mono | 11px | — | 2px | — | #4a6a5a |
-| Section Label | Mono | 9px | — | 4px | upper | #3a5a50 |
-| Badge | Mono | 9px | — | 1px | — | #3a5a50 |
-| Footer | Mono | 9px | — | 2px | — | #2a3a30 |
+| Subtitle | Mono | 12px | — | 2px | — | #6a8a7a |
+| Section Label | Mono | 10px | — | 4px | upper | #4a6a5c |
+| Badge | Mono | 10px | — | 1px | — | #4a6a5c |
+| Footer | Mono | 10px | — | 2px | — | #2a3a30 |
 
 ## Spacing
 

@@ -64,7 +64,7 @@ A clickable container with eyebrow tag, title, description, badge row, and arrow
 
 .card-tag {
   font-family: "Share Tech Mono", monospace;
-  font-size: 9px;
+  font-size: 10px;
   letter-spacing: 3px;
   color: #3af0a0;
   text-transform: uppercase;
@@ -80,9 +80,9 @@ A clickable container with eyebrow tag, title, description, badge row, and arrow
 }
 
 .card-desc {
-  font-size: 13px;
-  color: #6a8a80;
-  line-height: 1.5;
+  font-size: 14px;
+  color: #84a89a;
+  line-height: 1.55;
   margin-bottom: 16px;
 }
 
@@ -124,9 +124,9 @@ Small mono-text label used for metadata tags. Use inside `.card-meta` to display
 ```css
 .badge {
   font-family: "Share Tech Mono", monospace;
-  font-size: 9px;
+  font-size: 10px;
   letter-spacing: 1px;
-  color: #3a5a50;
+  color: #4a6a5c;
   background: #0a1410;
   border: 1px solid #1a3020;
   border-radius: 3px;
@@ -176,8 +176,8 @@ Vertical stack of label/value pairs for displaying key metrics. Used in HUD over
 
 .stats-panel .stat-label {
   font-family: "Share Tech Mono", monospace;
-  font-size: 9px;
-  color: #3a5a50;
+  font-size: 10px;
+  color: #4a6a5c;
   letter-spacing: 2px;
   text-transform: uppercase;
 }
@@ -221,7 +221,7 @@ Floating overlay that appears on hover, showing name, category/material, and des
 }
 
 .tooltip .tt-name {
-  font-size: 13px;
+  font-size: 14px;
   font-weight: 700;
   color: #e8f4ff;
   letter-spacing: 1px;
@@ -229,17 +229,17 @@ Floating overlay that appears on hover, showing name, category/material, and des
 
 .tooltip .tt-mat {
   font-family: "Share Tech Mono", monospace;
-  font-size: 9px;
+  font-size: 10px;
   color: #3af0a0;
   letter-spacing: 2px;
   margin-top: 3px;
 }
 
 .tooltip .tt-desc {
-  font-size: 11px;
-  color: #7a9a9a;
+  font-size: 12px;
+  color: #8aacac;
   margin-top: 4px;
-  line-height: 1.4;
+  line-height: 1.5;
 }
 ```
 
@@ -286,8 +286,8 @@ header h1 {
 
 header p {
   font-family: "Share Tech Mono", monospace;
-  font-size: 11px;
-  color: #4a6a5a;
+  font-size: 12px;
+  color: #6a8a7a;
   letter-spacing: 2px;
   margin-top: 10px;
 }
@@ -315,7 +315,7 @@ footer {
   padding: 24px 48px;
   border-top: 1px solid #1a2a20;
   font-family: "Share Tech Mono", monospace;
-  font-size: 9px;
+  font-size: 10px;
   color: #2a3a30;
   letter-spacing: 2px;
 }
@@ -442,7 +442,7 @@ Full-viewport heads-up display with scanlines, corner brackets, and positioned c
 
 .title-block h1 {
   font-family: "Share Tech Mono", monospace;
-  font-size: 11px;
+  font-size: 12px;
   letter-spacing: 4px;
   color: #3af0a0;
   text-transform: uppercase;
@@ -474,7 +474,7 @@ Full-viewport heads-up display with scanlines, corner brackets, and positioned c
 
 .legend-title {
   font-family: "Share Tech Mono", monospace;
-  font-size: 9px;
+  font-size: 10px;
   letter-spacing: 3px;
   color: #3af0a0;
   margin-bottom: 10px;
@@ -497,7 +497,7 @@ Full-viewport heads-up display with scanlines, corner brackets, and positioned c
 }
 
 .legend-label {
-  font-size: 13px;
+  font-size: 14px;
   font-weight: 500;
   color: #c8d8e8;
   letter-spacing: 1px;
@@ -505,7 +505,7 @@ Full-viewport heads-up display with scanlines, corner brackets, and positioned c
 
 .legend-sub {
   font-family: "Share Tech Mono", monospace;
-  font-size: 9px;
+  font-size: 10px;
   color: #4a7a6a;
   margin-left: 24px;
   margin-top: -4px;
@@ -522,8 +522,8 @@ Full-viewport heads-up display with scanlines, corner brackets, and positioned c
 
 .controls-hint p {
   font-family: "Share Tech Mono", monospace;
-  font-size: 9px;
-  color: #3a5a50;
+  font-size: 10px;
+  color: #4a6a5c;
   letter-spacing: 2px;
   line-height: 1.9;
 }
@@ -555,9 +555,9 @@ Responsive auto-fill grid for laying out cards. Columns fill automatically at a 
 ```css
 .section-title {
   font-family: "Share Tech Mono", monospace;
-  font-size: 9px;
+  font-size: 10px;
   letter-spacing: 4px;
-  color: #3a5a50;
+  color: #4a6a5c;
   text-transform: uppercase;
   margin-bottom: 24px;
 }

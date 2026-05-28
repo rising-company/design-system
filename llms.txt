@@ -26,9 +26,9 @@ Import: https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Rajdhani
 ### Text
 - Heading: #e8f4ff — page titles, card titles, tooltip names
 - Body: #c8d8e8 — primary body text, legend labels
-- Muted: #6a8a80 — descriptions, secondary body text
-- Subtle: #4a6a5a — subtitles, secondary mono text
-- Label: #3a5a50 — section titles, stat labels, control hints
+- Muted: #84a89a — descriptions, secondary body text
+- Subtle: #6a8a7a — subtitles, secondary mono text
+- Label: #4a6a5c — section titles, stat labels, control hints
 - Dim: #2a3a30 — footer text, lowest emphasis
 
 ### Accents
@@ -50,12 +50,12 @@ Import: https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Rajdhani
 | Page Title | Rajdhani | 36px | 700 | 3px | uppercase | #e8f4ff |
 | Section Heading | Rajdhani | 28px | 700 | 2px | none | #e8f4ff |
 | Card Title | Rajdhani | 20px | 700 | 1px | none | #e8f4ff |
-| Body | Rajdhani | 13px | 400 | normal | none | #6a8a80 |
+| Body | Rajdhani | 14px | 400 | normal | none | #84a89a |
 | Stat Value | Share Tech Mono | 16px | normal | 1px | none | #3af0a0 |
-| Subtitle | Share Tech Mono | 11px | normal | 2px | none | #4a6a5a |
-| Section Label | Share Tech Mono | 9px | normal | 4px | uppercase | #3a5a50 |
-| Badge | Share Tech Mono | 9px | normal | 1px | none | #3a5a50 |
-| Footer | Share Tech Mono | 9px | normal | 2px | none | #2a3a30 |
+| Subtitle | Share Tech Mono | 12px | normal | 2px | none | #6a8a7a |
+| Section Label | Share Tech Mono | 10px | normal | 4px | uppercase | #4a6a5c |
+| Badge | Share Tech Mono | 10px | normal | 1px | none | #4a6a5c |
+| Footer | Share Tech Mono | 10px | normal | 2px | none | #2a3a30 |
 
 ## Spacing
 
@@ -104,26 +104,26 @@ Structure: eyebrow tag → title → description → badge row
 - Arrow indicator: position absolute, bottom 24px, right 24px, mono font, color #1a3a2a → #3af0a0 on hover
 
 ### Badge
-- Font: Share Tech Mono, 9px, letter-spacing 1px
+- Font: Share Tech Mono, 10px, letter-spacing 1px
 - Background: #0a1410, border: 1px solid #1a3020, border-radius 3px, padding 3px 7px
 
 ### Stats Panel
 Vertical stack of stat rows:
-- Label: Share Tech Mono, 9px, letter-spacing 2px, uppercase, color #3a5a50
+- Label: Share Tech Mono, 10px, letter-spacing 2px, uppercase, color #4a6a5c
 - Value: Share Tech Mono, 16px, letter-spacing 1px, color #3af0a0
 
 ### Tooltip
 - Background: rgba(10, 12, 16, 0.92), border: 1px solid #3af0a050, border-radius 4px, padding 8px 12px
-- Name: 13px, font-weight 700, color #e8f4ff, letter-spacing 1px
-- Material line: Share Tech Mono, 9px, color #3af0a0, letter-spacing 2px
-- Description: 11px, color #7a9a9a, line-height 1.4
+- Name: 14px, font-weight 700, color #e8f4ff, letter-spacing 1px
+- Material line: Share Tech Mono, 10px, color #3af0a0, letter-spacing 2px
+- Description: 12px, color #8aacac, line-height 1.5
 
 ### Header
 - Structure: eyebrow → page title → subtitle
 - Padding: 48px 48px 32px, border-bottom: 1px solid #1a2a20
 
 ### Footer
-- Font: Share Tech Mono, 9px, color #2a3a30, letter-spacing 2px
+- Font: Share Tech Mono, 10px, color #2a3a30, letter-spacing 2px
 - Padding: 24px 48px, border-top: 1px solid #1a2a20
 - Must include rising.company backlink — wrap "rising company" mention in `<a href="https://rising.company" target="_blank" rel="noopener noreferrer">`. Anchor inherits color, no underline, transitions to #3af0a0 on hover.
 
