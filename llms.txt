@@ -34,13 +34,21 @@ Import: https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Rajdhani
 ### Accents
 - Primary (Mint): #3af0a0 — eyebrows, stat values, active highlights
 - Secondary (Blue): #2a7adf — gradient endpoints, secondary accent
-- Danger (Red): #cc2200 — error/danger states
-- Warning (Amber): #ddaa30 — warning/caution states
+- Danger (Red): #ff4a24 — error/danger states
+- Warning (Amber): #f5b83d — warning/caution states
 
 ### Accent Derivatives
+- Primary @ 8% alpha: #3af0a014 — selected/active surface wash
 - Primary @ 25% alpha: #3af0a040 — corner bracket borders
 - Primary @ 31% alpha: #3af0a050 — tooltip borders
 - Gradient: linear-gradient(90deg, #3af0a0, #2a7adf) — card hover top-border
+
+### State Recipe
+Any accent derives the same way — no extra tokens needed:
+- Background wash: accent @ 8% alpha (suffix 14)
+- Border: accent @ 31% alpha (suffix 50)
+- Text/icon: accent at full strength
+Examples: selected row #3af0a014 bg / #3af0a050 border / #3af0a0 text; error banner #ff4a2414 / #ff4a2450 / #ff4a24.
 
 ## Text Styles
 
@@ -56,6 +64,8 @@ Import: https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Rajdhani
 | Section Label | Share Tech Mono | 10px | normal | 4px | uppercase | #4a6a5c |
 | Badge | Share Tech Mono | 10px | normal | 1px | none | #4a6a5c |
 | Footer | Share Tech Mono | 10px | normal | 2px | none | #2a3a30 |
+
+Line-height: headings 1.1 · body 1.55 · mono metadata 1.5–1.9.
 
 ## Spacing
 
@@ -75,6 +85,28 @@ Import: https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Rajdhani
 ## Transitions
 
 All interactive transitions: 0.2s default easing. Properties: border-color, background, color, opacity.
+
+## Interaction States
+
+### Focus Ring (required)
+Keyboard focus only — style via :focus-visible, never plain :focus:
+```css
+:focus-visible { outline: 1px solid #3af0a0; outline-offset: 3px; border-radius: 2px; }
+```
+
+### Text Selection (required)
+```css
+::selection { background: #3af0a0; color: #0a0c10; }
+```
+
+### Disabled
+No new colors — reuse the low-emphasis ramp: text/icon Label #4a6a5c, border
+Border Subtle #1a3020, background unchanged. No hover transitions, cursor: not-allowed.
+
+### Load Reveal (optional)
+Staggered boot-up on page load — sections fade up in document order:
+opacity 0 → 1, translateY 8px → 0, 0.6s ease, 90ms stagger per section.
+Must respect prefers-reduced-motion (animation: none, content fully visible).
 
 ## Visual Effects
 

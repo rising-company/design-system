@@ -30,9 +30,11 @@ Import: https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Rajdhani
 
 **Text:** Heading `#e8f4ff` · Body `#c8d8e8` · Muted `#84a89a` · Subtle `#6a8a7a` · Label `#4a6a5c` · Dim `#2a3a30`
 
-**Accents:** Primary (Mint) `#3af0a0` · Secondary (Blue) `#2a7adf` · Danger `#cc2200` · Warning `#ddaa30`
+**Accents:** Primary (Mint) `#3af0a0` · Secondary (Blue) `#2a7adf` · Danger `#ff4a24` · Warning `#f5b83d`
 
-**Derivatives:** Primary@25% `#3af0a040` (corner brackets) · Primary@31% `#3af0a050` (tooltip borders) · Gradient `#3af0a0 → #2a7adf` (card hover bar)
+**Derivatives:** Primary@8% `#3af0a014` (selected/active wash) · Primary@25% `#3af0a040` (corner brackets) · Primary@31% `#3af0a050` (tooltip borders) · Gradient `#3af0a0 → #2a7adf` (card hover bar)
+
+**State recipe** — any accent derives the same way, no extra tokens: background wash @8% alpha (suffix `14`) · border @31% alpha (suffix `50`) · text/icon full strength. E.g. error banner: `#ff4a2414` bg / `#ff4a2450` border / `#ff4a24` text.
 
 ## Text Styles
 
@@ -49,6 +51,8 @@ Import: https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Rajdhani
 | Badge | Mono | 10px | — | 1px | — | #4a6a5c |
 | Footer | Mono | 10px | — | 2px | — | #2a3a30 |
 
+Line-height: headings `1.1` · body `1.55` · mono metadata `1.5–1.9`.
+
 ## Spacing
 
 Page `48px` · Section `32px` · Element `24px` · Grid `16px` · Inline `12px` · Tight `8px`
@@ -60,6 +64,22 @@ Card `6px` · Tooltip `4px` · Badge `3px`
 ## Transitions
 
 All: `0.2s` default easing. Properties: border-color, background, color, opacity.
+
+## Interaction States
+
+**Focus ring (required)** — keyboard only, via `:focus-visible` (never plain `:focus`):
+```css
+:focus-visible { outline: 1px solid #3af0a0; outline-offset: 3px; border-radius: 2px; }
+```
+
+**Text selection (required):**
+```css
+::selection { background: #3af0a0; color: #0a0c10; }
+```
+
+**Disabled** — no new colors; reuse the low-emphasis ramp: text/icon Label `#4a6a5c`, border Border Subtle `#1a3020`, background unchanged. No hover transitions, `cursor: not-allowed`.
+
+**Load reveal (optional)** — staggered boot-up on page load: sections fade up in document order (opacity 0 → 1, translateY 8px → 0, 0.6s ease, 90ms stagger). Must respect `prefers-reduced-motion`.
 
 ## Required Visual Effects
 
