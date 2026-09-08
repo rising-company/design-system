@@ -646,6 +646,19 @@
     line-height: 1.7;
   }
 
+
+  .fx-theme {
+    font-family: "Share Tech Mono", monospace;
+    font-size: 9px; letter-spacing: 1px; text-transform: uppercase;
+    color: var(--text-label); background: var(--bg-inset);
+    border: 1px solid var(--border-subtle); border-radius: 3px;
+    padding: 2px 6px; margin-left: 8px; vertical-align: 1px;
+  }
+
+  .fx-desc code {
+    font-size: 0.95em; padding: 0 3px;
+  }
+
   .fx-stage {
     position: relative;
     height: 96px;
@@ -828,7 +841,7 @@
   <div>
     <div class="eyebrow">// Rising Company</div>
     <h1>Design System</h1>
-    <div class="sub">Machine-readable spec — <a href="/llms.txt">design-system.rising.company/llms.txt</a><span class="cursor"></span></div>
+    <div class="sub">Machine-readable spec — <a href="/llms.txt">llms.txt</a> &middot; drop-in stylesheet — <a href="/rising.css">rising.css</a><span class="cursor"></span></div>
   </div>
   <div class="masthead-stats">
     <div class="stat-row">
@@ -1391,23 +1404,23 @@
 
   <div class="demo-row">
     <div class="demo-panel">
-      <div class="fx-label">Scanlines</div>
+      <div class="fx-label">Scanlines <span class="fx-theme">Mission only</span></div>
       <div data-theme="mission" class="fx-stage fx-scan"></div>
-      <div class="fx-desc">Fixed overlay on every page — rgba(0,0,0,0.04) lines, 4px rhythm. Shown exaggerated.</div>
+      <div class="fx-desc">Fixed overlay on every Mission page — <code>--chrome-scanline</code> lines, 4px rhythm. The token is <code>transparent</code> in Daylight, so the same rule goes inert. Shown exaggerated.</div>
     </div>
     <div class="demo-panel">
-      <div class="fx-label">Corner Brackets</div>
+      <div class="fx-label">Corner Brackets <span class="fx-theme">Mission only</span></div>
       <div data-theme="mission" class="fx-stage">
         <div class="fx-bracket-box"><i></i><i></i><i></i><i></i></div>
       </div>
-      <div class="fx-desc">32px L-borders at viewport corners — #3af0a040, 16px inset.</div>
+      <div class="fx-desc">32px L-borders at viewport corners — <code>--accent-bracket</code>, 16px inset. Hidden in Daylight via <code>--chrome-bracket-display</code>.</div>
     </div>
     <div class="demo-panel">
       <div class="fx-label">Hover Gradient</div>
       <div data-theme="mission" class="fx-stage">
         <div class="fx-gradient"></div>
       </div>
-      <div class="fx-desc">2px mint → blue bar at card top — opacity 0 → 1 on hover.</div>
+      <div class="fx-desc">2px <code>--gradient</code> bar at card top — opacity 0 → 1 on hover. Mint → blue in Mission, deep green → blue in Daylight.</div>
     </div>
   </div>
 
@@ -1416,12 +1429,12 @@
     <div class="demo-panel">
       <div class="fx-label">Focus Ring</div>
       <button class="fx-focus-btn">Tab to me</button>
-      <div class="fx-desc">:focus-visible — 1px mint outline, 3px offset. Keyboard only, never on click.</div>
+      <div class="fx-desc"><code>:focus-visible</code> — 1px <code>--accent-ink</code> outline, 3px offset. Keyboard only, never on click.</div>
     </div>
     <div class="demo-panel">
       <div class="fx-label">Selection</div>
-      <div class="fx-selection">Select this text — highlighted in mint with base-dark type. Every copy action carries the brand.</div>
-      <div class="fx-desc">::selection — background #3af0a0, color #0a0c10.</div>
+      <div class="fx-selection">Select this text — mint highlight with dark type in both themes. Every copy action carries the brand.</div>
+      <div class="fx-desc"><code>::selection</code> — background <code>--accent</code>, color <code>--accent-on</code>. Mint is a fill, so it holds in Daylight unchanged.</div>
     </div>
     <div class="demo-panel">
       <div class="fx-label">Load Reveal</div>
@@ -1454,14 +1467,15 @@
     </div>
     <div class="voice-card">
       <div class="voice-rule">Copy Style</div>
-      <div class="voice-example">Terse technical fragments, not sentences. No exclamation marks. No emoji. No casual language.</div>
+      <div class="voice-example">Terse fragments for chrome — plain sentences for anything a stranger reads. Ledes, help and error copy are written for humans, not operators. No exclamation marks. No emoji.</div>
     </div>
   </div>
 </section>
 
-<footer class="reveal" style="--i: 6">// design-system —
+<footer class="reveal" style="--i: 9">// design-system —
   <a href="https://rising.company" target="_blank" rel="noopener noreferrer">rising company</a>
   &middot; machine spec: <a href="/llms.txt">llms.txt</a>
+  &middot; stylesheet: <a href="/rising.css">rising.css</a>
 </footer>
 
 </div>
