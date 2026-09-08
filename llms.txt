@@ -1,6 +1,177 @@
 # Rising Company Design System
 
-> Mission control / technical HUD aesthetic — dark backgrounds, monospace system labels, mint-green accents, scanline textures, generous spacing.
+> One brand, two themes. Same type pairing, same spacing, same voice, same token names —
+> only the palette and the amount of chrome change.
+>
+> - **Mission** (dark) — mission control / technical HUD. Internal and operator-facing surfaces.
+> - **Daylight** (light) — same system in daylight. Public and user-facing surfaces.
+
+## Themes
+
+Themes are a **product decision, not a viewer preference**. A product picks one theme and
+commits to it. Both themes expose the *same variable names*, so every component below is
+written once and works in either.
+
+### Picking a theme
+
+| Use it for | Theme |
+|---|---|
+| Operator consoles, dashboards, diagram/map views, admin, internal tools | **Mission** |
+| Anything an external user lands on: marketing, landing pages, onboarding, sign-in for non-staff | **Daylight** |
+| Long-form reading, forms, data entry, docs, anything used in a bright room or on a projector | **Daylight** |
+| Ambient / always-on displays, monitoring walls, low-light rooms | **Mission** |
+
+Rules of thumb:
+
+- **If a stranger sees it first, it's Daylight.** A cold visitor should not be met with a
+  black screen and a bare input. Sign-in is the *end* of a landing page, not a substitute
+  for one.
+- **If the user is already logged in and doing operator work, it's Mission.**
+- A product may ship both — Daylight for its public/marketing surface and Mission for the
+  app behind the login. Switch at the auth boundary, not per-page.
+- A Daylight product **may** offer Mission as an opt-in user dark mode. A Mission product
+  must not silently flip to Daylight.
+
+### Applying a theme
+
+Set `data-theme` on the root element. `mission` is the default when the attribute is absent.
+
+```html
+<html data-theme="daylight">
+```
+
+```css
+/* ---- Mission (default / dark) ---- */
+:root, [data-theme="mission"] {
+  --bg-base: #0a0c10;
+  --bg-surface: #0d1117;
+  --bg-surface-hover: #0f1520;
+  --bg-inset: #0a1410;
+
+  --border: #1a2a20;
+  --border-hover: #2a4a38;
+  --border-subtle: #1a3020;
+  --border-grid: #111820;
+
+  --text-heading: #e8f4ff;
+  --text-body: #c8d8e8;
+  --text-muted: #84a89a;
+  --text-subtle: #6a8a7a;
+  --text-label: #4a6a5c;
+  --text-dim: #2a3a30;
+
+  --accent: #3af0a0;            /* brand fill — identical in both themes */
+  --accent-hover: #6ff7be;      /* --accent under hover */
+  --accent-ink: #3af0a0;        /* accent as text / icon / border */
+  --accent-on: #08150f;         /* text on top of --accent */
+  --accent-wash: #3af0a014;     /* accent @ 8%  */
+  --accent-line: #3af0a050;     /* accent @ 31% */
+  --accent-bracket: #3af0a040;  /* accent @ 25% */
+
+  --accent-2: #2a7adf;
+  --accent-2-ink: #2a7adf;
+  --danger: #ff4a24;
+  --danger-ink: #ff4a24;
+  --danger-wash: #ff4a2414;
+  --danger-line: #ff4a2450;
+  --warning: #f5b83d;
+  --warning-ink: #f5b83d;
+  --warning-wash: #f5b83d14;
+  --warning-line: #f5b83d50;
+
+  --gradient: linear-gradient(90deg, #3af0a0, #2a7adf);
+  --card-shadow: none;                     /* elevation is background shift only */
+
+  --chrome-scanline: rgba(0, 0, 0, 0.04);  /* scanline stripe color */
+  --chrome-bracket-display: block;         /* corner brackets on */
+  --chrome-glow: rgba(58, 240, 160, 0.05); /* atmosphere radial */
+  --chrome-grid-line: rgba(17, 24, 32, 0.7); /* atmosphere grid */
+}
+
+/* ---- Daylight (light) ---- */
+[data-theme="daylight"] {
+  --bg-base: #f6f8f7;
+  --bg-surface: #ffffff;
+  --bg-surface-hover: #eef3f0;
+  --bg-inset: #e8f5ee;
+
+  --border: #dde5e0;
+  --border-hover: #9dc4b0;
+  --border-subtle: #e6ede9;
+  --border-grid: #e9efeb;
+
+  --text-heading: #0b1a14;
+  --text-body: #26332d;
+  --text-muted: #43564c;
+  --text-subtle: #556b60;
+  --text-label: #5f766a;
+  --text-dim: #8a9d94;
+
+  --accent: #3af0a0;
+  --accent-hover: #22dc8c;      /* --accent under hover */
+  --accent-ink: #0b7a4e;        /* mint is illegible on white — text/borders darken */
+  --accent-on: #08150f;
+  --accent-wash: #0b7a4e12;
+  --accent-line: #0b7a4e45;
+  --accent-bracket: #0b7a4e30;
+
+  --accent-2: #2a7adf;
+  --accent-2-ink: #1f5fbf;
+  --danger: #ff4a24;
+  --danger-ink: #c02a10;
+  --danger-wash: #c02a1012;
+  --danger-line: #c02a1045;
+  --warning: #f5b83d;
+  --warning-ink: #8a5a00;
+  --warning-wash: #8a5a0012;
+  --warning-line: #8a5a0045;
+
+  --gradient: linear-gradient(90deg, #0b7a4e, #1f5fbf);
+  --card-shadow: 0 1px 2px rgba(11, 26, 20, 0.04); /* one hairline, never more */
+
+  --chrome-scanline: transparent;          /* no scanlines in Daylight */
+  --chrome-bracket-display: none;          /* no corner brackets */
+  --chrome-glow: rgba(11, 122, 78, 0.04);
+  --chrome-grid-line: rgba(11, 26, 20, 0.035);
+}
+```
+
+### Contrast
+
+Both ramps are tuned to the same rungs, so a component that reads correctly in one theme
+reads correctly in the other. Contrast vs. the theme's `--bg-base`:
+
+| Token | Mission | Daylight | Use |
+|---|---|---|---|
+| `--text-heading` | 17.5 | 16.8 | titles |
+| `--text-body` | 13.5 | 12.4 | body copy |
+| `--text-muted` | 7.5 | 7.4 | descriptions |
+| `--text-subtle` | 5.2 | 5.4 | subtitles, mono metadata |
+| `--text-label` | 3.3 | 4.6 | section labels, stat labels |
+| `--text-dim` | 1.6 | 2.7 | decorative only — see below |
+| `--accent-ink` | 13.2 | 5.0 | accent text, icons, borders |
+
+`--text-dim` is **below AA in both themes by design**. It is decorative de-emphasis for
+footer chrome and the rising.company backlink. Never let it carry information that isn't
+also available elsewhere, and never use it for form placeholders — use `--text-label`.
+
+`--accent` (`#3af0a0`) is a **fill**, not an ink, in Daylight: 1.4:1 on white. Use it as a
+button/badge background with `--accent-on` text, never as text or a 1px border on light.
+
+### Theme-conditional chrome
+
+| Effect | Mission | Daylight |
+|---|---|---|
+| Scanlines | required | off |
+| Corner brackets | required on full-bleed HUD views | off |
+| Atmosphere grid | on, mint glow | off, or a single hairline rule |
+| Elevation | background shift only, no shadows | background shift + `0 1px 2px rgba(11,26,20,0.04)` on cards |
+| Page margin | 48px | 48px (24px under 768px) |
+
+Daylight drops the HUD texture on purpose. The brand carries in Daylight through the
+Share Tech Mono labels, the `//` prefix, the mint, and the spacing — not through darkness.
+
+---
 
 ## Fonts
 
@@ -9,68 +180,86 @@ Import: https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Rajdhani
 - Display/Content: "Rajdhani", sans-serif — weights 300, 500, 700
 - System/Technical: "Share Tech Mono", monospace
 
+**Font roles** — Share Tech Mono for HUD readouts (labels, stats, badges, eyebrows,
+footers, buttons, metadata). Rajdhani for human content (titles, descriptions, body).
+Unchanged across themes.
+
 ## Colors
 
+Reference the variables above rather than literal hex. Raw values, per theme:
+
 ### Backgrounds
-- Base: #0a0c10 — page background
-- Surface: #0d1117 — cards, panels, elevated containers
-- Surface Hover: #0f1520 — interactive surface hover state
-- Inset: #0a1410 — badge backgrounds, recessed areas
+| Token | Mission | Daylight | Use |
+|---|---|---|---|
+| `--bg-base` | `#0a0c10` | `#f6f8f7` | page background |
+| `--bg-surface` | `#0d1117` | `#ffffff` | cards, panels, elevated containers |
+| `--bg-surface-hover` | `#0f1520` | `#eef3f0` | interactive surface hover |
+| `--bg-inset` | `#0a1410` | `#e8f5ee` | badge backgrounds, recessed areas |
 
 ### Borders
-- Default: #1a2a20 — card borders, dividers
-- Hover: #2a4a38 — card hover borders
-- Subtle: #1a3020 — badge borders, faint separators
-- Grid: #111820 — background structural lines
+| Token | Mission | Daylight | Use |
+|---|---|---|---|
+| `--border` | `#1a2a20` | `#dde5e0` | card borders, dividers |
+| `--border-hover` | `#2a4a38` | `#9dc4b0` | card hover borders |
+| `--border-subtle` | `#1a3020` | `#e6ede9` | badge borders, faint separators |
+| `--border-grid` | `#111820` | `#e9efeb` | background structural lines |
 
 ### Text
-- Heading: #e8f4ff — page titles, card titles, tooltip names
-- Body: #c8d8e8 — primary body text, legend labels
-- Muted: #84a89a — descriptions, secondary body text
-- Subtle: #6a8a7a — subtitles, secondary mono text
-- Label: #4a6a5c — section titles, stat labels, control hints
-- Dim: #2a3a30 — footer text, lowest emphasis
+| Token | Mission | Daylight | Use |
+|---|---|---|---|
+| `--text-heading` | `#e8f4ff` | `#0b1a14` | page/card titles |
+| `--text-body` | `#c8d8e8` | `#26332d` | primary body text |
+| `--text-muted` | `#84a89a` | `#43564c` | descriptions, secondary body |
+| `--text-subtle` | `#6a8a7a` | `#556b60` | subtitles, secondary mono |
+| `--text-label` | `#4a6a5c` | `#5f766a` | section labels, stat labels, placeholders |
+| `--text-dim` | `#2a3a30` | `#8a9d94` | footer chrome, backlink — decorative only |
 
 ### Accents
-- Primary (Mint): #3af0a0 — eyebrows, stat values, active highlights
-- Secondary (Blue): #2a7adf — gradient endpoints, secondary accent
-- Danger (Red): #ff4a24 — error/danger states
-- Warning (Amber): #f5b83d — warning/caution states
-
-### Accent Derivatives
-- Primary @ 8% alpha: #3af0a014 — selected/active surface wash
-- Primary @ 25% alpha: #3af0a040 — corner bracket borders
-- Primary @ 31% alpha: #3af0a050 — tooltip borders
-- Gradient: linear-gradient(90deg, #3af0a0, #2a7adf) — card hover top-border
+| Token | Mission | Daylight | Use |
+|---|---|---|---|
+| `--accent` | `#3af0a0` | `#3af0a0` | brand fill (button/badge background) |
+| `--accent-hover` | `#6ff7be` | `#22dc8c` | `--accent` under hover — keeps `--accent-on` text |
+| `--accent-ink` | `#3af0a0` | `#0b7a4e` | accent text, icons, 1px borders |
+| `--accent-on` | `#08150f` | `#08150f` | text on top of `--accent` |
+| `--accent-2-ink` | `#2a7adf` | `#1f5fbf` | secondary accent |
+| `--danger-ink` | `#ff4a24` | `#c02a10` | error / destructive |
+| `--warning-ink` | `#f5b83d` | `#8a5a00` | warning / caution |
 
 ### State Recipe
 Any accent derives the same way — no extra tokens needed:
-- Background wash: accent @ 8% alpha (suffix 14)
-- Border: accent @ 31% alpha (suffix 50)
-- Text/icon: accent at full strength
-Examples: selected row #3af0a014 bg / #3af0a050 border / #3af0a0 text; error banner #ff4a2414 / #ff4a2450 / #ff4a24.
+- Background wash: accent-ink @ 8% alpha (hex suffix `14`, or `12` on light)
+- Border: accent-ink @ 31% alpha (hex suffix `50`, or `45` on light)
+- Text/icon: `--accent-ink` at full strength
+
+Examples — selected row: `--accent-wash` bg / `--accent-line` border / `--accent-ink` text.
+Error banner: `#ff4a2414` / `#ff4a2450` / `#ff4a24` in Mission; `#c02a1012` / `#c02a1045` /
+`#c02a10` in Daylight.
 
 ## Text Styles
 
 | Style | Family | Size | Weight | Letter-Spacing | Transform | Color |
 |---|---|---|---|---|---|---|
-| Eyebrow | Share Tech Mono | 10px | normal | 4px | uppercase | #3af0a0 |
-| Page Title | Rajdhani | 36px | 700 | 3px | uppercase | #e8f4ff |
-| Section Heading | Rajdhani | 28px | 700 | 2px | none | #e8f4ff |
-| Card Title | Rajdhani | 20px | 700 | 1px | none | #e8f4ff |
-| Body | Rajdhani | 14px | 400 | normal | none | #84a89a |
-| Stat Value | Share Tech Mono | 16px | normal | 1px | none | #3af0a0 |
-| Subtitle | Share Tech Mono | 12px | normal | 2px | none | #6a8a7a |
-| Section Label | Share Tech Mono | 10px | normal | 4px | uppercase | #4a6a5c |
-| Badge | Share Tech Mono | 10px | normal | 1px | none | #4a6a5c |
-| Footer | Share Tech Mono | 10px | normal | 2px | none | #2a3a30 |
+| Eyebrow | Share Tech Mono | 10px | normal | 4px | uppercase | `--accent-ink` |
+| Hero Title | Rajdhani | 56px (clamp 36–56) | 700 | 2px | uppercase | `--text-heading` |
+| Page Title | Rajdhani | 36px | 700 | 3px | uppercase | `--text-heading` |
+| Section Heading | Rajdhani | 28px | 700 | 2px | none | `--text-heading` |
+| Card Title | Rajdhani | 20px | 700 | 1px | none | `--text-heading` |
+| Lede | Rajdhani | 18px | 400 | normal | none | `--text-muted` |
+| Body | Rajdhani | 14px | 400 | normal | none | `--text-muted` |
+| Stat Value | Share Tech Mono | 16px | normal | 1px | none | `--accent-ink` |
+| Subtitle | Share Tech Mono | 12px | normal | 2px | none | `--text-subtle` |
+| Section Label | Share Tech Mono | 10px | normal | 4px | uppercase | `--text-label` |
+| Button | Share Tech Mono | 11px | normal | 2px | uppercase | per variant |
+| Badge | Share Tech Mono | 10px | normal | 1px | none | `--text-label` |
+| Footer | Share Tech Mono | 10px | normal | 2px | none | `--text-dim` |
 
-Line-height: headings 1.1 · body 1.55 · mono metadata 1.5–1.9.
+Line-height: headings 1.1 · lede 1.5 · body 1.55 · mono metadata 1.5–1.9.
 
 ## Spacing
 
-- Page: 48px — header, main, side padding
-- Section: 32px — between major sections
+- Page: 48px — header, main, side padding (24px below 768px)
+- Landing section: 96px — vertical rhythm between landing-page bands (64px below 768px)
+- Section: 32px — between major sections inside an app view
 - Element: 24px — card padding, footer vertical padding
 - Grid: 16px — grid gap between cards
 - Inline: 12px — gap between badges
@@ -79,127 +268,373 @@ Line-height: headings 1.1 · body 1.55 · mono metadata 1.5–1.9.
 ## Border Radius
 
 - Card: 6px — cards, panels
-- Tooltip: 4px — tooltips, floating elements
+- Control: 4px — buttons, inputs, tooltips
 - Badge: 3px — badges, small tags
 
 ## Transitions
 
-All interactive transitions: 0.2s default easing. Properties: border-color, background, color, opacity.
+All interactive transitions: 0.2s default easing. Properties: border-color, background,
+color, opacity, transform.
 
 ## Interaction States
 
 ### Focus Ring (required)
-Keyboard focus only — style via :focus-visible, never plain :focus:
+Keyboard focus only — style via `:focus-visible`, never plain `:focus`:
 ```css
-:focus-visible { outline: 1px solid #3af0a0; outline-offset: 3px; border-radius: 2px; }
+:focus-visible { outline: 1px solid var(--accent-ink); outline-offset: 3px; border-radius: 2px; }
 ```
 
 ### Text Selection (required)
 ```css
-::selection { background: #3af0a0; color: #0a0c10; }
+::selection { background: var(--accent); color: var(--accent-on); }
 ```
 
 ### Disabled
-No new colors — reuse the low-emphasis ramp: text/icon Label #4a6a5c, border
-Border Subtle #1a3020, background unchanged. No hover transitions, cursor: not-allowed.
+No new colors — reuse the low-emphasis ramp: text/icon `--text-label`, border
+`--border-subtle`, background unchanged. No hover transitions, `cursor: not-allowed`.
 
 ### Load Reveal (optional)
-Staggered boot-up on page load — sections fade up in document order:
-opacity 0 → 1, translateY 8px → 0, 0.6s ease, 90ms stagger per section.
-Must respect prefers-reduced-motion (animation: none, content fully visible).
+Staggered boot-up on page load — sections fade up in document order: opacity 0 → 1,
+translateY 8px → 0, 0.6s ease, 90ms stagger per section. Must respect
+`prefers-reduced-motion` (animation: none, content fully visible).
 
 ## Visual Effects
 
-### Scanlines (required on every page)
-Fixed overlay, pointer-events: none, z-index: 100:
+### Scanlines (Mission only)
+Fixed overlay, `pointer-events: none`, `z-index: 100`. Driven by the theme token, so the
+same rule is inert in Daylight:
 ```css
-background: repeating-linear-gradient(
-  to bottom,
-  transparent 0px, transparent 3px,
-  rgba(0,0,0,0.04) 3px, rgba(0,0,0,0.04) 4px
-);
+body::before {
+  content: ""; position: fixed; inset: 0; pointer-events: none; z-index: 100;
+  background: repeating-linear-gradient(
+    to bottom,
+    transparent 0px, transparent 3px,
+    var(--chrome-scanline) 3px, var(--chrome-scanline) 4px
+  );
+}
 ```
 
-### Corner Brackets
-32x32px L-shaped borders at viewport corners. Border color: #3af0a040. Positioned 16px from edges. Use border-top + border-left for top-left, etc.
+### Corner Brackets (Mission only)
+32x32px L-shaped borders at viewport corners. Border color `var(--accent-bracket)`,
+positioned 16px from edges, `display: var(--chrome-bracket-display)`.
 
 ### Card Hover Gradient
-2px bar at card top: linear-gradient(90deg, #3af0a0, #2a7adf). Hidden (opacity: 0) by default, opacity: 1 on hover.
+2px bar at card top: `var(--gradient)`. Hidden (`opacity: 0`) by default, `opacity: 1` on hover.
+
+### Card Elevation (Daylight only)
+Daylight has no dark field to sit on, so cards take one hairline shadow:
+`box-shadow: 0 1px 2px rgba(11, 26, 20, 0.04)`. Mission keeps `box-shadow: none` —
+elevation there is background shift only.
+
+---
 
 ## Components
 
+### Button
+
+Mono, uppercase, tracked. Three variants plus danger; three sizes.
+
+```html
+<button class="btn btn-primary">Send magic link</button>
+<button class="btn btn-secondary">Add to calendar</button>
+<button class="btn btn-ghost">Cancel</button>
+<button class="btn btn-primary" disabled>Sending…</button>
+```
+
+```css
+.btn {
+  font-family: "Share Tech Mono", monospace;
+  font-size: 11px; letter-spacing: 2px; text-transform: uppercase;
+  padding: 13px 26px; border-radius: 4px; border: 1px solid transparent;
+  display: inline-flex; align-items: center; justify-content: center; gap: 10px;
+  cursor: pointer; text-decoration: none; white-space: nowrap;
+  transition: background 0.2s, border-color 0.2s, color 0.2s, opacity 0.2s;
+}
+.btn-sm { font-size: 10px; padding: 9px 18px; letter-spacing: 1.5px; }
+.btn-lg { font-size: 12px; padding: 17px 34px; letter-spacing: 3px; }
+
+/* Solid — the loud one. One per view. */
+.btn-primary { background: var(--accent); color: var(--accent-on); border-color: var(--accent); }
+.btn-primary:hover { background: var(--accent-hover); border-color: var(--accent-hover); }
+
+/* Wash — the HUD default for in-app actions */
+.btn-secondary { background: var(--accent-wash); color: var(--accent-ink); border-color: var(--accent-line); }
+.btn-secondary:hover { background: var(--bg-surface-hover); border-color: var(--accent-ink); }
+
+/* Neutral */
+.btn-ghost { background: transparent; color: var(--text-body); border-color: var(--border); }
+.btn-ghost:hover { background: var(--bg-surface-hover); border-color: var(--border-hover); color: var(--text-heading); }
+
+.btn-danger { background: transparent; color: var(--danger-ink); border-color: var(--danger-ink); }
+.btn-danger:hover { background: var(--danger-ink); color: var(--bg-base); }
+
+.btn[disabled], .btn[aria-busy="true"] {
+  color: var(--text-label); background: transparent;
+  border-color: var(--border-subtle); cursor: not-allowed;
+}
+.btn-block { display: flex; width: 100%; }
+```
+
+**Which variant:** `btn-primary` is reserved for the single most important action on a
+view — a landing hero CTA, the submit on an auth form. Inside Mission app chrome, prefer
+`btn-secondary`; a solid mint slab is too loud repeated. `btn-ghost` for everything else.
+
+### Form Field
+
+The label carries the `//` prefix — it is system commentary, same as a section label.
+
+```html
+<div class="field">
+  <label class="field-label" for="email">// Email</label>
+  <input class="input" id="email" type="email" placeholder="you@company.com"
+         autocomplete="email" required>
+  <p class="field-help">We'll send a sign-in link — no password.</p>
+</div>
+
+<div class="field is-error">
+  <label class="field-label" for="email2">// Email</label>
+  <input class="input" id="email2" type="email" aria-invalid="true" aria-describedby="email2-err">
+  <p class="field-error" id="email2-err">Not a valid address.</p>
+</div>
+```
+
+```css
+.field { display: flex; flex-direction: column; gap: 8px; }
+.field-label {
+  font-family: "Share Tech Mono", monospace; font-size: 10px;
+  letter-spacing: 3px; text-transform: uppercase; color: var(--text-label);
+}
+.input {
+  font-family: "Rajdhani", sans-serif; font-size: 16px; font-weight: 500;
+  color: var(--text-body); background: var(--bg-surface);
+  border: 1px solid var(--border); border-radius: 4px;
+  padding: 13px 14px; width: 100%; transition: border-color 0.2s, background 0.2s;
+}
+.input::placeholder { color: var(--text-label); font-weight: 400; }
+.input:hover { border-color: var(--border-hover); }
+.input:focus { outline: none; border-color: var(--accent-ink); background: var(--bg-surface-hover); }
+.input:focus-visible { outline: 1px solid var(--accent-ink); outline-offset: 2px; }
+.input[disabled] { color: var(--text-label); border-color: var(--border-subtle); cursor: not-allowed; }
+
+.field-help  { font-family: "Rajdhani", sans-serif; font-size: 13px; color: var(--text-muted); }
+.field-error {
+  font-family: "Share Tech Mono", monospace; font-size: 10px;
+  letter-spacing: 1px; color: var(--danger-ink);
+}
+.field.is-error .input { border-color: var(--danger-ink); }
+```
+
+Inputs use 16px text — anything smaller triggers zoom-on-focus in mobile Safari. Never
+use `--text-dim` for a placeholder.
+
 ### Card
 Structure: eyebrow tag → title → description → badge row
-- Container: background #0d1117, border 1px solid #1a2a20, border-radius 6px, padding 24px
-- Hover: background #0f1520, border-color #2a4a38, gradient top-bar opacity 1
-- Gradient bar: position absolute, top 0, left 0, right 0, height 2px
-- Arrow indicator: position absolute, bottom 24px, right 24px, mono font, color #1a3a2a → #3af0a0 on hover
+- Container: `background: var(--bg-surface)`, `border: 1px solid var(--border)`, radius 6px, padding 24px
+- Hover: `background: var(--bg-surface-hover)`, `border-color: var(--border-hover)`, gradient top-bar opacity 1
+- Gradient bar: absolute, top 0, left 0, right 0, height 2px, `background: var(--gradient)`
+- Arrow indicator: absolute, bottom 24px, right 24px, mono, `var(--border-hover)` → `var(--accent-ink)` on hover
+- Daylight adds `box-shadow: 0 1px 2px rgba(11,26,20,0.04)`
 
 ### Badge
 - Font: Share Tech Mono, 10px, letter-spacing 1px
-- Background: #0a1410, border: 1px solid #1a3020, border-radius 3px, padding 3px 7px
+- `background: var(--bg-inset)`, `border: 1px solid var(--border-subtle)`, radius 3px, padding 3px 7px
+- Color: `var(--text-label)`
 
 ### Stats Panel
 Vertical stack of stat rows:
-- Label: Share Tech Mono, 10px, letter-spacing 2px, uppercase, color #4a6a5c
-- Value: Share Tech Mono, 16px, letter-spacing 1px, color #3af0a0
+- Label: Share Tech Mono, 10px, letter-spacing 2px, uppercase, `var(--text-label)`
+- Value: Share Tech Mono, 16px, letter-spacing 1px, `var(--accent-ink)`
 
 ### Tooltip
-- Background: rgba(10, 12, 16, 0.92), border: 1px solid #3af0a050, border-radius 4px, padding 8px 12px
-- Name: 14px, font-weight 700, color #e8f4ff, letter-spacing 1px
-- Material line: Share Tech Mono, 10px, color #3af0a0, letter-spacing 2px
-- Description: 12px, color #8aacac, line-height 1.5
+- `background: var(--bg-base)` @ 92% opacity, `border: 1px solid var(--accent-line)`, radius 4px, padding 8px 12px
+- Name: 14px, weight 700, `var(--text-heading)`, letter-spacing 1px
+- Material line: Share Tech Mono, 10px, `var(--accent-ink)`, letter-spacing 2px
+- Description: 12px, `var(--text-muted)`, line-height 1.5
 
-### Header
+### App Header
 - Structure: eyebrow → page title → subtitle
-- Padding: 48px 48px 32px, border-bottom: 1px solid #1a2a20
+- Padding: 48px 48px 32px, `border-bottom: 1px solid var(--border)`
 
 ### Footer
-- Font: Share Tech Mono, 10px, color #2a3a30, letter-spacing 2px
-- Padding: 24px 48px, border-top: 1px solid #1a2a20
-- Must include rising.company backlink — wrap "rising company" mention in `<a href="https://rising.company" target="_blank" rel="noopener noreferrer">`. Anchor inherits color, no underline, transitions to #3af0a0 on hover.
-
-### Rising Company Backlink (required branding)
-Every Rising Company product must include a subtle backlink to https://rising.company:
-- Target: https://rising.company, opens in new tab (target="_blank" rel="noopener noreferrer")
-- Text: "rising.company" (lowercase, standalone) or wrap an existing "rising company" mention in footer copy
-- Style: footer mono token — Share Tech Mono, 9–10px, 2–4px letter-spacing, color #2a3a30, uppercase if standalone
-- Hover: transition color to #3af0a0 over 0.2s, no underline
-- Placement: auth/login screens (below the form, 24–48px gap), app layouts (footer or sidebar bottom, near logout), marketing/demo pages (inline within site footer copy)
+- Font: Share Tech Mono, 10px, `var(--text-dim)`, letter-spacing 2px
+- Padding: 24px 48px, `border-top: 1px solid var(--border)`
+- Must include the rising.company backlink — see below.
 
 ### Grid Layout
-- display: grid
-- grid-template-columns: repeat(auto-fill, minmax(280px, 1fr))
-- gap: 16px
+- `display: grid`; `grid-template-columns: repeat(auto-fill, minmax(280px, 1fr))`; `gap: 16px`
 
-### HUD Overlay
-Full-viewport overlay with pointer-events: none containing:
-- Scanlines layer
-- 4 corner brackets (tl, tr, bl, br)
-- Content blocks positioned absolute (title top-left, stats top-right, legend bottom-left, controls bottom-right)
+### HUD Overlay (Mission only)
+Full-viewport overlay with `pointer-events: none` containing scanlines, 4 corner brackets,
+and content blocks positioned absolute (title top-left, stats top-right, legend bottom-left,
+controls bottom-right).
+
+---
+
+## Page Patterns
+
+### Landing Page (Daylight)
+
+A user-facing product needs a landing page before it needs a login box. Required order:
+
+1. **Nav** — wordmark left; links + one `btn-sm` CTA right. 64px tall, `border-bottom: 1px
+   solid var(--border)`, sticky, `background: var(--bg-base)`.
+2. **Hero** — eyebrow (`// Rising Company`) → hero title → lede (one sentence, ≤ 90 chars) →
+   action row (`btn-primary btn-lg` + `btn-ghost btn-lg`) → mono trust line
+   (`NO PASSWORD · NO CALENDAR ACCESS · FREE`). Max-width 720px for centered heroes.
+3. **Proof strip** — one row of mono stats or a single-line quote. Optional.
+4. **How it works** — 3 numbered steps. Reuse the `01 / 02 / 03` mono numerals from the
+   section-head pattern; each step is a title + one line of body.
+5. **Feature grid** — 3 cards, `minmax(280px, 1fr)`.
+6. **CTA band** — `background: var(--bg-inset)`, full-bleed, `border-block: 1px solid
+   var(--border-subtle)`. Section heading + one `btn-primary btn-lg`.
+7. **Footer** — column links + the rising.company backlink.
+
+Vertical rhythm between bands: 96px (64px below 768px). Every band's inner content shares
+one `max-width: 1080px; margin: 0 auto; padding-inline: 48px` container.
+
+```html
+<section class="hero">
+  <div class="eyebrow">// Rising Company</div>
+  <h1 class="hero-title">Huddle</h1>
+  <p class="lede">Find a meeting time without the back-and-forth. Share one link.</p>
+  <div class="hero-actions">
+    <a class="btn btn-primary btn-lg" href="#start">Start a huddle</a>
+    <a class="btn btn-ghost btn-lg" href="#how">See how it works</a>
+  </div>
+  <div class="hero-trust">No password · No calendar access · Free</div>
+</section>
+```
+
+```css
+.hero { text-align: center; max-width: 720px; margin: 0 auto; padding: 96px 0 64px; }
+.hero-title {
+  font-family: "Rajdhani", sans-serif; font-weight: 700;
+  font-size: clamp(36px, 7vw, 56px); letter-spacing: 2px; line-height: 1.1;
+  text-transform: uppercase; color: var(--text-heading); margin: 12px 0 16px;
+}
+.lede { font-size: 18px; line-height: 1.5; color: var(--text-muted); margin: 0 auto; max-width: 52ch; }
+.hero-actions { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; margin-top: 32px; }
+.hero-trust {
+  font-family: "Share Tech Mono", monospace; font-size: 10px; letter-spacing: 3px;
+  text-transform: uppercase; color: var(--text-label); margin-top: 24px;
+}
+```
+
+### Auth Screen
+
+**A bare centered form on an empty field is not an auth screen** — it gives a first-time
+visitor nothing to decide with. Two sanctioned layouts:
+
+**Split (default for user-facing products)** — 50/50 above 900px, stacked below. Left: the
+pitch (eyebrow, product name, one-line lede, 3 mono checkpoints). Right: a surface card
+holding the form. The pitch panel may use `background: var(--bg-inset)` to separate it.
+
+**Centered (staff / operator sign-in)** — a single `max-width: 400px` surface card:
+eyebrow → product name → one-line purpose → field → `btn-primary btn-block` → helper text →
+backlink. Only appropriate when everyone signing in already knows what the product is.
+
+```html
+<main class="auth">
+  <section class="auth-pitch">
+    <div class="eyebrow">// Rising Company</div>
+    <h1 class="hero-title">Huddle</h1>
+    <p class="lede">Find a meeting time without the back-and-forth.</p>
+    <ul class="auth-points">
+      <li>// One link — everyone marks their times</li>
+      <li>// No calendar access required</li>
+      <li>// Works for people without an account</li>
+    </ul>
+  </section>
+
+  <section class="auth-panel">
+    <div class="card auth-card">
+      <div class="section-label">// Sign in</div>
+      <div class="field">
+        <label class="field-label" for="email">// Email</label>
+        <input class="input" id="email" type="email" placeholder="you@company.com" autocomplete="email">
+        <p class="field-help">We'll email you a sign-in link. No password to remember.</p>
+      </div>
+      <button class="btn btn-primary btn-block btn-lg">Send magic link</button>
+      <a class="rising-backlink" href="https://rising.company" target="_blank" rel="noopener noreferrer">rising.company</a>
+    </div>
+  </section>
+</main>
+```
+
+```css
+.auth { display: grid; grid-template-columns: 1fr 1fr; min-height: 100vh; }
+.auth-pitch, .auth-panel { display: flex; flex-direction: column; justify-content: center; padding: 48px; }
+.auth-pitch { background: var(--bg-inset); border-right: 1px solid var(--border-subtle); }
+.auth-points {
+  list-style: none; padding: 0; margin: 32px 0 0;
+  display: flex; flex-direction: column; gap: 12px;
+  font-family: "Share Tech Mono", monospace; font-size: 11px;
+  letter-spacing: 1px; color: var(--text-subtle);
+}
+.auth-card { max-width: 400px; width: 100%; display: flex; flex-direction: column; gap: 24px; }
+@media (max-width: 900px) {
+  .auth { grid-template-columns: 1fr; }
+  .auth-pitch { border-right: none; border-bottom: 1px solid var(--border-subtle); padding: 64px 24px 48px; }
+  .auth-panel { padding: 48px 24px 64px; }
+}
+```
+
+Copy rules for auth: say what the product does *before* asking for an address; name the
+mechanism ("we'll email you a link — no password"); never let the button be the only text
+on screen.
+
+### Empty State
+Eyebrow → one-line explanation in `--text-muted` → one `btn-secondary`. Centered, max-width
+420px, 96px vertical padding. Never a bare "No results."
+
+---
+
+## Rising Company Backlink (required branding)
+
+Every Rising Company product must include a subtle backlink to https://rising.company:
+- Target: https://rising.company, opens in new tab (`target="_blank" rel="noopener noreferrer"`)
+- Text: "rising.company" (lowercase, standalone) or wrap an existing "rising company" mention
+- Style: footer mono token — Share Tech Mono, 9–10px, 2–4px letter-spacing, `var(--text-dim)`, uppercase if standalone
+- Hover: transition to `var(--accent-ink)` over 0.2s, no underline
+- Placement: auth screens (below the form, 24–48px gap), app layouts (footer or sidebar
+  bottom, near logout), landing/marketing pages (inline within the site footer copy)
+
+```css
+.rising-backlink {
+  font-family: "Share Tech Mono", monospace; font-size: 10px; letter-spacing: 4px;
+  color: var(--text-dim); text-transform: uppercase; text-decoration: none;
+  transition: color 0.2s;
+}
+.rising-backlink:hover { color: var(--accent-ink); }
+```
+
+---
 
 ## Voice & Tone
 
+Identical in both themes. Daylight is lighter in *value*, not in tone.
+
 ### // Prefix Convention
-Eyebrow text, section labels, legend titles, and footers use the "//" prefix. Signals system commentary — framing/annotating, not informing. Examples: "// RV Power Systems", "// Materials", "// Diagrams"
+Eyebrow text, section labels, form labels, legend titles, and footers use the `//` prefix.
+Signals system commentary — framing/annotating, not informing. Examples: "// Materials",
+"// Email", "// Sign in"
 
 ### Case Rules
-- Uppercase: eyebrows, section labels, page titles, stat labels
-- Normal case: card titles, body text, descriptions, tooltip content
-
-### Font Roles
-- Share Tech Mono: HUD readouts — labels, stats, badges, eyebrows, footers, metadata
-- Rajdhani: human content — titles, descriptions, body text
+- Uppercase: eyebrows, section labels, page/hero titles, stat labels, buttons
+- Normal case: card titles, body text, descriptions, tooltip content, ledes, help text
 
 ### Copy Style
-- Terse technical fragments, not full sentences
+- Terse technical fragments for chrome; **plain sentences for anything a stranger reads.**
+  Landing ledes, help text, and error messages are written for humans, not operators.
 - Em dashes (—) over commas for joining
 - Middle dot (·) as inline separator: "SYSTEM A · SYSTEM B"
 - No exclamation marks. No emoji. No casual language.
 
 ### Layout Philosophy
-- Dark-first: background is a feature, not empty space. 48px page margins.
+- **Theme-appropriate ground:** Mission's darkness is a feature; Daylight's white is a
+  feature. Neither is empty space. 48px page margins in both.
 - Sparse grids: auto-fill responsive, ample gap. Content breathes.
-- Layered depth: Base → Surface → Surface Hover. Elevation through background shifts, not shadows.
+- Layered depth: Base → Surface → Surface Hover. Elevation through background shifts;
+  Daylight adds one hairline shadow, never more.
 - Subtle interaction: 0.2s transitions, border shifts, gradient reveals. Nothing bounces.
-- Scanlines always present on every page.
+- Scanlines and brackets are Mission-only. Do not port them to Daylight.

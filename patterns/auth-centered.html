@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="mission">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>OS — Centered Auth Pattern</title>
+<link rel="icon" type="image/svg+xml" href="../favicon.svg">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Rajdhani:wght@300;500;700&display=swap">
+<link rel="stylesheet" href="../rising.css">
+<style>
+  .auth-centered {
+    min-height: 100vh; display: flex; align-items: center; justify-content: center;
+    padding: 48px 24px;
+  }
+  .auth-centered .card { max-width: 400px; width: 100%; display: flex; flex-direction: column; gap: 24px; }
+  .auth-foot { display: flex; justify-content: center; margin-top: 8px; }
+</style>
+</head>
+<body>
+
+<div class="corner tl"></div>
+<div class="corner tr"></div>
+<div class="corner bl"></div>
+<div class="corner br"></div>
+
+<!--
+  Centered auth is for operator sign-in only: everyone reaching this screen
+  already knows what the product is. A product strangers land on gets the
+  split layout (auth-split.html) behind a landing page.
+-->
+<main class="auth-centered">
+  <div class="card">
+    <div>
+      <div class="eyebrow">// Rising Company</div>
+      <h1 class="page-title" style="margin: 10px 0 8px;">OS</h1>
+      <p class="subtitle">Operations console &mdash; staff access</p>
+    </div>
+
+    <div class="field">
+      <label class="field-label" for="email">// Email</label>
+      <input class="input" id="email" type="email" placeholder="you@rising.company"
+             autocomplete="email" required>
+      <p class="field-help">Sign-in link goes to your Rising address. No password.</p>
+    </div>
+
+    <button class="btn btn-primary btn-block" type="submit">Send magic link</button>
+
+    <div class="auth-foot">
+      <a class="rising-backlink" href="https://rising.company"
+         target="_blank" rel="noopener noreferrer">rising.company</a>
+    </div>
+  </div>
+</main>
+
+</body>
+</html>
