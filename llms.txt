@@ -164,9 +164,11 @@ button/badge background with `--accent-on` text, never as text or a 1px border o
 |---|---|---|
 | Scanlines | required | off |
 | Corner brackets | required on full-bleed HUD views | off |
-| Atmosphere grid | on, mint glow | off, or a single hairline rule |
-| Elevation | background shift only, no shadows | background shift + `0 1px 2px rgba(11,26,20,0.04)` on cards |
-| Page margin | 48px | 48px (24px under 768px) |
+| Atmosphere grid | on — mint glow over a 48px grid | on, but near-invisible (`--chrome-grid-line` @ 3.5%) |
+| Elevation | background shift only (`--card-shadow: none`) | background shift + one hairline (`--card-shadow`) |
+
+Page margins, spacing, radii, type and motion are **identical in both themes** — only the
+four rows above differ.
 
 Daylight drops the HUD texture on purpose. The brand carries in Daylight through the
 Share Tech Mono labels, the `//` prefix, the mint, and the spacing — not through darkness.
@@ -225,6 +227,30 @@ Reference the variables above rather than literal hex. Raw values, per theme:
 | `--danger-ink` | `#ff4a24` | `#c02a10` | error / destructive |
 | `--warning-ink` | `#f5b83d` | `#8a5a00` | warning / caution |
 
+### Derivatives & chrome
+Every accent also carries a wash and a line; these are real tokens, not values to
+recompute at the call site.
+
+| Token | Mission | Daylight | Use |
+|---|---|---|---|
+| `--accent-wash` | `#3af0a014` | `#0b7a4e12` | selected / active surface wash |
+| `--accent-line` | `#3af0a050` | `#0b7a4e45` | accent border |
+| `--accent-bracket` | `#3af0a040` | `#0b7a4e30` | corner brackets |
+| `--danger-wash` | `#ff4a2414` | `#c02a1012` | error banner background |
+| `--danger-line` | `#ff4a2450` | `#c02a1045` | error banner border |
+| `--warning-wash` | `#f5b83d14` | `#8a5a0012` | caution background |
+| `--warning-line` | `#f5b83d50` | `#8a5a0045` | caution border |
+| `--gradient` | mint → blue | deep green → blue | card hover bar |
+| `--card-shadow` | `none` | `0 1px 2px rgba(11,26,20,0.04)` | elevation |
+| `--chrome-scanline` | `rgba(0,0,0,0.04)` | `transparent` | scanline stripe |
+| `--chrome-bracket-display` | `block` | `none` | corner bracket visibility |
+| `--chrome-glow` | `rgba(58,240,160,0.05)` | `rgba(11,122,78,0.04)` | atmosphere radial |
+| `--chrome-grid-line` | `rgba(17,24,32,0.7)` | `rgba(11,26,20,0.035)` | atmosphere grid |
+
+`--accent-2`, `--danger` and `--warning` also exist as full-strength fills (identical in
+both themes) alongside the `-ink` variants above — use the fill as a background with dark
+type, the ink as text or a 1px border.
+
 ### State Recipe
 Any accent derives the same way — no extra tokens needed:
 - Background wash: accent-ink @ 8% alpha (hex suffix `14`, or `12` on light)
@@ -240,7 +266,7 @@ Error banner: `#ff4a2414` / `#ff4a2450` / `#ff4a24` in Mission; `#c02a1012` / `#
 | Style | Family | Size | Weight | Letter-Spacing | Transform | Color |
 |---|---|---|---|---|---|---|
 | Eyebrow | Share Tech Mono | 10px | normal | 4px | uppercase | `--accent-ink` |
-| Hero Title | Rajdhani | 56px (clamp 36–56) | 700 | 2px | uppercase | `--text-heading` |
+| Hero Title | Rajdhani | `clamp(36px, 7vw, 56px)` | 700 | 2px | uppercase | `--text-heading` |
 | Page Title | Rajdhani | 36px | 700 | 3px | uppercase | `--text-heading` |
 | Section Heading | Rajdhani | 28px | 700 | 2px | none | `--text-heading` |
 | Card Title | Rajdhani | 20px | 700 | 1px | none | `--text-heading` |
@@ -321,10 +347,10 @@ positioned 16px from edges, `display: var(--chrome-bracket-display)`.
 ### Card Hover Gradient
 2px bar at card top: `var(--gradient)`. Hidden (`opacity: 0`) by default, `opacity: 1` on hover.
 
-### Card Elevation (Daylight only)
-Daylight has no dark field to sit on, so cards take one hairline shadow:
-`box-shadow: 0 1px 2px rgba(11, 26, 20, 0.04)`. Mission keeps `box-shadow: none` —
-elevation there is background shift only.
+### Card Elevation
+Apply `box-shadow: var(--card-shadow)` unconditionally. Daylight has no dark field to sit
+on, so it resolves to one hairline (`0 1px 2px rgba(11, 26, 20, 0.04)`); Mission resolves
+it to `none`, where elevation is background shift only. One rule, both themes.
 
 ---
 
@@ -416,7 +442,7 @@ The label carries the `//` prefix — it is system commentary, same as a section
 .input:focus-visible { outline: 1px solid var(--accent-ink); outline-offset: 2px; }
 .input[disabled] { color: var(--text-label); border-color: var(--border-subtle); cursor: not-allowed; }
 
-.field-help  { font-family: "Rajdhani", sans-serif; font-size: 13px; color: var(--text-muted); }
+.field-help  { font-size: 13px; color: var(--text-muted); line-height: 1.5; }
 .field-error {
   font-family: "Share Tech Mono", monospace; font-size: 10px;
   letter-spacing: 1px; color: var(--danger-ink);
@@ -433,7 +459,7 @@ Structure: eyebrow tag → title → description → badge row
 - Hover: `background: var(--bg-surface-hover)`, `border-color: var(--border-hover)`, gradient top-bar opacity 1
 - Gradient bar: absolute, top 0, left 0, right 0, height 2px, `background: var(--gradient)`
 - Arrow indicator: absolute, bottom 24px, right 24px, mono, `var(--border-hover)` → `var(--accent-ink)` on hover
-- Daylight adds `box-shadow: 0 1px 2px rgba(11,26,20,0.04)`
+- Elevation: `box-shadow: var(--card-shadow)` — a hairline in Daylight, `none` in Mission
 
 ### Badge
 - Font: Share Tech Mono, 10px, letter-spacing 1px
@@ -446,7 +472,7 @@ Vertical stack of stat rows:
 - Value: Share Tech Mono, 16px, letter-spacing 1px, `var(--accent-ink)`
 
 ### Tooltip
-- `background: var(--bg-base)` @ 92% opacity, `border: 1px solid var(--accent-line)`, radius 4px, padding 8px 12px
+- `background: color-mix(in srgb, var(--bg-base) 92%, transparent)`, `border: 1px solid var(--accent-line)`, radius 4px, padding 8px 12px
 - Name: 14px, weight 700, `var(--text-heading)`, letter-spacing 1px
 - Material line: Share Tech Mono, 10px, `var(--accent-ink)`, letter-spacing 2px
 - Description: 12px, `var(--text-muted)`, line-height 1.5
@@ -507,12 +533,16 @@ one `max-width: 1080px; margin: 0 auto; padding-inline: 48px` container.
 
 ```css
 .hero { text-align: center; max-width: 720px; margin: 0 auto; padding: 96px 0 64px; }
+
+/* No margin on the title itself — hero rhythm comes from .hero .lede below, so
+   .hero-title stays reusable in auth panels and anywhere else. */
 .hero-title {
   font-family: "Rajdhani", sans-serif; font-weight: 700;
   font-size: clamp(36px, 7vw, 56px); letter-spacing: 2px; line-height: 1.1;
-  text-transform: uppercase; color: var(--text-heading); margin: 12px 0 16px;
+  text-transform: uppercase; color: var(--text-heading);
 }
-.lede { font-size: 18px; line-height: 1.5; color: var(--text-muted); margin: 0 auto; max-width: 52ch; }
+.lede { font-size: 18px; line-height: 1.5; color: var(--text-muted); }
+.hero .lede { margin: 16px auto 0; max-width: 52ch; }
 .hero-actions { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; margin-top: 32px; }
 .hero-trust {
   font-family: "Share Tech Mono", monospace; font-size: 10px; letter-spacing: 3px;
@@ -573,9 +603,11 @@ backlink. Only appropriate when everyone signing in already knows what the produ
 }
 .auth-card { max-width: 400px; width: 100%; display: flex; flex-direction: column; gap: 24px; }
 @media (max-width: 900px) {
-  .auth { grid-template-columns: 1fr; }
+  /* min-height: 0 releases the 100vh floor once stacked, or the two panels
+     add up to two full screens. align-items centers the card in the panel. */
+  .auth { grid-template-columns: 1fr; min-height: 0; }
   .auth-pitch { border-right: none; border-bottom: 1px solid var(--border-subtle); padding: 64px 24px 48px; }
-  .auth-panel { padding: 48px 24px 64px; }
+  .auth-panel { padding: 48px 24px 64px; align-items: center; }
 }
 ```
 

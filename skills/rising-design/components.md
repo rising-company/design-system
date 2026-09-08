@@ -13,6 +13,8 @@ The whole layer is also published as a drop-in stylesheet:
 
 A clickable container with eyebrow tag, title, description, badge row, and arrow indicator. Use for navigation links to pages, diagrams, or sections. Features a gradient top-border that appears on hover.
 
+This is the full anchor-card recipe: it layers `display: block` / `text-decoration: none` and its own internal margins on top of the base `.card` in `rising.css`. Those additions are deliberate — the base class stays margin-free so it composes in other contexts (auth panels, feature grids). Use the base class when you want to control spacing yourself.
+
 ### HTML
 
 ```html
@@ -39,6 +41,7 @@ A clickable container with eyebrow tag, title, description, badge row, and arrow
   text-decoration: none;
   border: 1px solid var(--border);
   border-radius: 6px;
+  box-shadow: var(--card-shadow);
   padding: 24px;
   background: var(--bg-surface);
   transition: border-color 0.2s, background 0.2s;
@@ -128,6 +131,7 @@ Small mono-text label used for metadata tags. Use inside `.card-meta` to display
 
 ```css
 .badge {
+  display: inline-block;
   font-family: "Share Tech Mono", monospace;
   font-size: 10px;
   letter-spacing: 1px;
@@ -404,34 +408,38 @@ Full-viewport heads-up display with scanlines, corner brackets, and positioned c
   pointer-events: none;
 }
 
-.corner {
+/* Scoped to .hud on purpose. rising.css defines a global `.corner` that is
+   position: fixed to the viewport; inside the overlay the brackets belong to
+   the .hud box instead, so these must win. */
+.hud .corner {
   position: absolute;
   width: 32px;
   height: 32px;
+  display: block;
 }
 
-.corner.tl {
+.hud .corner.tl {
   top: 16px;
   left: 16px;
   border-top: 1px solid var(--accent-bracket);
   border-left: 1px solid var(--accent-bracket);
 }
 
-.corner.tr {
+.hud .corner.tr {
   top: 16px;
   right: 16px;
   border-top: 1px solid var(--accent-bracket);
   border-right: 1px solid var(--accent-bracket);
 }
 
-.corner.bl {
+.hud .corner.bl {
   bottom: 16px;
   left: 16px;
   border-bottom: 1px solid var(--accent-bracket);
   border-left: 1px solid var(--accent-bracket);
 }
 
-.corner.br {
+.hud .corner.br {
   bottom: 16px;
   right: 16px;
   border-bottom: 1px solid var(--accent-bracket);
@@ -769,7 +777,8 @@ A user-facing product needs a landing page before it needs a login box.
 ### CSS
 
 ```css
-.shell { max-width: 1080px; margin: 0 auto; padding-inline: 48px; }
+/* position + z-index lift the content above .atmosphere, which sits at z-index: 0 */
+.shell { position: relative; z-index: 1; max-width: 1080px; margin: 0 auto; padding-inline: 48px; }
 @media (max-width: 768px) { .shell { padding-inline: 24px; } }
 
 .band { padding-block: 96px; }
@@ -796,8 +805,8 @@ A user-facing product needs a landing page before it needs a login box.
   color: var(--text-heading);
 }
 
-.lede { font-size: 18px; line-height: 1.5; color: var(--text-muted); max-width: 52ch; }
-.hero .lede { margin: 16px auto 0; }
+.lede { font-size: 18px; line-height: 1.5; color: var(--text-muted); }
+.hero .lede { margin: 16px auto 0; max-width: 52ch; }
 .hero-actions { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; margin-top: 32px; }
 
 .hero-trust {

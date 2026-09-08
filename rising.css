@@ -229,7 +229,7 @@ body::before {
   .btn-danger { background: transparent; color: var(--danger-ink); border-color: var(--danger-ink); }
   .btn-danger:hover { background: var(--danger-ink); color: var(--bg-base); }
 
-  .btn[disabled] {
+  .btn[disabled], .btn[aria-busy="true"] {
     color: var(--text-label); background: transparent;
     border-color: var(--border-subtle); cursor: not-allowed;
   }
