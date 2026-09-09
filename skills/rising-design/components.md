@@ -72,8 +72,8 @@ This is the full anchor-card recipe: it layers `display: block` / `text-decorati
 
 .card-tag {
   font-family: "Share Tech Mono", monospace;
-  font-size: 10px;
-  letter-spacing: 3px;
+  font-size: 12px;
+  letter-spacing: 0.15em;
   color: var(--accent-ink);
   text-transform: uppercase;
   margin-bottom: 10px;
@@ -133,8 +133,8 @@ Small mono-text label used for metadata tags. Use inside `.card-meta` to display
 .badge {
   display: inline-block;
   font-family: "Share Tech Mono", monospace;
-  font-size: 10px;
-  letter-spacing: 1px;
+  font-size: 12px;
+  letter-spacing: 0.05em;
   color: var(--text-label);
   background: var(--bg-inset);
   border: 1px solid var(--border-subtle);
@@ -185,17 +185,17 @@ Vertical stack of label/value pairs for displaying key metrics. Used in HUD over
 
 .stats-panel .stat-label {
   font-family: "Share Tech Mono", monospace;
-  font-size: 10px;
+  font-size: 12px;
   color: var(--text-label);
-  letter-spacing: 2px;
+  letter-spacing: 0.1em;
   text-transform: uppercase;
 }
 
 .stats-panel .stat-value {
   font-family: "Share Tech Mono", monospace;
-  font-size: 16px;
+  font-size: 17px;
   color: var(--accent-ink);
-  letter-spacing: 1px;
+  letter-spacing: 0.06em;
 }
 ```
 
@@ -238,9 +238,9 @@ Floating overlay that appears on hover, showing name, category/material, and des
 
 .tooltip .tt-mat {
   font-family: "Share Tech Mono", monospace;
-  font-size: 10px;
+  font-size: 12px;
   color: var(--accent-ink);
-  letter-spacing: 2px;
+  letter-spacing: 0.1em;
   margin-top: 3px;
 }
 
@@ -278,8 +278,8 @@ header {
 
 header .eyebrow {
   font-family: "Share Tech Mono", monospace;
-  font-size: 10px;
-  letter-spacing: 4px;
+  font-size: 12px;
+  letter-spacing: 0.2em;
   color: var(--accent-ink);
   text-transform: uppercase;
   margin-bottom: 10px;
@@ -295,9 +295,9 @@ header h1 {
 
 header p {
   font-family: "Share Tech Mono", monospace;
-  font-size: 12px;
+  font-size: 13px;
   color: var(--text-subtle);
-  letter-spacing: 2px;
+  letter-spacing: 0.1em;
   margin-top: 10px;
 }
 ```
@@ -324,9 +324,9 @@ footer {
   padding: 24px 48px;
   border-top: 1px solid var(--border);
   font-family: "Share Tech Mono", monospace;
-  font-size: 10px;
+  font-size: 12px;
   color: var(--text-dim);
-  letter-spacing: 2px;
+  letter-spacing: 0.1em;
 }
 
 footer a {
@@ -455,8 +455,8 @@ Full-viewport heads-up display with scanlines, corner brackets, and positioned c
 
 .title-block h1 {
   font-family: "Share Tech Mono", monospace;
-  font-size: 12px;
-  letter-spacing: 4px;
+  font-size: 13px;
+  letter-spacing: 0.2em;
   color: var(--accent-ink);
   text-transform: uppercase;
   margin-bottom: 4px;
@@ -472,10 +472,10 @@ Full-viewport heads-up display with scanlines, corner brackets, and positioned c
 
 .title-block .sub {
   font-family: "Share Tech Mono", monospace;
-  font-size: 10px;
+  font-size: 12px;
   color: var(--text-subtle);
   margin-top: 6px;
-  letter-spacing: 2px;
+  letter-spacing: 0.1em;
 }
 
 .legend {
@@ -487,8 +487,8 @@ Full-viewport heads-up display with scanlines, corner brackets, and positioned c
 
 .legend-title {
   font-family: "Share Tech Mono", monospace;
-  font-size: 10px;
-  letter-spacing: 3px;
+  font-size: 12px;
+  letter-spacing: 0.15em;
   color: var(--accent-ink);
   margin-bottom: 10px;
   text-transform: uppercase;
@@ -518,7 +518,7 @@ Full-viewport heads-up display with scanlines, corner brackets, and positioned c
 
 .legend-sub {
   font-family: "Share Tech Mono", monospace;
-  font-size: 10px;
+  font-size: 12px;
   color: var(--text-subtle);
   margin-left: 24px;
   margin-top: -4px;
@@ -535,9 +535,9 @@ Full-viewport heads-up display with scanlines, corner brackets, and positioned c
 
 .controls-hint p {
   font-family: "Share Tech Mono", monospace;
-  font-size: 10px;
+  font-size: 12px;
   color: var(--text-label);
-  letter-spacing: 2px;
+  letter-spacing: 0.1em;
   line-height: 1.9;
 }
 
@@ -568,8 +568,8 @@ Responsive auto-fill grid for laying out cards. Columns fill automatically at a 
 ```css
 .section-title {
   font-family: "Share Tech Mono", monospace;
-  font-size: 10px;
-  letter-spacing: 4px;
+  font-size: 12px;
+  letter-spacing: 0.2em;
   color: var(--text-label);
   text-transform: uppercase;
   margin-bottom: 24px;
@@ -606,8 +606,8 @@ Mono, uppercase, tracked — reads as a system control in both themes.
 ```css
 .btn {
   font-family: "Share Tech Mono", monospace;
-  font-size: 11px;
-  letter-spacing: 2px;
+  font-size: 12px;
+  letter-spacing: 0.1em;
   text-transform: uppercase;
   padding: 13px 26px;
   border-radius: 4px;
@@ -622,8 +622,8 @@ Mono, uppercase, tracked — reads as a system control in both themes.
   transition: background 0.2s, border-color 0.2s, color 0.2s, opacity 0.2s;
 }
 
-.btn-sm { font-size: 10px; padding: 9px 18px; letter-spacing: 1.5px; }
-.btn-lg { font-size: 12px; padding: 17px 34px; letter-spacing: 3px; }
+.btn-sm { font-size: 12px; padding: 9px 18px; letter-spacing: 0.075em; }
+.btn-lg { font-size: 13px; padding: 17px 34px; letter-spacing: 0.15em; }
 .btn-block { display: flex; width: 100%; }
 
 /* Solid — the loud one. One per view. */
@@ -687,8 +687,8 @@ The label carries the `//` prefix — it is system commentary, same as a section
 
 .field-label {
   font-family: "Share Tech Mono", monospace;
-  font-size: 10px;
-  letter-spacing: 3px;
+  font-size: 12px;
+  letter-spacing: 0.15em;
   text-transform: uppercase;
   color: var(--text-label);
 }
@@ -716,8 +716,8 @@ The label carries the `//` prefix — it is system commentary, same as a section
 
 .field-error {
   font-family: "Share Tech Mono", monospace;
-  font-size: 10px;
-  letter-spacing: 1px;
+  font-size: 12px;
+  letter-spacing: 0.05em;
   color: var(--danger-ink);
 }
 
@@ -811,7 +811,7 @@ A user-facing product needs a landing page before it needs a login box.
 
 .hero-trust {
   font-family: "Share Tech Mono", monospace;
-  font-size: 10px; letter-spacing: 3px; text-transform: uppercase;
+  font-size: 12px; letter-spacing: 0.15em; text-transform: uppercase;
   color: var(--text-label); margin-top: 24px;
 }
 
@@ -819,7 +819,7 @@ A user-facing product needs a landing page before it needs a login box.
 
 .step-num {
   font-family: "Share Tech Mono", monospace;
-  font-size: 12px; letter-spacing: 2px; color: var(--accent-ink);
+  font-size: 13px; letter-spacing: 0.1em; color: var(--accent-ink);
   padding-bottom: 12px; margin-bottom: 12px;
   border-bottom: 1px solid var(--border);
 }
@@ -885,7 +885,7 @@ Worked example: `patterns/landing.html` in the design-system repo.
   list-style: none; padding: 0; margin: 32px 0 0;
   display: flex; flex-direction: column; gap: 12px;
   font-family: "Share Tech Mono", monospace;
-  font-size: 11px; letter-spacing: 1px; color: var(--text-subtle);
+  font-size: 12px; letter-spacing: 0.05em; color: var(--text-subtle);
 }
 
 .auth-card { max-width: 400px; width: 100%; display: flex; flex-direction: column; gap: 24px; }

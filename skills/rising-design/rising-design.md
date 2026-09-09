@@ -67,9 +67,9 @@ Reference the variable, never the literal hex. Both themes define the identical 
 | `--text-heading` | `#e8f4ff` | `#0b1a14` | page & card titles |
 | `--text-body` | `#c8d8e8` | `#26332d` | primary body text |
 | `--text-muted` | `#84a89a` | `#43564c` | descriptions |
-| `--text-subtle` | `#6a8a7a` | `#556b60` | subtitles · mono metadata |
-| `--text-label` | `#4a6a5c` | `#5f766a` | section labels · placeholders |
-| `--text-dim` | `#2a3a30` | `#8a9d94` | footer chrome — decorative only |
+| `--text-subtle` | `#7d9b8c` | `#4a5d54` | subtitles · mono metadata |
+| `--text-label` | `#6e8f80` | `#52655b` | section labels · placeholders |
+| `--text-dim` | `#61856d` | `#61746b` | footer chrome · backlink |
 | `--accent` | `#3af0a0` | `#3af0a0` | brand **fill** (button/badge background) |
 | `--accent-hover` | `#6ff7be` | `#22dc8c` | `--accent` under hover |
 | `--accent-ink` | `#3af0a0` | `#0b7a4e` | accent as **text · icon · border** |
@@ -88,7 +88,7 @@ Reference the variable, never the literal hex. Both themes define the identical 
 **Two traps:**
 
 - **`--accent` is a fill, not an ink.** Mint `#3af0a0` is 1.4:1 on white. In Daylight use it as a *background* with `--accent-on` text. For accent text, icons and 1px borders use `--accent-ink`.
-- **`--text-dim` is below AA in both themes on purpose.** Decorative de-emphasis for footer chrome and the backlink only. Never load-bearing, and never a form placeholder — use `--text-label`.
+- **The bottom of the ramp still has to clear AA.** `--text-subtle` / `--text-label` / `--text-dim` sit at 5.5–6.6:1, `--text-dim` included, because nearly everything on those rungs is 12px Share Tech Mono — hairline stems that go grey on a 1× display, where contrast is the only thing buying them back. `--text-dim` is the lowest rung, not a licence to go under 4.5:1; keep it to footer chrome and the backlink, and never a form placeholder — use `--text-label`.
 
 **State recipe** — any accent derives the same way, no extra tokens: background wash @8% · border @31% · text/icon at full ink strength.
 
@@ -110,21 +110,32 @@ Drive these from tokens so the same rule is inert in the other theme:
 
 | Style | Family | Size | Weight | LS | Transform | Color |
 |---|---|---|---|---|---|---|
-| Eyebrow | Mono | 10px | — | 4px | upper | `--accent-ink` |
+| Eyebrow | Mono | 12px | — | 0.2em | upper | `--accent-ink` |
 | Hero Title | Rajdhani | clamp(36–56px) | 700 | 2px | upper | `--text-heading` |
 | Page Title | Rajdhani | 36px | 700 | 3px | upper | `--text-heading` |
 | Section Heading | Rajdhani | 28px | 700 | 2px | — | `--text-heading` |
 | Card Title | Rajdhani | 20px | 700 | 1px | — | `--text-heading` |
-| Lede | Rajdhani | 18px | 400 | — | — | `--text-muted` |
-| Body | Rajdhani | 14px | 400 | — | — | `--text-muted` |
-| Stat Value | Mono | 16px | — | 1px | — | `--accent-ink` |
-| Subtitle | Mono | 12px | — | 2px | — | `--text-subtle` |
-| Section Label | Mono | 10px | — | 4px | upper | `--text-label` |
-| Button | Mono | 11px | — | 2px | upper | per variant |
-| Badge | Mono | 10px | — | 1px | — | `--text-label` |
-| Footer | Mono | 10px | — | 2px | — | `--text-dim` |
+| Lede | Rajdhani | 18px | 500 | — | — | `--text-muted` |
+| Body | Rajdhani | 15px | 500 | — | — | `--text-muted` |
+| Stat Value | Mono | 17px | — | 0.06em | — | `--accent-ink` |
+| Subtitle | Mono | 13px | — | 0.1em | — | `--text-subtle` |
+| Section Label | Mono | 12px | — | 0.2em | upper | `--text-label` |
+| Button | Mono | 12px | — | 0.1em | upper | per variant |
+| Badge | Mono | 12px | — | 0.05em | — | `--text-label` |
+| Footer | Mono | 12px | — | 0.1em | — | `--text-dim` |
 
-Line-height: headings `1.1` · lede `1.5` · body `1.55` · mono metadata `1.5–1.9`.
+Line-height: headings `1.1` · lede `1.5` · body `1.6` · mono metadata `1.5–1.9`.
+
+**Two rules hold this scale together, and both exist for 1× displays:**
+
+- **12px is the floor for Share Tech Mono — nothing smaller, ever.** Its stems are about
+  7% of the em, so below 12px they sample to under one device pixel on a non-Retina
+  monitor and turn to grey mush. The same text looks fine on a Retina laptop, which is
+  exactly why the floor has to be a rule and not a judgement call.
+- **Mono tracking is in `em`, not `px`.** Tracking that reads as HUD spacing at 12px reads
+  as disconnected letters at 10px; `em` keeps the ratio fixed whatever the size. The
+  widest rung is `0.2em` — resist going past it, because past roughly a quarter of an em
+  the eye stops seeing words and starts seeing characters.
 
 ## Spacing
 
@@ -207,7 +218,7 @@ Every Rising Company product must include a subtle backlink to `https://rising.c
 
 - Target `https://rising.company`, new tab (`target="_blank" rel="noopener noreferrer"`)
 - Text `rising.company` (lowercase) — or wrap an existing "rising company" mention in the footer
-- Style: Share Tech Mono · 9–10px · 2–4px letter-spacing · `--text-dim` · uppercase if standalone
+- Style: Share Tech Mono · 12px · 0.1–0.2em letter-spacing · `--text-dim` · uppercase if standalone
 - Hover: `--accent-ink` over `0.2s`. No underline.
 - Placement: auth screens (below the form, 24–48px gap), app layouts (footer or sidebar bottom near logout), landing/marketing (inline in the site footer copy)
 

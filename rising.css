@@ -26,9 +26,9 @@
     --text-heading: #e8f4ff;
     --text-body: #c8d8e8;
     --text-muted: #84a89a;
-    --text-subtle: #6a8a7a;
-    --text-label: #4a6a5c;
-    --text-dim: #2a3a30;
+    --text-subtle: #7d9b8c;
+    --text-label: #6e8f80;
+    --text-dim: #61856d;
 
     --accent: #3af0a0;
     --accent-hover: #6ff7be;
@@ -73,9 +73,9 @@
     --text-heading: #0b1a14;
     --text-body: #26332d;
     --text-muted: #43564c;
-    --text-subtle: #556b60;
-    --text-label: #5f766a;
-    --text-dim: #8a9d94;
+    --text-subtle: #4a5d54;
+    --text-label: #52655b;
+    --text-dim: #61746b;
 
     --accent: #3af0a0;
     --accent-hover: #22dc8c;
@@ -163,13 +163,13 @@ body::before {
 /* ══════════════ TEXT STYLES ══════════════ */
 .eyebrow {
   font-family: "Share Tech Mono", monospace;
-  font-size: 10px; letter-spacing: 4px; text-transform: uppercase;
+  font-size: 12px; letter-spacing: 0.2em; text-transform: uppercase;
   color: var(--accent-ink);
 }
 
 .section-label {
   font-family: "Share Tech Mono", monospace;
-  font-size: 10px; letter-spacing: 4px; text-transform: uppercase;
+  font-size: 12px; letter-spacing: 0.2em; text-transform: uppercase;
   color: var(--text-label);
 }
 
@@ -186,35 +186,35 @@ body::before {
 
 .sec-title { font-size: 28px; font-weight: 700; letter-spacing: 2px; color: var(--text-heading); line-height: 1.1; }
 .card-title { font-size: 20px; font-weight: 700; letter-spacing: 1px; color: var(--text-heading); }
-.lede { font-size: 18px; line-height: 1.5; color: var(--text-muted); }
-.body { font-size: 14px; line-height: 1.55; color: var(--text-muted); }
+.lede { font-size: 18px; font-weight: 500; line-height: 1.5; color: var(--text-muted); }
+.body { font-size: 15px; font-weight: 500; line-height: 1.6; color: var(--text-muted); }
 
 .subtitle {
   font-family: "Share Tech Mono", monospace;
-  font-size: 12px; letter-spacing: 2px; color: var(--text-subtle);
+  font-size: 13px; letter-spacing: 0.1em; color: var(--text-subtle);
 }
 
 .stat-label {
   font-family: "Share Tech Mono", monospace;
-  font-size: 10px; letter-spacing: 2px; text-transform: uppercase; color: var(--text-label);
+  font-size: 12px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-label);
 }
 
 .stat-value {
   font-family: "Share Tech Mono", monospace;
-  font-size: 16px; letter-spacing: 1px; color: var(--accent-ink);
+  font-size: 17px; letter-spacing: 0.06em; color: var(--accent-ink);
 }
 
 /* ══════════════ BUTTONS ══════════════ */
   .btn {
     font-family: "Share Tech Mono", monospace;
-    font-size: 11px; letter-spacing: 2px; text-transform: uppercase;
+    font-size: 12px; letter-spacing: 0.1em; text-transform: uppercase;
     padding: 13px 26px; border-radius: 4px; border: 1px solid transparent;
     display: inline-flex; align-items: center; justify-content: center; gap: 10px;
     cursor: pointer; text-decoration: none; white-space: nowrap;
     transition: background 0.2s, border-color 0.2s, color 0.2s, opacity 0.2s;
   }
-  .btn-sm { font-size: 10px; padding: 9px 18px; letter-spacing: 1.5px; }
-  .btn-lg { font-size: 12px; padding: 17px 34px; letter-spacing: 3px; }
+  .btn-sm { font-size: 12px; padding: 9px 18px; letter-spacing: 0.075em; }
+  .btn-lg { font-size: 13px; padding: 17px 34px; letter-spacing: 0.15em; }
   .btn-block { display: flex; width: 100%; }
 
   .btn-primary { background: var(--accent); color: var(--accent-on); border-color: var(--accent); }
@@ -236,47 +236,12 @@ body::before {
 
   .btn-row { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; }
 
-  /* ══════════════ FORM FIELDS ══════════════ */
-  .field { display: flex; flex-direction: column; gap: 8px; }
-
-  .field-label {
-    font-family: "Share Tech Mono", monospace; font-size: 10px;
-    letter-spacing: 3px; text-transform: uppercase; color: var(--text-label);
-  }
-
-  .input {
-    font-family: "Rajdhani", sans-serif; font-size: 16px; font-weight: 500;
-    color: var(--text-body); background: var(--bg-surface);
-    border: 1px solid var(--border); border-radius: 4px;
-    padding: 13px 14px; width: 100%;
-    transition: border-color 0.2s, background 0.2s;
-  }
-  .input::placeholder { color: var(--text-label); font-weight: 400; }
-  .input:hover { border-color: var(--border-hover); }
-  .input:focus { outline: none; border-color: var(--accent-ink); background: var(--bg-surface-hover); }
-  .input:focus-visible { outline: 1px solid var(--accent-ink); outline-offset: 2px; }
-  .input[disabled] { color: var(--text-label); border-color: var(--border-subtle); cursor: not-allowed; }
-
-  .field-help { font-size: 13px; color: var(--text-muted); line-height: 1.5; }
-
-  .field-error {
-    font-family: "Share Tech Mono", monospace; font-size: 10px;
-    letter-spacing: 1px; color: var(--danger-ink);
-  }
-  .field.is-error .input { border-color: var(--danger-ink); }
-
-  .control-grid {
-    display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-    gap: 24px; padding: 24px; border: 1px solid var(--border);
-    border-radius: 6px; background: var(--bg-surface); box-shadow: var(--card-shadow);
-  }
-
-  /* ══════════════ FORM FIELDS ══════════════ */
+/* ══════════════ FORM FIELDS ══════════════ */
 .field { display: flex; flex-direction: column; gap: 8px; }
 
 .field-label {
-  font-family: "Share Tech Mono", monospace; font-size: 10px;
-  letter-spacing: 3px; text-transform: uppercase; color: var(--text-label);
+  font-family: "Share Tech Mono", monospace; font-size: 12px;
+  letter-spacing: 0.15em; text-transform: uppercase; color: var(--text-label);
 }
 
 .input {
@@ -292,13 +257,19 @@ body::before {
 .input:focus-visible { outline: 1px solid var(--accent-ink); outline-offset: 2px; }
 .input[disabled] { color: var(--text-label); border-color: var(--border-subtle); cursor: not-allowed; }
 
-.field-help { font-size: 13px; color: var(--text-muted); line-height: 1.5; }
+.field-help { font-size: 14px; font-weight: 500; color: var(--text-muted); line-height: 1.5; }
 
 .field-error {
-  font-family: "Share Tech Mono", monospace; font-size: 10px;
-  letter-spacing: 1px; color: var(--danger-ink);
+  font-family: "Share Tech Mono", monospace; font-size: 12px;
+  letter-spacing: 0.05em; color: var(--danger-ink);
 }
 .field.is-error .input { border-color: var(--danger-ink); }
+
+.control-grid {
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 24px; padding: 24px; border: 1px solid var(--border);
+  border-radius: 6px; background: var(--bg-surface); box-shadow: var(--card-shadow);
+}
 
 /* ══════════════ CARD ══════════════ */
 .card {
@@ -320,7 +291,7 @@ a.card:hover::before, .card.is-interactive:hover::before { opacity: 1; }
 
 .card-tag {
   font-family: "Share Tech Mono", monospace;
-  font-size: 10px; letter-spacing: 3px; text-transform: uppercase;
+  font-size: 12px; letter-spacing: 0.15em; text-transform: uppercase;
   color: var(--accent-ink);
 }
 
@@ -328,10 +299,10 @@ a.card:hover::before, .card.is-interactive:hover::before { opacity: 1; }
 .badge {
   display: inline-block;
   font-family: "Share Tech Mono", monospace;
-  font-size: 10px; letter-spacing: 1px;
+  font-size: 12px; letter-spacing: 0.05em;
   background: var(--bg-inset); color: var(--text-label);
   border: 1px solid var(--border-subtle); border-radius: 3px;
-  padding: 3px 7px;
+  padding: 4px 8px;
 }
 
 /* ══════════════ GRID ══════════════ */
@@ -370,7 +341,7 @@ a.card:hover::before, .card.is-interactive:hover::before { opacity: 1; }
 
 .nav-links a {
   font-family: "Share Tech Mono", monospace;
-  font-size: 10px; letter-spacing: 2px; text-transform: uppercase;
+  font-size: 12px; letter-spacing: 0.1em; text-transform: uppercase;
   color: var(--text-label); text-decoration: none; transition: color 0.2s;
 }
 .nav-links a:hover { color: var(--accent-ink); }
@@ -392,7 +363,7 @@ a.card:hover::before, .card.is-interactive:hover::before { opacity: 1; }
 
 .hero-trust {
   font-family: "Share Tech Mono", monospace;
-  font-size: 10px; letter-spacing: 3px; text-transform: uppercase;
+  font-size: 12px; letter-spacing: 0.15em; text-transform: uppercase;
   color: var(--text-label); margin-top: 24px;
 }
 
@@ -400,7 +371,7 @@ a.card:hover::before, .card.is-interactive:hover::before { opacity: 1; }
 
 .step-num {
   font-family: "Share Tech Mono", monospace;
-  font-size: 12px; letter-spacing: 2px; color: var(--accent-ink);
+  font-size: 13px; letter-spacing: 0.1em; color: var(--accent-ink);
   padding-bottom: 12px; margin-bottom: 12px;
   border-bottom: 1px solid var(--border);
 }
@@ -417,8 +388,8 @@ a.card:hover::before, .card.is-interactive:hover::before { opacity: 1; }
 .auth-points {
   list-style: none; padding: 0; margin: 32px 0 0;
   display: flex; flex-direction: column; gap: 12px;
-  font-family: "Share Tech Mono", monospace; font-size: 11px;
-  letter-spacing: 1px; color: var(--text-subtle);
+  font-family: "Share Tech Mono", monospace; font-size: 12px;
+  letter-spacing: 0.05em; color: var(--text-subtle);
 }
 
 .auth-card { max-width: 400px; width: 100%; display: flex; flex-direction: column; gap: 24px; }
@@ -436,7 +407,7 @@ a.card:hover::before, .card.is-interactive:hover::before { opacity: 1; }
 /* ══════════════ FOOTER ══════════════ */
 .site-footer {
   font-family: "Share Tech Mono", monospace;
-  font-size: 10px; letter-spacing: 2px; color: var(--text-dim);
+  font-size: 12px; letter-spacing: 0.1em; color: var(--text-dim);
   border-top: 1px solid var(--border);
   padding-block: 24px;
 }
@@ -446,7 +417,7 @@ a.card:hover::before, .card.is-interactive:hover::before { opacity: 1; }
 
 .rising-backlink {
   font-family: "Share Tech Mono", monospace;
-  font-size: 10px; letter-spacing: 4px; text-transform: uppercase;
+  font-size: 12px; letter-spacing: 0.2em; text-transform: uppercase;
   color: var(--text-dim); text-decoration: none; transition: color 0.2s;
 }
 .rising-backlink:hover { color: var(--accent-ink); }

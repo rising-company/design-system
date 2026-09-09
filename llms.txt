@@ -56,9 +56,9 @@ Set `data-theme` on the root element. `mission` is the default when the attribut
   --text-heading: #e8f4ff;
   --text-body: #c8d8e8;
   --text-muted: #84a89a;
-  --text-subtle: #6a8a7a;
-  --text-label: #4a6a5c;
-  --text-dim: #2a3a30;
+  --text-subtle: #7d9b8c;
+  --text-label: #6e8f80;
+  --text-dim: #61856d;
 
   --accent: #3af0a0;            /* brand fill — identical in both themes */
   --accent-hover: #6ff7be;      /* --accent under hover */
@@ -103,9 +103,9 @@ Set `data-theme` on the root element. `mission` is the default when the attribut
   --text-heading: #0b1a14;
   --text-body: #26332d;
   --text-muted: #43564c;
-  --text-subtle: #556b60;
-  --text-label: #5f766a;
-  --text-dim: #8a9d94;
+  --text-subtle: #4a5d54;
+  --text-label: #52655b;
+  --text-dim: #61746b;
 
   --accent: #3af0a0;
   --accent-hover: #22dc8c;      /* --accent under hover */
@@ -146,14 +146,16 @@ reads correctly in the other. Contrast vs. the theme's `--bg-base`:
 | `--text-heading` | 17.5 | 16.8 | titles |
 | `--text-body` | 13.5 | 12.4 | body copy |
 | `--text-muted` | 7.5 | 7.4 | descriptions |
-| `--text-subtle` | 5.2 | 5.4 | subtitles, mono metadata |
-| `--text-label` | 3.3 | 4.6 | section labels, stat labels |
-| `--text-dim` | 1.6 | 2.7 | decorative only — see below |
+| `--text-subtle` | 6.5 | 6.6 | subtitles, mono metadata |
+| `--text-label` | 5.5 | 5.8 | section labels, stat labels |
+| `--text-dim` | 4.6 | 4.7 | footer chrome, backlink |
 | `--accent-ink` | 13.2 | 5.0 | accent text, icons, borders |
 
-`--text-dim` is **below AA in both themes by design**. It is decorative de-emphasis for
-footer chrome and the rising.company backlink. Never let it carry information that isn't
-also available elsewhere, and never use it for form placeholders — use `--text-label`.
+**Every rung clears AA (4.5:1), including `--text-dim`.** That is deliberate: almost
+everything on the bottom three rungs is 12px Share Tech Mono, and Share Tech Mono has
+hairline stems that go grey and blurry on a 1× display. Contrast is what buys those
+stems back. `--text-dim` is still the lowest rung — use it for footer chrome and the
+rising.company backlink, not for form placeholders (use `--text-label`).
 
 `--accent` (`#3af0a0`) is a **fill**, not an ink, in Daylight: 1.4:1 on white. Use it as a
 button/badge background with `--accent-on` text, never as text or a 1px border on light.
@@ -212,9 +214,9 @@ Reference the variables above rather than literal hex. Raw values, per theme:
 | `--text-heading` | `#e8f4ff` | `#0b1a14` | page/card titles |
 | `--text-body` | `#c8d8e8` | `#26332d` | primary body text |
 | `--text-muted` | `#84a89a` | `#43564c` | descriptions, secondary body |
-| `--text-subtle` | `#6a8a7a` | `#556b60` | subtitles, secondary mono |
-| `--text-label` | `#4a6a5c` | `#5f766a` | section labels, stat labels, placeholders |
-| `--text-dim` | `#2a3a30` | `#8a9d94` | footer chrome, backlink — decorative only |
+| `--text-subtle` | `#7d9b8c` | `#4a5d54` | subtitles, secondary mono |
+| `--text-label` | `#6e8f80` | `#52655b` | section labels, stat labels, placeholders |
+| `--text-dim` | `#61856d` | `#61746b` | footer chrome, backlink — decorative only |
 
 ### Accents
 | Token | Mission | Daylight | Use |
@@ -265,21 +267,37 @@ Error banner: `#ff4a2414` / `#ff4a2450` / `#ff4a24` in Mission; `#c02a1012` / `#
 
 | Style | Family | Size | Weight | Letter-Spacing | Transform | Color |
 |---|---|---|---|---|---|---|
-| Eyebrow | Share Tech Mono | 10px | normal | 4px | uppercase | `--accent-ink` |
+| Eyebrow | Share Tech Mono | 12px | normal | 0.2em | uppercase | `--accent-ink` |
 | Hero Title | Rajdhani | `clamp(36px, 7vw, 56px)` | 700 | 2px | uppercase | `--text-heading` |
 | Page Title | Rajdhani | 36px | 700 | 3px | uppercase | `--text-heading` |
 | Section Heading | Rajdhani | 28px | 700 | 2px | none | `--text-heading` |
 | Card Title | Rajdhani | 20px | 700 | 1px | none | `--text-heading` |
-| Lede | Rajdhani | 18px | 400 | normal | none | `--text-muted` |
-| Body | Rajdhani | 14px | 400 | normal | none | `--text-muted` |
-| Stat Value | Share Tech Mono | 16px | normal | 1px | none | `--accent-ink` |
-| Subtitle | Share Tech Mono | 12px | normal | 2px | none | `--text-subtle` |
-| Section Label | Share Tech Mono | 10px | normal | 4px | uppercase | `--text-label` |
-| Button | Share Tech Mono | 11px | normal | 2px | uppercase | per variant |
-| Badge | Share Tech Mono | 10px | normal | 1px | none | `--text-label` |
-| Footer | Share Tech Mono | 10px | normal | 2px | none | `--text-dim` |
+| Lede | Rajdhani | 18px | 500 | normal | none | `--text-muted` |
+| Body | Rajdhani | 15px | 500 | normal | none | `--text-muted` |
+| Stat Value | Share Tech Mono | 17px | normal | 0.06em | none | `--accent-ink` |
+| Subtitle | Share Tech Mono | 13px | normal | 0.1em | none | `--text-subtle` |
+| Section Label | Share Tech Mono | 12px | normal | 0.2em | uppercase | `--text-label` |
+| Button | Share Tech Mono | 12px | normal | 0.1em | uppercase | per variant |
+| Badge | Share Tech Mono | 12px | normal | 0.05em | none | `--text-label` |
+| Footer | Share Tech Mono | 12px | normal | 0.1em | none | `--text-dim` |
 
-Line-height: headings 1.1 · lede 1.5 · body 1.55 · mono metadata 1.5–1.9.
+Line-height: headings 1.1 · lede 1.5 · body 1.6 · mono metadata 1.5–1.9.
+
+### Two rules hold the mono scale together
+
+Both exist for 1× (non-Retina) displays, where most of this system is actually read:
+
+**12px is the floor for Share Tech Mono. Nothing smaller, ever.** Its stems are roughly
+7% of the em, so below 12px they sample to under one device pixel on a 1× monitor and
+render as grey blur. The identical text looks crisp on a Retina laptop, which is why the
+floor has to be a rule rather than a judgement call — the display you designed on is not
+the display it ships to. Rajdhani body copy has a matching floor of 15px, at weight 500
+(400 is not in the font link, and 300 is far too light at text sizes).
+
+**Mono tracking is expressed in `em`, never `px`.** Tracking that reads as deliberate HUD
+spacing at 12px reads as disconnected characters at 10px; `em` pins the ratio whatever the
+size. `0.2em` is the widest rung in the system — past about a quarter of an em the eye
+stops resolving words and starts spelling out letters.
 
 ## Spacing
 
@@ -370,14 +388,14 @@ Mono, uppercase, tracked. Three variants plus danger; three sizes.
 ```css
 .btn {
   font-family: "Share Tech Mono", monospace;
-  font-size: 11px; letter-spacing: 2px; text-transform: uppercase;
+  font-size: 12px; letter-spacing: 0.1em; text-transform: uppercase;
   padding: 13px 26px; border-radius: 4px; border: 1px solid transparent;
   display: inline-flex; align-items: center; justify-content: center; gap: 10px;
   cursor: pointer; text-decoration: none; white-space: nowrap;
   transition: background 0.2s, border-color 0.2s, color 0.2s, opacity 0.2s;
 }
-.btn-sm { font-size: 10px; padding: 9px 18px; letter-spacing: 1.5px; }
-.btn-lg { font-size: 12px; padding: 17px 34px; letter-spacing: 3px; }
+.btn-sm { font-size: 12px; padding: 9px 18px; letter-spacing: 0.075em; }
+.btn-lg { font-size: 13px; padding: 17px 34px; letter-spacing: 0.15em; }
 
 /* Solid — the loud one. One per view. */
 .btn-primary { background: var(--accent); color: var(--accent-on); border-color: var(--accent); }
@@ -427,8 +445,8 @@ The label carries the `//` prefix — it is system commentary, same as a section
 ```css
 .field { display: flex; flex-direction: column; gap: 8px; }
 .field-label {
-  font-family: "Share Tech Mono", monospace; font-size: 10px;
-  letter-spacing: 3px; text-transform: uppercase; color: var(--text-label);
+  font-family: "Share Tech Mono", monospace; font-size: 12px;
+  letter-spacing: 0.15em; text-transform: uppercase; color: var(--text-label);
 }
 .input {
   font-family: "Rajdhani", sans-serif; font-size: 16px; font-weight: 500;
@@ -444,8 +462,8 @@ The label carries the `//` prefix — it is system commentary, same as a section
 
 .field-help  { font-size: 13px; color: var(--text-muted); line-height: 1.5; }
 .field-error {
-  font-family: "Share Tech Mono", monospace; font-size: 10px;
-  letter-spacing: 1px; color: var(--danger-ink);
+  font-family: "Share Tech Mono", monospace; font-size: 12px;
+  letter-spacing: 0.05em; color: var(--danger-ink);
 }
 .field.is-error .input { border-color: var(--danger-ink); }
 ```
@@ -462,27 +480,27 @@ Structure: eyebrow tag → title → description → badge row
 - Elevation: `box-shadow: var(--card-shadow)` — a hairline in Daylight, `none` in Mission
 
 ### Badge
-- Font: Share Tech Mono, 10px, letter-spacing 1px
+- Font: Share Tech Mono, 12px, letter-spacing 0.05em
 - `background: var(--bg-inset)`, `border: 1px solid var(--border-subtle)`, radius 3px, padding 3px 7px
 - Color: `var(--text-label)`
 
 ### Stats Panel
 Vertical stack of stat rows:
-- Label: Share Tech Mono, 10px, letter-spacing 2px, uppercase, `var(--text-label)`
-- Value: Share Tech Mono, 16px, letter-spacing 1px, `var(--accent-ink)`
+- Label: Share Tech Mono, 12px, letter-spacing 0.1em, uppercase, `var(--text-label)`
+- Value: Share Tech Mono, 17px, letter-spacing 0.06em, `var(--accent-ink)`
 
 ### Tooltip
 - `background: color-mix(in srgb, var(--bg-base) 92%, transparent)`, `border: 1px solid var(--accent-line)`, radius 4px, padding 8px 12px
-- Name: 14px, weight 700, `var(--text-heading)`, letter-spacing 1px
-- Material line: Share Tech Mono, 10px, `var(--accent-ink)`, letter-spacing 2px
-- Description: 12px, `var(--text-muted)`, line-height 1.5
+- Name: 15px, weight 700, `var(--text-heading)`, letter-spacing 1px
+- Material line: Share Tech Mono, 12px, `var(--accent-ink)`, letter-spacing 0.1em
+- Description: 13px, `var(--text-muted)`, line-height 1.5
 
 ### App Header
 - Structure: eyebrow → page title → subtitle
 - Padding: 48px 48px 32px, `border-bottom: 1px solid var(--border)`
 
 ### Footer
-- Font: Share Tech Mono, 10px, `var(--text-dim)`, letter-spacing 2px
+- Font: Share Tech Mono, 12px, `var(--text-dim)`, letter-spacing 0.1em
 - Padding: 24px 48px, `border-top: 1px solid var(--border)`
 - Must include the rising.company backlink — see below.
 
@@ -545,7 +563,7 @@ one `max-width: 1080px; margin: 0 auto; padding-inline: 48px` container.
 .hero .lede { margin: 16px auto 0; max-width: 52ch; }
 .hero-actions { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; margin-top: 32px; }
 .hero-trust {
-  font-family: "Share Tech Mono", monospace; font-size: 10px; letter-spacing: 3px;
+  font-family: "Share Tech Mono", monospace; font-size: 12px; letter-spacing: 0.15em;
   text-transform: uppercase; color: var(--text-label); margin-top: 24px;
 }
 ```
@@ -598,8 +616,8 @@ backlink. Only appropriate when everyone signing in already knows what the produ
 .auth-points {
   list-style: none; padding: 0; margin: 32px 0 0;
   display: flex; flex-direction: column; gap: 12px;
-  font-family: "Share Tech Mono", monospace; font-size: 11px;
-  letter-spacing: 1px; color: var(--text-subtle);
+  font-family: "Share Tech Mono", monospace; font-size: 12px;
+  letter-spacing: 0.05em; color: var(--text-subtle);
 }
 .auth-card { max-width: 400px; width: 100%; display: flex; flex-direction: column; gap: 24px; }
 @media (max-width: 900px) {
@@ -626,14 +644,14 @@ Eyebrow → one-line explanation in `--text-muted` → one `btn-secondary`. Cent
 Every Rising Company product must include a subtle backlink to https://rising.company:
 - Target: https://rising.company, opens in new tab (`target="_blank" rel="noopener noreferrer"`)
 - Text: "rising.company" (lowercase, standalone) or wrap an existing "rising company" mention
-- Style: footer mono token — Share Tech Mono, 9–10px, 2–4px letter-spacing, `var(--text-dim)`, uppercase if standalone
+- Style: footer mono token — Share Tech Mono, 12px, 0.1–0.2em letter-spacing, `var(--text-dim)`, uppercase if standalone
 - Hover: transition to `var(--accent-ink)` over 0.2s, no underline
 - Placement: auth screens (below the form, 24–48px gap), app layouts (footer or sidebar
   bottom, near logout), landing/marketing pages (inline within the site footer copy)
 
 ```css
 .rising-backlink {
-  font-family: "Share Tech Mono", monospace; font-size: 10px; letter-spacing: 4px;
+  font-family: "Share Tech Mono", monospace; font-size: 12px; letter-spacing: 0.2em;
   color: var(--text-dim); text-transform: uppercase; text-decoration: none;
   transition: color 0.2s;
 }
