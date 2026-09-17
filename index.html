@@ -4,7 +4,8 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Rising Company — Design System</title>
-<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<link rel="icon" type="image/svg+xml" href="/branding/favicon.svg">
+<link rel="apple-touch-icon" sizes="180x180" href="/branding/apple-icon.png">
 <script defer src="/_vercel/insights/script.js"></script>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Rajdhani:wght@300;500;700&display=swap">
 <link rel="stylesheet" href="rising.css">
@@ -760,6 +761,20 @@
     padding: 6px 10px;
   }
 
+
+  /* ── Brand assets ─────────────────────────────────────────── */
+  .brand-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 16px; margin-bottom: 24px; }
+  .brand-card {
+    background: var(--bg-surface); border: 1px solid var(--border); border-radius: 6px; box-shadow: var(--card-shadow);
+    padding: 16px; display: flex; flex-direction: column; gap: 12px; align-items: center; text-align: center;
+  }
+  .brand-card img { display: block; max-width: 100%; height: auto; }
+  .brand-card .brand-icon { width: 96px; height: 96px; }
+  .brand-card .brand-wordmark { background: #fff; padding: 12px; border-radius: 4px; }
+  .brand-card .brand-name { font-family: "Share Tech Mono", monospace; font-size: 12px; letter-spacing: 0.1em; color: var(--text-body); }
+  .brand-card .brand-meta { font-family: "Rajdhani", sans-serif; font-size: 14px; color: var(--text-label); }
+  .brand-card.wide { grid-column: 1 / -1; }
+
   .voice-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
@@ -836,6 +851,7 @@
   <a href="#patterns">06 Patterns</a>
   <a href="#effects">07 Effects</a>
   <a href="#voice">08 Voice</a>
+  <a href="#brand">09 Brand</a>
 </nav>
 
 <div class="container">
@@ -1475,7 +1491,55 @@
   </div>
 </section>
 
-<footer class="reveal" style="--i: 9">// design-system —
+<section id="brand" class="reveal" style="--i: 9">
+  <div class="sec-head">
+    <span class="sec-num">09</span>
+    <h2 class="sec-title">Brand Assets</h2>
+    <span class="sec-rule"></span>
+  </div>
+
+  <p class="voice-body" style="max-width: 68ch; margin-bottom: 24px;">Everything lives in <code>/branding/</code> and is served from <a href="/branding/">design-system.rising.company/branding/</a>. Reference by URL or copy the file &mdash; never redraw the mark. The icon always sits on the dark <code>#0a0c10</code> base, in both themes.</p>
+
+  <div class="brand-grid">
+    <div class="brand-card">
+      <img class="brand-icon" src="/branding/favicon.svg" alt="Rising Company favicon, SVG">
+      <div class="brand-name">favicon.svg</div>
+      <div class="brand-meta">Tab icon &middot; preferred</div>
+    </div>
+    <div class="brand-card">
+      <img class="brand-icon" src="/branding/favicon.png" alt="Rising Company favicon, 512px PNG">
+      <div class="brand-name">favicon.png</div>
+      <div class="brand-meta">512 &middot; alpha &middot; PWA / OG</div>
+    </div>
+    <div class="brand-card">
+      <img class="brand-icon" src="/branding/favicon-xl.png" alt="Rising Company favicon, 1024px PNG">
+      <div class="brand-name">favicon-xl.png</div>
+      <div class="brand-meta">1024 &middot; store listings</div>
+    </div>
+    <div class="brand-card">
+      <img class="brand-icon" src="/branding/apple-icon.png" alt="Rising Company Apple touch icon, 180px">
+      <div class="brand-name">apple-icon.png</div>
+      <div class="brand-meta">180 &middot; opaque &middot; square &mdash; iOS masks it</div>
+    </div>
+    <div class="brand-card wide">
+      <img class="brand-wordmark" src="/branding/rising-logo-white.png" alt="Rising Company horizontal wordmark on white" style="max-width: 420px;">
+      <div class="brand-name">rising-logo-white.png</div>
+      <div class="brand-meta">2026&times;898 &middot; white background &middot; Daylight surfaces on white only. No dark-safe wordmark yet &mdash; on Mission use the mark + product name in Rajdhani.</div>
+    </div>
+  </div>
+
+  <table class="token-table">
+    <thead><tr><th>Wire it</th><th>Where</th></tr></thead>
+    <tbody>
+      <tr><td class="t-name">&lt;link rel="icon" type="image/svg+xml" href="&hellip;/branding/favicon.svg"&gt;</td><td class="t-use">Any HTML head</td></tr>
+      <tr><td class="t-name">&lt;link rel="apple-touch-icon" sizes="180x180" href="&hellip;/branding/apple-icon.png"&gt;</td><td class="t-use">Any HTML head</td></tr>
+      <tr><td class="t-name">app/icon.png &middot; app/apple-icon.png</td><td class="t-use">Next.js App Router &mdash; copy the files in; the framework emits the links</td></tr>
+      <tr><td class="t-name">rising-logo-transparent.png</td><td class="t-use">Checkerboard is baked in (no alpha). Do not place on a page.</td></tr>
+    </tbody>
+  </table>
+</section>
+
+<footer class="reveal" style="--i: 10">// design-system —
   <a href="https://rising.company" target="_blank" rel="noopener noreferrer">rising company</a>
   &middot; machine spec: <a href="/llms.txt">llms.txt</a>
   &middot; stylesheet: <a href="/rising.css">rising.css</a>

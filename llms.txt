@@ -639,6 +639,41 @@ Eyebrow → one-line explanation in `--text-muted` → one `btn-secondary`. Cent
 
 ---
 
+## Brand Assets
+
+All brand imagery lives in `branding/` and is served from
+`https://design-system.rising.company/branding/`. Reference it by URL or copy the file into
+the product — never redraw the mark.
+
+| File | Size | Alpha | Use |
+|---|---|---|---|
+| `favicon.svg` | 64×64 viewBox | yes | Browser tab icon. Preferred favicon — scales cleanly. Dark base, rounded corners baked in. |
+| `favicon.png` | 512×512 | yes | Raster fallback for the favicon, PWA manifest icons, OG/social thumbnails. Rounded corners baked in. |
+| `favicon-xl.png` | 1024×1024 | yes | Same mark at 2× — app-store listings, splash screens, any place asking for ≥512px. |
+| `apple-icon.png` | 180×180 | no (opaque) | `<link rel="apple-touch-icon">` and Next.js `app/apple-icon.png`. Square corners on purpose — iOS applies its own mask; a pre-rounded or transparent icon shows black wedges. |
+| `rising-logo-white.png` | 2026×898 | no (white bg) | Horizontal wordmark (arrow + "RISING COMPANY"). Daylight surfaces only, on `--bg-surface` white. |
+| `rising-logo-transparent.png` | 909×393 | **no** — checkerboard is baked in | Do not place on a page. Reference only until a real transparent export replaces it. |
+
+Rules:
+
+- The mark is the mint→blue rising arrow (`#3af0a0` → `#2a7adf`) on `--bg-base` `#0a0c10`.
+  Tab and app icons always use the dark base, in both themes — the icon is not themed.
+- Wire favicons in the `<head>`:
+
+```html
+<link rel="icon" type="image/svg+xml" href="https://design-system.rising.company/branding/favicon.svg">
+<link rel="apple-touch-icon" sizes="180x180" href="https://design-system.rising.company/branding/apple-icon.png">
+```
+
+- Next.js App Router: copy `favicon.png` → `app/icon.png` and `apple-icon.png` → `app/apple-icon.png`;
+  the framework emits the `<link>` tags itself.
+- Wordmark on Mission (dark) surfaces: there is no dark-safe wordmark yet — use the
+  favicon mark plus the product name set in Rajdhani, not `rising-logo-white.png`.
+- Minimum clear space around the mark: the arrow's own width on all sides. Minimum
+  rendered size: 16px (favicon) / 120px wide (wordmark).
+
+---
+
 ## Rising Company Backlink (required branding)
 
 Every Rising Company product must include a subtle backlink to https://rising.company:

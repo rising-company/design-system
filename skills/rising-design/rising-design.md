@@ -212,6 +212,27 @@ Copy rules: say what the product does *before* asking for an address; name the m
 
 Eyebrow → one-line explanation in `--text-muted` → one `btn-secondary`. Centered, max-width 420px, 96px vertical padding. Never a bare "No results."
 
+## Brand Assets
+
+Brand imagery lives at `https://design-system.rising.company/branding/` (repo: `branding/`). Reference or copy — never redraw the mark.
+
+| File | Size | Use |
+|---|---|---|
+| `favicon.svg` | 64 viewBox, alpha | Preferred browser-tab icon |
+| `favicon.png` / `favicon-xl.png` | 512 / 1024, alpha, rounded | Raster favicon, PWA manifest, OG thumbnails, store listings |
+| `apple-icon.png` | 180×180, opaque, **square** | `apple-touch-icon` / Next.js `app/apple-icon.png` — iOS masks it; don't pre-round |
+| `rising-logo-white.png` | 2026×898, white bg | Horizontal wordmark — Daylight surfaces on white only |
+| `rising-logo-transparent.png` | 909×393 | Checkerboard is baked in, no alpha — **do not use on a page** |
+
+- Icons always use the dark `#0a0c10` base in both themes — the icon is not themed.
+- On Mission surfaces use the favicon mark + product name in Rajdhani; there is no dark-safe wordmark yet.
+- Clear space: the arrow's width on all sides. Minimum size: 16px icon / 120px-wide wordmark.
+
+```html
+<link rel="icon" type="image/svg+xml" href="https://design-system.rising.company/branding/favicon.svg">
+<link rel="apple-touch-icon" sizes="180x180" href="https://design-system.rising.company/branding/apple-icon.png">
+```
+
 ## Branding: rising.company Backlink
 
 Every Rising Company product must include a subtle backlink to `https://rising.company`. Minor — present for those looking for it, invisible to those who aren't.

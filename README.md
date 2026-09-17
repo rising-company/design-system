@@ -14,7 +14,7 @@ Live: <https://design-system.rising.company>
 - `llms.txt` — the canonical spec, written for AI agents and humans. When in doubt, this file is the source of truth.
 - `patterns/` — worked page patterns: `landing.html`, `auth-split.html` (Daylight), `auth-centered.html` (Mission).
 - `skills/rising-design/` — Claude skill that loads the spec into agent context.
-- `favicon.svg` / `favicon.png` / `rising-logo-*.png` — brand assets.
+- `branding/` — brand image assets (favicon, Apple touch icon, wordmark logos). See "Brand assets" in `llms.txt` for the file list, sizes and which one to use where.
 
 ## Picking a theme
 
