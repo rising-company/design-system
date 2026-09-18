@@ -840,7 +840,8 @@ pieces so that moving between products feels like moving between rooms of one bu
      hover. Sign-out is always the bottom item so muscle memory carries across products. Status
      stays outside the menu — it is system state, not user state. The reference build is
      `<details>`/`<summary>` (no JS needed; add light-dismiss on outside click and Escape); a
-     framework may use its own popover but keeps the classes and the item order.
+     framework uses its own popover — a button with `aria-expanded` and the Motion panel
+     recipe — but keeps the classes and the item order.
 2. **Page header** — inside `.app-main`, one per view. See the component entry above.
 3. **App footer** — `background: var(--bg-surface)`, `border-top: 1px solid var(--border)`,
    `padding: 16px 48px`, mono 12px `--text-dim` uppercase. Left: `// PRODUCT · BUILD <date> ·
@@ -962,7 +963,8 @@ Rules:
   display: flex; align-items: center; gap: 10px; padding: 4px 0; cursor: pointer;
   border-radius: 4px; color: var(--text-subtle); transition: color 0.2s;
 }
-.user-menu-trigger:hover, .user-menu[open] > .user-menu-trigger { color: var(--text-heading); }
+.user-menu-trigger:hover, .user-menu[open] > .user-menu-trigger,
+.user-menu-trigger[aria-expanded="true"] { color: var(--text-heading); }
 .user-menu-email {
   font-family: "Share Tech Mono", monospace; font-size: 12px; letter-spacing: 0.05em;
   max-width: 24ch; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
@@ -977,7 +979,8 @@ Rules:
   width: 8px; height: 8px; border-right: 1px solid currentColor; border-bottom: 1px solid currentColor;
   transform: translateY(-2px) rotate(45deg); transition: transform 0.2s;
 }
-.user-menu[open] .user-menu-chevron { transform: translateY(2px) rotate(225deg); }
+.user-menu[open] .user-menu-chevron,
+.user-menu-trigger[aria-expanded="true"] .user-menu-chevron { transform: translateY(2px) rotate(225deg); }
 .user-menu-panel {
   position: absolute; top: calc(100% + 8px); right: 0; z-index: 70;
   min-width: 240px; padding: 6px;

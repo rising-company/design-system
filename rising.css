@@ -414,7 +414,8 @@ a.card:hover::before, .card.is-interactive:hover::before { opacity: 1; }
 .app-session { display: flex; align-items: center; gap: 20px; margin-left: auto; flex-shrink: 0; }
 
 /* User menu — <details>/<summary> so it works without JS; a framework may
-   swap in its own popover but keeps the classes and the item order. */
+   swap in its own popover (a button with aria-expanded and a Motion panel)
+   but keeps the classes and the item order. */
 .user-menu { position: relative; }
 .user-menu > summary { list-style: none; }
 .user-menu > summary::-webkit-details-marker { display: none; }
@@ -424,7 +425,8 @@ a.card:hover::before, .card.is-interactive:hover::before { opacity: 1; }
   padding: 4px 0; cursor: pointer; border-radius: 4px;
   color: var(--text-subtle); transition: color 0.2s;
 }
-.user-menu-trigger:hover, .user-menu[open] > .user-menu-trigger { color: var(--text-heading); }
+.user-menu-trigger:hover, .user-menu[open] > .user-menu-trigger,
+.user-menu-trigger[aria-expanded="true"] { color: var(--text-heading); }
 
 .user-menu-email {
   font-family: "Share Tech Mono", monospace;
@@ -446,7 +448,8 @@ a.card:hover::before, .card.is-interactive:hover::before { opacity: 1; }
   border-right: 1px solid currentColor; border-bottom: 1px solid currentColor;
   transform: translateY(-2px) rotate(45deg); transition: transform 0.2s;
 }
-.user-menu[open] .user-menu-chevron { transform: translateY(2px) rotate(225deg); }
+.user-menu[open] .user-menu-chevron,
+.user-menu-trigger[aria-expanded="true"] .user-menu-chevron { transform: translateY(2px) rotate(225deg); }
 
 .user-menu-panel {
   position: absolute; top: calc(100% + 8px); right: 0; z-index: 70;
