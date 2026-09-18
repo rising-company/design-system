@@ -208,6 +208,18 @@ A user-facing product needs a landing page before it needs a login box. Required
 
 Copy rules: say what the product does *before* asking for an address; name the mechanism ("we'll email you a link — no password"); never let the button be the only text on screen.
 
+### App shell (both themes)
+
+The chrome behind the auth boundary — the same three pieces in every signed-in Rising product:
+
+1. **App bar** — 56px, sticky, `--bg-surface`, bottom border, full-bleed with the 48px gutter. Slots left→right: **brand** (favicon mark + product name as an 18px `.wordmark`; optional `· CONTEXT` for tenant/environment), **nav** (3–5 mono links, current one `aria-current="page"` → `--text-heading` + 1px `--accent-ink` rule), **session** (right: `.status` dot + label, then the user menu — trigger = 24px initials chip + email + chevron; panel = `// Signed in as` + email, account items, **Sign out** last, ruled off, `--danger-ink` on hover). Status stays outside the menu; the exit is always "Sign out". No `// Rising` eyebrow, no CTA button.
+2. **Page header** — one per view, inside `.app-main`: eyebrow → `.page-title` (+ actions right, same baseline) → `.subtitle`; 24px below, 32px margin, bottom border. Session controls never go here.
+3. **App footer** — `--bg-surface`, top border, `padding: 16px 48px`, mono `--text-dim` uppercase. Left `// PRODUCT · BUILD <date> · <sha>`; right ≤ 3 links + the rising.company backlink last. Pinned to the bottom by `.app { display:flex; flex-direction:column; min-height:100vh }`.
+
+Chrome is surface, content is base. Both bars full-bleed (`.shell` goes *inside* `.app-main` if a view wants the 1080px column). Corner brackets stay off the shell. Below 768px: two-row bar (brand + session / scrolling nav), 24px gutters; below 640px context and the trigger's email hide (chip stays), footer centers. Sidebar products (os, safe) relocate the same slots into the sidebar top and bottom and drop the footer.
+
+Classes: `.app .app-bar .app-brand .app-context .app-nav .app-session .status .user-menu .user-menu-trigger .user-initials .user-menu-email .user-menu-chevron .user-menu-panel .user-menu-head .user-menu-item .user-menu-signout .app-main .page-header .page-header-row .app-footer .app-footer-links`. Full anatomy in `components.md` → "App shell"; worked example `patterns/app-shell.html`.
+
 ### Empty state
 
 Eyebrow → one-line explanation in `--text-muted` → one `btn-secondary`. Centered, max-width 420px, 96px vertical padding. Never a bare "No results."
@@ -241,7 +253,7 @@ Every Rising Company product must include a subtle backlink to `https://rising.c
 - Text `rising.company` (lowercase) — or wrap an existing "rising company" mention in the footer
 - Style: Share Tech Mono · 12px · 0.1–0.2em letter-spacing · `--text-dim` · uppercase if standalone
 - Hover: `--accent-ink` over `0.2s`. No underline.
-- Placement: auth screens (below the form, 24–48px gap), app layouts (footer or sidebar bottom near logout), landing/marketing (inline in the site footer copy)
+- Placement: auth screens (below the form, 24–48px gap), app layouts (last link in `.app-footer`, or sidebar bottom near logout), landing/marketing (inline in the site footer copy)
 
 ```html
 <a href="https://rising.company" target="_blank" rel="noopener noreferrer"

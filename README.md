@@ -12,7 +12,7 @@ Live: <https://design-system.rising.company>
 - `index.html` — single-page visual reference with a live theme toggle. Renders every token (colors, type, controls, components, patterns) styled in the system itself.
 - `rising.css` — drop-in token + component layer. Link it and set `data-theme`; that's the whole setup.
 - `llms.txt` — the canonical spec, written for AI agents and humans. When in doubt, this file is the source of truth.
-- `patterns/` — worked page patterns: `landing.html`, `auth-split.html` (Daylight), `auth-centered.html` (Mission).
+- `patterns/` — worked page patterns: `landing.html`, `auth-split.html` (Daylight), `auth-centered.html`, `app-shell.html` (Mission).
 - `skills/rising-design/` — Claude skill that loads the spec into agent context.
 - `branding/` — brand image assets (favicon, Apple touch icon, wordmark logos). See "Brand assets" in `llms.txt` for the file list, sizes and which one to use where.
 

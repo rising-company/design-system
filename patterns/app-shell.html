@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="mission">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Huddle — App Shell Pattern</title>
+<link rel="icon" type="image/svg+xml" href="../branding/favicon.svg">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Rajdhani:wght@300;500;700&display=swap">
+<link rel="stylesheet" href="../rising.css">
+<style>
+  /* Page-specific only — everything else comes from rising.css */
+  .huddle-card { display: flex; flex-direction: column; gap: 12px; }
+  .huddle-card .card-meta { display: flex; flex-wrap: wrap; gap: 12px; margin-top: auto; }
+  .huddle-card .body { margin: 0; }
+</style>
+</head>
+<body class="app">
+
+<div class="atmosphere"></div>
+
+<!--
+  The app shell is the chrome behind the auth boundary. Three pieces:
+    app-bar    — brand · primary nav · session. Sticky, on --bg-surface.
+    app-main   — the view. One .page-header at the top, then content.
+    app-footer — ident · links · the rising.company backlink.
+  Same markup in both themes; switch data-theme on <html>.
+-->
+<header class="app-bar">
+  <a class="app-brand" href="#" aria-label="Huddle home">
+    <img src="../branding/favicon.svg" alt="">
+    <span class="wordmark">Huddle</span>
+  </a>
+  <span class="app-context">Rising Company</span>
+
+  <nav class="app-nav" aria-label="Primary">
+    <a href="#" aria-current="page">Huddles</a>
+    <a href="#">Templates</a>
+    <a href="#">Settings</a>
+  </nav>
+
+  <div class="app-session">
+    <span class="status" title="All systems normal">Online</span>
+
+    <details class="user-menu">
+      <summary class="user-menu-trigger" aria-label="Account menu">
+        <span class="user-initials" aria-hidden="true">BC</span>
+        <span class="user-menu-email">ben@rising.company</span>
+        <span class="user-menu-chevron" aria-hidden="true"></span>
+      </summary>
+      <div class="user-menu-panel">
+        <div class="user-menu-head">
+          <div class="section-label">// Signed in as</div>
+          <div class="user-menu-email">ben@rising.company</div>
+        </div>
+        <a class="user-menu-item" href="#">Settings</a>
+        <a class="user-menu-item" href="#">Switch organization</a>
+        <button class="user-menu-item user-menu-signout" type="button">Sign out</button>
+      </div>
+    </details>
+  </div>
+</header>
+
+<main class="app-main">
+  <div class="page-header">
+    <div class="eyebrow">// Huddles</div>
+    <div class="page-header-row">
+      <h1 class="page-title">Your huddles</h1>
+      <a class="btn btn-primary btn-sm" href="#">New huddle</a>
+    </div>
+    <p class="subtitle">3 open &middot; 12 closed &middot; last reply 4 min ago</p>
+  </div>
+
+  <div class="grid">
+    <a class="card is-interactive huddle-card" href="#">
+      <div class="card-tag">// Open &middot; 5 replies</div>
+      <div class="card-title">Q4 planning offsite</div>
+      <p class="body">Three days proposed. Two people still to answer.</p>
+      <div class="card-meta">
+        <span class="badge">Oct 6&ndash;8</span>
+        <span class="badge">7 invited</span>
+      </div>
+    </a>
+    <a class="card is-interactive huddle-card" href="#">
+      <div class="card-tag">// Open &middot; 2 replies</div>
+      <div class="card-title">Venue walkthrough</div>
+      <p class="body">Waiting on the venue team. Closes Friday.</p>
+      <div class="card-meta">
+        <span class="badge">Sep 22</span>
+        <span class="badge">4 invited</span>
+      </div>
+    </a>
+    <a class="card is-interactive huddle-card" href="#">
+      <div class="card-tag">// Open &middot; 0 replies</div>
+      <div class="card-title">Board update</div>
+      <p class="body">Sent an hour ago. No replies yet.</p>
+      <div class="card-meta">
+        <span class="badge">Sep 30</span>
+        <span class="badge">3 invited</span>
+      </div>
+    </a>
+  </div>
+</main>
+
+<footer class="app-footer">
+  <span>// Huddle &middot; build 2026-09-18 &middot; 0a7d685</span>
+  <span class="app-footer-links">
+    <a href="#">Status</a>
+    <a href="#">Privacy</a>
+    <a class="rising-backlink" href="https://rising.company" target="_blank" rel="noopener noreferrer">rising.company</a>
+  </span>
+</footer>
+
+<script>
+  // <details> has no light-dismiss of its own: close the user menu on an
+  // outside click or Escape. A framework's popover replaces all of this.
+  document.addEventListener("click", function (e) {
+    document.querySelectorAll(".user-menu[open]").forEach(function (m) {
+      if (!m.contains(e.target)) m.removeAttribute("open");
+    });
+  });
+  document.addEventListener("keydown", function (e) {
+    if (e.key === "Escape") document.querySelectorAll(".user-menu[open]").forEach(function (m) { m.removeAttribute("open"); });
+  });
+</script>
+
+</body>
+</html>

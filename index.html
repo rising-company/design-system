@@ -1331,7 +1331,7 @@
 
   <p class="voice-body" style="max-width: 68ch; margin-bottom: 32px;">
     Page-level compositions. A user-facing product needs a landing page before it needs a login
-    box &mdash; these are the two shapes that gap keeps showing up in.
+    box, and every product needs the same chrome once someone is signed in &mdash; these are the shapes that keep showing up.
   </p>
 
   <div class="section-label">// Landing page &mdash; Daylight</div>
@@ -1396,6 +1396,34 @@
     <div class="voice-card">
       <div class="vc-label">// Name the mechanism</div>
       <div class="vc-body">&ldquo;We&rsquo;ll email you a link &mdash; no password.&rdquo; Never let the button be the only text on screen.</div>
+    </div>
+  </div>
+
+  <div class="section-label">// App shell &mdash; Mission (same markup in Daylight)</div>
+  <div class="pattern-frame">
+    <div class="frame-bar">
+      <span>// patterns/app-shell.html &middot; mission</span>
+      <a href="patterns/app-shell.html" target="_blank" rel="noopener">Open full page &rarr;</a>
+    </div>
+    <iframe src="patterns/app-shell.html" title="App shell pattern — Mission theme" loading="lazy"></iframe>
+  </div>
+
+  <div class="voice-grid" style="margin-top: 24px;">
+    <div class="voice-card">
+      <div class="vc-label">// Three pieces, every product</div>
+      <div class="vc-body"><code>.app-bar</code> (brand &middot; nav &middot; session) &rarr; <code>.app-main</code> with one <code>.page-header</code> &rarr; <code>.app-footer</code> (ident &middot; links &middot; backlink). Moving between products should feel like moving between rooms of one building.</div>
+    </div>
+    <div class="voice-card">
+      <div class="vc-label">// Chrome is surface, content is base</div>
+      <div class="vc-body">Bar and footer sit on <code>--bg-surface</code>; the view sits on <code>--bg-base</code>. That one-step lift is the whole hierarchy &mdash; no shadows, no heavier borders. 56px bar, 16px footer, both full-bleed.</div>
+    </div>
+    <div class="voice-card">
+      <div class="vc-label">// One user menu, top-right</div>
+      <div class="vc-body">Initials chip + email opens a panel: who you are, the account items, then <strong>Sign out</strong> last &mdash; ruled off, <code>--danger-ink</code> on hover. Same order in every product. Status stays outside; it&rsquo;s system state, not user state.</div>
+    </div>
+    <div class="voice-card">
+      <div class="vc-label">// Not the landing nav</div>
+      <div class="vc-body"><code>.nav</code> is 64px on <code>--bg-base</code> with a CTA. <code>.app-bar</code> is 56px on <code>--bg-surface</code> with none, and the mark replaces the <code>// Rising</code> eyebrow. Switch at the auth boundary, with the theme.</div>
     </div>
   </div>
 

@@ -286,6 +286,8 @@ body::before {
   background: var(--gradient); opacity: 0; transition: opacity 0.2s;
 }
 
+a.card { color: inherit; text-decoration: none; }
+
 a.card:hover, .card.is-interactive:hover { border-color: var(--border-hover); background: var(--bg-surface-hover); }
 a.card:hover::before, .card.is-interactive:hover::before { opacity: 1; }
 
@@ -347,6 +349,218 @@ a.card:hover::before, .card.is-interactive:hover::before { opacity: 1; }
 .nav-links a:hover { color: var(--accent-ink); }
 
 @media (max-width: 640px) { .nav-links a:not(.btn) { display: none; } }
+
+/* ══════════════ APP SHELL ══════════════ */
+/* Chrome for the signed-in product — the surface behind the auth boundary.
+   Distinct from .nav / .site-footer, which belong to the landing page.
+
+   <body class="app">
+     <header class="app-bar">   brand · nav · session   </header>
+     <main class="app-main">    .page-header + content   </main>
+     <footer class="app-footer"> ident · links · backlink </footer>
+   </body>
+
+   Chrome sits on --bg-surface; content sits on --bg-base. Both bars are
+   full-bleed with the 48px page gutter (24px below 768px) — an app is not
+   width-limited the way a landing page is. Put .shell inside .app-main if
+   a view wants the 1080px column. */
+.app { display: flex; flex-direction: column; min-height: 100vh; }
+
+.app-main { flex: 1; position: relative; z-index: 1; padding: 48px; }
+
+/* ── App bar ── */
+.app-bar {
+  position: sticky; top: 0; z-index: 60;
+  display: flex; align-items: center; gap: 32px;
+  min-height: 56px; padding-inline: 48px;
+  background: var(--bg-surface);
+  border-bottom: 1px solid var(--border);
+}
+
+/* Brand: the favicon mark + product name. The mark carries the Rising
+   identity so the name can be the product's own. Optional .app-context
+   after it names the tenant / workspace / environment. */
+.app-brand {
+  display: flex; align-items: center; gap: 12px; flex-shrink: 0;
+  color: var(--text-heading); text-decoration: none;
+}
+.app-brand img, .app-brand svg { width: 24px; height: 24px; border-radius: 4px; flex-shrink: 0; }
+.app-brand .wordmark { font-size: 18px; letter-spacing: 3px; }
+
+.app-context {
+  font-family: "Share Tech Mono", monospace;
+  font-size: 12px; letter-spacing: 0.1em; text-transform: uppercase;
+  color: var(--text-label); white-space: nowrap;
+}
+.app-context::before { content: "·"; margin-right: 12px; color: var(--text-dim); }
+
+/* Primary navigation: mono links, active one carries a 1px accent rule
+   sitting on the bar's bottom border. */
+.app-nav { display: flex; align-items: center; gap: 24px; flex: 1; min-width: 0; }
+
+.app-nav a {
+  font-family: "Share Tech Mono", monospace;
+  font-size: 12px; letter-spacing: 0.1em; text-transform: uppercase;
+  color: var(--text-label); text-decoration: none; white-space: nowrap;
+  padding-block: 6px; border-bottom: 1px solid transparent;
+  transition: color 0.2s, border-color 0.2s;
+}
+.app-nav a:hover { color: var(--accent-ink); }
+.app-nav a[aria-current="page"] { color: var(--text-heading); border-bottom-color: var(--accent-ink); }
+
+/* Session cluster: status · user menu. Always right-aligned. Status is
+   system state and stays outside the menu; everything about the person
+   (who they are, their settings, the exit) lives inside it. */
+.app-session { display: flex; align-items: center; gap: 20px; margin-left: auto; flex-shrink: 0; }
+
+/* User menu — <details>/<summary> so it works without JS; a framework may
+   swap in its own popover but keeps the classes and the item order. */
+.user-menu { position: relative; }
+.user-menu > summary { list-style: none; }
+.user-menu > summary::-webkit-details-marker { display: none; }
+
+.user-menu-trigger {
+  display: flex; align-items: center; gap: 10px;
+  padding: 4px 0; cursor: pointer; border-radius: 4px;
+  color: var(--text-subtle); transition: color 0.2s;
+}
+.user-menu-trigger:hover, .user-menu[open] > .user-menu-trigger { color: var(--text-heading); }
+
+.user-menu-email {
+  font-family: "Share Tech Mono", monospace;
+  font-size: 12px; letter-spacing: 0.05em;
+  max-width: 24ch; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+}
+
+/* Initials chip: the identity that survives when the email hides. */
+.user-initials {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 24px; height: 24px; border-radius: 4px; flex-shrink: 0;
+  font-family: "Share Tech Mono", monospace; font-size: 12px; letter-spacing: 0.05em;
+  text-transform: uppercase; color: var(--accent-ink);
+  background: var(--accent-wash); border: 1px solid var(--accent-line);
+}
+
+.user-menu-chevron {
+  width: 8px; height: 8px; flex-shrink: 0;
+  border-right: 1px solid currentColor; border-bottom: 1px solid currentColor;
+  transform: translateY(-2px) rotate(45deg); transition: transform 0.2s;
+}
+.user-menu[open] .user-menu-chevron { transform: translateY(2px) rotate(225deg); }
+
+.user-menu-panel {
+  position: absolute; top: calc(100% + 8px); right: 0; z-index: 70;
+  min-width: 240px; padding: 6px;
+  background: var(--bg-surface); border: 1px solid var(--border-hover);
+  border-radius: 6px; box-shadow: 0 12px 32px rgba(0, 0, 0, 0.28);
+}
+[data-theme="daylight"] .user-menu-panel { box-shadow: 0 12px 32px rgba(11, 26, 20, 0.12); }
+
+.user-menu-head {
+  padding: 8px 10px 10px; margin-bottom: 6px;
+  border-bottom: 1px solid var(--border);
+}
+.user-menu-head .section-label { font-size: 12px; letter-spacing: 0.15em; margin-bottom: 4px; }
+.user-menu-head .user-menu-email { max-width: none; color: var(--text-body); }
+
+.user-menu-item {
+  display: flex; align-items: center; gap: 10px; width: 100%;
+  padding: 10px; border-radius: 4px; text-align: left;
+  font-family: "Share Tech Mono", monospace;
+  font-size: 12px; letter-spacing: 0.1em; text-transform: uppercase;
+  color: var(--text-label); background: none; border: 0; cursor: pointer;
+  text-decoration: none; transition: background 0.2s, color 0.2s;
+}
+.user-menu-item:hover { background: var(--bg-surface-hover); color: var(--text-heading); }
+
+/* Sign out is always the last item, ruled off from the rest. */
+.user-menu-signout { margin-top: 6px; border-top: 1px solid var(--border); border-radius: 0 0 4px 4px; padding-top: 12px; }
+.user-menu-signout:hover { color: var(--danger-ink); }
+
+/* Plain links in the session cluster (help, docs) share the nav-link voice. */
+.app-session > a {
+  font-family: "Share Tech Mono", monospace;
+  font-size: 12px; letter-spacing: 0.1em; text-transform: uppercase;
+  color: var(--text-label); text-decoration: none; transition: color 0.2s;
+}
+.app-session > a:hover { color: var(--accent-ink); }
+
+/* Status readout: 6px dot + mono label. Live by default; .is-degraded and
+   .is-down recolour the dot and stop the pulse. */
+.status {
+  display: inline-flex; align-items: center; gap: 8px;
+  font-family: "Share Tech Mono", monospace;
+  font-size: 12px; letter-spacing: 0.1em; text-transform: uppercase;
+  color: var(--text-label); white-space: nowrap;
+}
+.status::before {
+  content: ""; width: 6px; height: 6px; border-radius: 50%;
+  background: var(--accent); flex-shrink: 0;
+  animation: status-pulse 2.4s ease-out infinite;
+}
+.status.is-degraded::before { background: var(--warning); animation: none; }
+.status.is-down::before { background: var(--danger); animation: none; }
+
+@keyframes status-pulse {
+  0%   { box-shadow: 0 0 0 0 var(--accent-line); }
+  70%  { box-shadow: 0 0 0 6px transparent; }
+  100% { box-shadow: 0 0 0 0 transparent; }
+}
+
+/* ── Page header ── */
+/* Per-view heading inside .app-main. One per page, directly under the bar.
+   eyebrow → title (+ actions on the same baseline) → subtitle. */
+.page-header {
+  padding-bottom: 24px; margin-bottom: 32px;
+  border-bottom: 1px solid var(--border);
+}
+.page-header .eyebrow { margin-bottom: 8px; }
+.page-header .subtitle { margin-top: 8px; }
+.page-header-row {
+  display: flex; align-items: flex-end; justify-content: space-between;
+  gap: 16px 24px; flex-wrap: wrap;
+}
+
+/* ── App footer ── */
+/* A status strip, not a sitemap: product ident + build on the left, a few
+   links and the required rising.company backlink on the right. 16px
+   vertical padding — it is chrome, so it sits tighter than the 24px
+   landing footer. */
+.app-footer {
+  position: relative; z-index: 1;
+  display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between;
+  gap: 12px 24px; padding: 16px 48px;
+  background: var(--bg-surface);
+  border-top: 1px solid var(--border);
+  font-family: "Share Tech Mono", monospace;
+  font-size: 12px; letter-spacing: 0.1em; text-transform: uppercase;
+  color: var(--text-dim);
+}
+.app-footer a { color: inherit; text-decoration: none; transition: color 0.2s; }
+.app-footer a:hover { color: var(--accent-ink); }
+.app-footer-links { display: flex; flex-wrap: wrap; align-items: center; gap: 20px; }
+
+/* ── Responsive ── */
+@media (max-width: 768px) {
+  .app-main { padding: 24px; }
+  .app-footer { padding-inline: 24px; }
+
+  /* The bar becomes two rows: brand + session on the first, nav on the
+     second, scrolling sideways rather than wrapping. */
+  .app-bar { flex-wrap: wrap; gap: 0 24px; padding-inline: 24px; min-height: 0; }
+  .app-brand, .app-session { min-height: 56px; }
+  .app-nav {
+    order: 3; flex-basis: 100%; gap: 20px;
+    overflow-x: auto; scrollbar-width: none; padding-bottom: 10px;
+  }
+  .app-nav::-webkit-scrollbar { display: none; }
+  .app-nav a { padding-block: 2px 4px; }
+}
+
+@media (max-width: 640px) {
+  .app-context, .user-menu-trigger .user-menu-email { display: none; }
+  .app-footer { justify-content: center; text-align: center; }
+}
 
 /* ══════════════ LANDING BANDS ══════════════ */
 .band { padding-block: 96px; }

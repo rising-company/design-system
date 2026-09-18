@@ -254,9 +254,9 @@ Floating overlay that appears on hover, showing name, category/material, and des
 
 ---
 
-## Header
+## Page header
 
-Page header with eyebrow, title, and subtitle. Used at the top of index/landing pages. The eyebrow uses monospace and the title uses Rajdhani bold.
+The per-view heading — eyebrow, title, subtitle — one per page. Inside an app shell it sits at the top of `.app-main` as `.page-header` (see "App shell" below); standalone at the top of a page with no app bar it takes the 48px padding shown here. It is **not** the app bar: email, status and sign-out never go in a page header.
 
 ### HTML
 
@@ -306,7 +306,7 @@ header p {
 
 ## Footer
 
-Minimal mono-text footer. Used at the bottom of index/landing pages with a subtle top border. The "rising company" mention must be a backlink to `https://rising.company` (see "Branding: rising.company Backlink" in `rising-design.md`).
+Minimal mono-text footer for index/landing pages, with a subtle top border. The signed-in product uses `.app-footer` instead — see "App shell" below. The "rising company" mention must be a backlink to `https://rising.company` (see "Branding: rising.company Backlink" in `rising-design.md`).
 
 ### HTML
 
@@ -917,6 +917,203 @@ A single `max-width: 400px` surface card: eyebrow → product name → one-line 
 - Never let the button be the only text on screen.
 
 Worked examples: `patterns/auth-split.html` (Daylight) and `patterns/auth-centered.html` (Mission).
+
+---
+
+## App shell
+
+The chrome behind the auth boundary: app bar on top, one page header per view, app footer at the bottom. Same markup in both themes. Chrome sits on `--bg-surface`, content on `--bg-base` — that one-step lift is the whole hierarchy.
+
+**App bar** — 56px, sticky, full-bleed with the 48px gutter. Three slots: **brand** (favicon mark + product name as an 18px `.wordmark`, optional `.app-context` naming the tenant/environment), **nav** (3–5 mono links, current one `aria-current="page"` → `--text-heading` + 1px `--accent-ink` rule), **session** (right-aligned: `.status`, then the user menu — trigger is initials chip + email + chevron; panel is `// Signed in as` + email, the product's account items, then Sign out last, ruled off, `--danger-ink` on hover). Status stays outside the menu. The exit is always "Sign out". No `// Rising` eyebrow — the mark says that. No CTA button — that's the landing `.nav`.
+
+**App footer** — 16px vertical padding, mono `--text-dim` uppercase. Left `// PRODUCT · BUILD <date> · <sha>`; right two or three links and the rising.company backlink last. A status strip, not a sitemap.
+
+Below 768px the bar becomes two rows (brand + session, then the nav scrolling sideways) with 24px gutters. Below 640px the context and the trigger's email hide (the initials chip stays) and the footer centers. `<details>` has no light-dismiss — close on outside click and Escape (see the pattern's script). Sidebar products (os, safe) keep their sidebar: brand + context at the top, session + build + backlink at the bottom, no separate footer.
+
+### HTML
+
+```html
+<body class="app">
+  <header class="app-bar">
+    <a class="app-brand" href="/" aria-label="Huddle home">
+      <img src="https://design-system.rising.company/branding/favicon.svg" alt="">
+      <span class="wordmark">Huddle</span>
+    </a>
+    <span class="app-context">Rising Company</span>
+    <nav class="app-nav" aria-label="Primary">
+      <a href="/huddles" aria-current="page">Huddles</a>
+      <a href="/templates">Templates</a>
+      <a href="/settings">Settings</a>
+    </nav>
+    <div class="app-session">
+      <span class="status">Online</span>
+      <details class="user-menu">
+        <summary class="user-menu-trigger" aria-label="Account menu">
+          <span class="user-initials" aria-hidden="true">BC</span>
+          <span class="user-menu-email">ben@rising.company</span>
+          <span class="user-menu-chevron" aria-hidden="true"></span>
+        </summary>
+        <div class="user-menu-panel">
+          <div class="user-menu-head">
+            <div class="section-label">// Signed in as</div>
+            <div class="user-menu-email">ben@rising.company</div>
+          </div>
+          <a class="user-menu-item" href="/settings">Settings</a>
+          <a class="user-menu-item" href="/orgs">Switch organization</a>
+          <button class="user-menu-item user-menu-signout" type="button">Sign out</button>
+        </div>
+      </details>
+    </div>
+  </header>
+
+  <main class="app-main">
+    <div class="page-header">
+      <div class="eyebrow">// Huddles</div>
+      <div class="page-header-row">
+        <h1 class="page-title">Your huddles</h1>
+        <a class="btn btn-primary btn-sm" href="/huddles/new">New huddle</a>
+      </div>
+      <p class="subtitle">3 open · 12 closed</p>
+    </div>
+    …
+  </main>
+
+  <footer class="app-footer">
+    <span>// Huddle · build 2026-09-18 · 0a7d685</span>
+    <span class="app-footer-links">
+      <a href="/status">Status</a>
+      <a href="/privacy">Privacy</a>
+      <a class="rising-backlink" href="https://rising.company" target="_blank" rel="noopener noreferrer">rising.company</a>
+    </span>
+  </footer>
+</body>
+```
+
+### CSS
+
+```css
+.app { display: flex; flex-direction: column; min-height: 100vh; }
+.app-main { flex: 1; position: relative; z-index: 1; padding: 48px; }
+
+.app-bar {
+  position: sticky; top: 0; z-index: 60;
+  display: flex; align-items: center; gap: 32px;
+  min-height: 56px; padding-inline: 48px;
+  background: var(--bg-surface); border-bottom: 1px solid var(--border);
+}
+.app-brand { display: flex; align-items: center; gap: 12px; flex-shrink: 0; color: var(--text-heading); text-decoration: none; }
+.app-brand img, .app-brand svg { width: 24px; height: 24px; border-radius: 4px; }
+.app-brand .wordmark { font-size: 18px; letter-spacing: 3px; }
+.app-context {
+  font-family: "Share Tech Mono", monospace; font-size: 12px; letter-spacing: 0.1em;
+  text-transform: uppercase; color: var(--text-label); white-space: nowrap;
+}
+.app-context::before { content: "·"; margin-right: 12px; color: var(--text-dim); }
+
+.app-nav { display: flex; align-items: center; gap: 24px; flex: 1; min-width: 0; }
+.app-nav a {
+  font-family: "Share Tech Mono", monospace; font-size: 12px; letter-spacing: 0.1em;
+  text-transform: uppercase; color: var(--text-label); text-decoration: none; white-space: nowrap;
+  padding-block: 6px; border-bottom: 1px solid transparent; transition: color 0.2s, border-color 0.2s;
+}
+.app-nav a:hover { color: var(--accent-ink); }
+.app-nav a[aria-current="page"] { color: var(--text-heading); border-bottom-color: var(--accent-ink); }
+
+.app-session { display: flex; align-items: center; gap: 20px; margin-left: auto; flex-shrink: 0; }
+
+/* User menu — <details>/<summary>; a framework may swap in its own popover
+   but keeps the classes and the item order. */
+.user-menu { position: relative; }
+.user-menu > summary { list-style: none; }
+.user-menu > summary::-webkit-details-marker { display: none; }
+.user-menu-trigger {
+  display: flex; align-items: center; gap: 10px; padding: 4px 0; cursor: pointer;
+  border-radius: 4px; color: var(--text-subtle); transition: color 0.2s;
+}
+.user-menu-trigger:hover, .user-menu[open] > .user-menu-trigger { color: var(--text-heading); }
+.user-menu-email {
+  font-family: "Share Tech Mono", monospace; font-size: 12px; letter-spacing: 0.05em;
+  max-width: 24ch; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+}
+.user-initials {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 24px; height: 24px; border-radius: 4px; flex-shrink: 0;
+  font-family: "Share Tech Mono", monospace; font-size: 12px; letter-spacing: 0.05em; text-transform: uppercase;
+  color: var(--accent-ink); background: var(--accent-wash); border: 1px solid var(--accent-line);
+}
+.user-menu-chevron {
+  width: 8px; height: 8px; border-right: 1px solid currentColor; border-bottom: 1px solid currentColor;
+  transform: translateY(-2px) rotate(45deg); transition: transform 0.2s;
+}
+.user-menu[open] .user-menu-chevron { transform: translateY(2px) rotate(225deg); }
+.user-menu-panel {
+  position: absolute; top: calc(100% + 8px); right: 0; z-index: 70;
+  min-width: 240px; padding: 6px;
+  background: var(--bg-surface); border: 1px solid var(--border-hover);
+  border-radius: 6px; box-shadow: 0 12px 32px rgba(0, 0, 0, 0.28);
+}
+[data-theme="daylight"] .user-menu-panel { box-shadow: 0 12px 32px rgba(11, 26, 20, 0.12); }
+.user-menu-head { padding: 8px 10px 10px; margin-bottom: 6px; border-bottom: 1px solid var(--border); }
+.user-menu-head .section-label { letter-spacing: 0.15em; margin-bottom: 4px; }
+.user-menu-head .user-menu-email { max-width: none; color: var(--text-body); }
+.user-menu-item {
+  display: flex; align-items: center; gap: 10px; width: 100%; padding: 10px; border-radius: 4px; text-align: left;
+  font-family: "Share Tech Mono", monospace; font-size: 12px; letter-spacing: 0.1em; text-transform: uppercase;
+  color: var(--text-label); background: none; border: 0; cursor: pointer; text-decoration: none;
+  transition: background 0.2s, color 0.2s;
+}
+.user-menu-item:hover { background: var(--bg-surface-hover); color: var(--text-heading); }
+.user-menu-signout { margin-top: 6px; border-top: 1px solid var(--border); border-radius: 0 0 4px 4px; padding-top: 12px; }
+.user-menu-signout:hover { color: var(--danger-ink); }
+
+.status {
+  display: inline-flex; align-items: center; gap: 8px;
+  font-family: "Share Tech Mono", monospace; font-size: 12px; letter-spacing: 0.1em;
+  text-transform: uppercase; color: var(--text-label); white-space: nowrap;
+}
+.status::before {
+  content: ""; width: 6px; height: 6px; border-radius: 50%; background: var(--accent);
+  animation: status-pulse 2.4s ease-out infinite;
+}
+.status.is-degraded::before { background: var(--warning); animation: none; }
+.status.is-down::before { background: var(--danger); animation: none; }
+@keyframes status-pulse {
+  0% { box-shadow: 0 0 0 0 var(--accent-line); } 70% { box-shadow: 0 0 0 6px transparent; } 100% { box-shadow: 0 0 0 0 transparent; }
+}
+
+.page-header { padding-bottom: 24px; margin-bottom: 32px; border-bottom: 1px solid var(--border); }
+.page-header .eyebrow { margin-bottom: 8px; }
+.page-header .subtitle { margin-top: 8px; }
+.page-header-row { display: flex; align-items: flex-end; justify-content: space-between; gap: 16px 24px; flex-wrap: wrap; }
+
+.app-footer {
+  position: relative; z-index: 1;
+  display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between;
+  gap: 12px 24px; padding: 16px 48px;
+  background: var(--bg-surface); border-top: 1px solid var(--border);
+  font-family: "Share Tech Mono", monospace; font-size: 12px; letter-spacing: 0.1em;
+  text-transform: uppercase; color: var(--text-dim);
+}
+.app-footer a { color: inherit; text-decoration: none; transition: color 0.2s; }
+.app-footer a:hover { color: var(--accent-ink); }
+.app-footer-links { display: flex; flex-wrap: wrap; align-items: center; gap: 20px; }
+
+@media (max-width: 768px) {
+  .app-main { padding: 24px; }
+  .app-footer { padding-inline: 24px; }
+  .app-bar { flex-wrap: wrap; gap: 0 24px; padding-inline: 24px; min-height: 0; }
+  .app-brand, .app-session { min-height: 56px; }
+  .app-nav { order: 3; flex-basis: 100%; gap: 20px; overflow-x: auto; scrollbar-width: none; padding-bottom: 10px; }
+  .app-nav::-webkit-scrollbar { display: none; }
+  .app-nav a { padding-block: 2px 4px; }
+}
+@media (max-width: 640px) {
+  .app-context, .user-menu-trigger .user-menu-email { display: none; }
+  .app-footer { justify-content: center; text-align: center; }
+}
+```
+
+Worked example: `patterns/app-shell.html` (Mission; switch `data-theme` for Daylight).
 
 ---
 

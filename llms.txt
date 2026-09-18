@@ -304,8 +304,8 @@ stops resolving words and starts spelling out letters.
 - Page: 48px — header, main, side padding (24px below 768px)
 - Landing section: 96px — vertical rhythm between landing-page bands (64px below 768px)
 - Section: 32px — between major sections inside an app view
-- Element: 24px — card padding, footer vertical padding
-- Grid: 16px — grid gap between cards
+- Element: 24px — card padding, landing-footer vertical padding
+- Grid: 16px — grid gap between cards, app-footer vertical padding
 - Inline: 12px — gap between badges
 - Tight: 8px — between related text elements
 
@@ -495,14 +495,27 @@ Vertical stack of stat rows:
 - Material line: Share Tech Mono, 12px, `var(--accent-ink)`, letter-spacing 0.1em
 - Description: 13px, `var(--text-muted)`, line-height 1.5
 
-### App Header
-- Structure: eyebrow → page title → subtitle
-- Padding: 48px 48px 32px, `border-bottom: 1px solid var(--border)`
+### Page Header
+The per-view heading, one per page, directly under the app bar. Not the app bar itself —
+see "App Shell" under Page Patterns for the difference.
+- Structure: eyebrow → page title (actions on the same baseline, right) → subtitle
+- Inside `.app-main` (which already carries the 48px page padding): `padding-bottom: 24px`,
+  `margin-bottom: 32px`, `border-bottom: 1px solid var(--border)`
+- Standalone at the top of a page with no app bar: `padding: 48px 48px 32px`
 
 ### Footer
+Two footers, one voice. `.site-footer` is the landing page's; `.app-footer` is the
+signed-in product's (see "App Shell"). Both:
 - Font: Share Tech Mono, 12px, `var(--text-dim)`, letter-spacing 0.1em
-- Padding: 24px 48px, `border-top: 1px solid var(--border)`
+- `border-top: 1px solid var(--border)`; 24px vertical padding on the landing footer,
+  16px on the app footer
 - Must include the rising.company backlink — see below.
+
+### Status
+Live-state readout: a 6px dot + mono label (`ONLINE`, `SYNCING`, `3 PENDING`).
+- Dot: `var(--accent)`, pulses a `--accent-line` ring every 2.4s (off under reduced motion)
+- `.is-degraded` → `var(--warning)` dot, `.is-down` → `var(--danger)` dot, no pulse
+- Label: Share Tech Mono, 12px, 0.1em, uppercase, `var(--text-label)`
 
 ### Grid Layout
 - `display: grid`; `grid-template-columns: repeat(auto-fill, minmax(280px, 1fr))`; `gap: 16px`
@@ -633,6 +646,254 @@ Copy rules for auth: say what the product does *before* asking for an address; n
 mechanism ("we'll email you a link — no password"); never let the button be the only text
 on screen.
 
+### App Shell (both themes)
+
+The chrome behind the auth boundary. Every signed-in Rising product uses the same three
+pieces so that moving between products feels like moving between rooms of one building:
+
+```
+┌──────────────────────────────────────────────────────────────────┐
+│ [mark] PRODUCT · CONTEXT    NAV NAV NAV        ● ONLINE  [BC] who ⌄  │  app-bar   56px, sticky, --bg-surface
+├──────────────────────────────────────────────────────────────────┤
+│ // EYEBROW                                                        │
+│ PAGE TITLE                                        [ action ]      │  page-header
+│ subtitle · mono                                                   │
+│ ───────────────────────────────────────────────────────────────── │
+│ content                                                           │  app-main   --bg-base, 48px padding
+│                                                                   │
+├──────────────────────────────────────────────────────────────────┤
+│ // PRODUCT · BUILD 2026-09-18 · 0a7d685      STATUS  PRIVACY  RISING.COMPANY │  app-footer 16px, --bg-surface
+└──────────────────────────────────────────────────────────────────┘
+```
+
+1. **App bar** — `56px` min-height, sticky, `background: var(--bg-surface)`, `border-bottom:
+   1px solid var(--border)`, full-bleed with the 48px page gutter. Three slots, left to right:
+   - **Brand** — the favicon mark (24px, from `branding/favicon.svg`) + the product name as a
+     `.wordmark` at 18px. Links to the product's home route. The mark carries the Rising
+     identity, so the name is the product's own — there is no `// Rising` eyebrow up here.
+     Optional `.app-context` after it (mono, `--text-label`, `·`-separated) names the tenant,
+     workspace or environment: `· RISING COMPANY`, `· STAGING`.
+   - **Nav** — the product's top-level sections as mono 12px uppercase links, `--text-label`,
+     hover `--accent-ink`. The current one takes `aria-current="page"`: `--text-heading` with a
+     1px `--accent-ink` rule under it. Three to five links; more than that is a sidebar product.
+   - **Session** — right-aligned: an optional `.status` readout, then the **user menu**. Its
+     trigger shows identity at a glance — a 24px initials chip, the email in mono `--text-subtle`
+     (truncates at 24ch, hides below 640px; the chip stays), a chevron. The panel opens
+     under it, right-aligned: `// Signed in as` + full email, then the product's account items
+     (Settings, Switch organization, …), then **Sign out** last, ruled off, `--danger-ink` on
+     hover. Sign-out is always the bottom item so muscle memory carries across products. Status
+     stays outside the menu — it is system state, not user state. The reference build is
+     `<details>`/`<summary>` (no JS needed; add light-dismiss on outside click and Escape); a
+     framework may use its own popover but keeps the classes and the item order.
+2. **Page header** — inside `.app-main`, one per view. See the component entry above.
+3. **App footer** — `background: var(--bg-surface)`, `border-top: 1px solid var(--border)`,
+   `padding: 16px 48px`, mono 12px `--text-dim` uppercase. Left: `// PRODUCT · BUILD <date> ·
+   <sha>`. Right: two or three links at most (status, privacy, docs) and the rising.company
+   backlink last. It is a status strip, not a sitemap. Pinned to the viewport bottom on short
+   pages by `.app { display: flex; flex-direction: column; min-height: 100vh }`.
+
+Rules:
+- **Chrome is surface, content is base.** Bar and footer sit on `--bg-surface`; the view sits
+  on `--bg-base`. That one-step lift is the whole hierarchy — no shadows, no heavier borders.
+- **Both bars are full-bleed.** An app is not width-limited like a landing page. A view that
+  wants the 1080px column puts `.shell` inside `.app-main`, not around the bars.
+- **The app bar is not the landing nav.** `.nav` is 64px on `--bg-base` with a CTA button;
+  `.app-bar` is 56px on `--bg-surface` with none. Switch at the auth boundary, with the theme.
+- **Don't put account controls anywhere else.** Email, settings, org switching and sign-out
+  live in the user menu, top-right, in that order — never in the page header, never spread
+  along the bar — so an operator's eye never has to hunt for the exit.
+- **Corner brackets are for viewport-scale surfaces** (auth, HUD overlays, maps). The bar and
+  footer already frame the app; don't add brackets on top of them.
+- **Sidebar products** (os, safe) keep the sidebar for module navigation. The slots relocate,
+  they do not change: brand + context at the sidebar top, session + build + backlink at the
+  sidebar bottom, and no app footer — the sidebar bottom *is* the footer.
+- Below 768px the bar becomes two rows — brand + session, then the nav scrolling sideways —
+  and the gutters drop to 24px. Below 640px the context and email hide; the footer centers.
+
+```html
+<body class="app">
+  <header class="app-bar">
+    <a class="app-brand" href="/" aria-label="Huddle home">
+      <img src="https://design-system.rising.company/branding/favicon.svg" alt="">
+      <span class="wordmark">Huddle</span>
+    </a>
+    <span class="app-context">Rising Company</span>
+    <nav class="app-nav" aria-label="Primary">
+      <a href="/huddles" aria-current="page">Huddles</a>
+      <a href="/templates">Templates</a>
+      <a href="/settings">Settings</a>
+    </nav>
+    <div class="app-session">
+      <span class="status">Online</span>
+      <details class="user-menu">
+        <summary class="user-menu-trigger" aria-label="Account menu">
+          <span class="user-initials" aria-hidden="true">BC</span>
+          <span class="user-menu-email">ben@rising.company</span>
+          <span class="user-menu-chevron" aria-hidden="true"></span>
+        </summary>
+        <div class="user-menu-panel">
+          <div class="user-menu-head">
+            <div class="section-label">// Signed in as</div>
+            <div class="user-menu-email">ben@rising.company</div>
+          </div>
+          <a class="user-menu-item" href="/settings">Settings</a>
+          <a class="user-menu-item" href="/orgs">Switch organization</a>
+          <button class="user-menu-item user-menu-signout" type="button">Sign out</button>
+        </div>
+      </details>
+    </div>
+  </header>
+
+  <main class="app-main">
+    <div class="page-header">
+      <div class="eyebrow">// Huddles</div>
+      <div class="page-header-row">
+        <h1 class="page-title">Your huddles</h1>
+        <a class="btn btn-primary btn-sm" href="/huddles/new">New huddle</a>
+      </div>
+      <p class="subtitle">3 open · 12 closed</p>
+    </div>
+    …
+  </main>
+
+  <footer class="app-footer">
+    <span>// Huddle · build 2026-09-18 · 0a7d685</span>
+    <span class="app-footer-links">
+      <a href="/status">Status</a>
+      <a href="/privacy">Privacy</a>
+      <a class="rising-backlink" href="https://rising.company" target="_blank" rel="noopener noreferrer">rising.company</a>
+    </span>
+  </footer>
+</body>
+```
+
+```css
+.app { display: flex; flex-direction: column; min-height: 100vh; }
+.app-main { flex: 1; position: relative; z-index: 1; padding: 48px; }
+
+.app-bar {
+  position: sticky; top: 0; z-index: 60;
+  display: flex; align-items: center; gap: 32px;
+  min-height: 56px; padding-inline: 48px;
+  background: var(--bg-surface); border-bottom: 1px solid var(--border);
+}
+.app-brand { display: flex; align-items: center; gap: 12px; flex-shrink: 0; color: var(--text-heading); text-decoration: none; }
+.app-brand img, .app-brand svg { width: 24px; height: 24px; border-radius: 4px; }
+.app-brand .wordmark { font-size: 18px; letter-spacing: 3px; }
+.app-context {
+  font-family: "Share Tech Mono", monospace; font-size: 12px; letter-spacing: 0.1em;
+  text-transform: uppercase; color: var(--text-label); white-space: nowrap;
+}
+.app-context::before { content: "·"; margin-right: 12px; color: var(--text-dim); }
+
+.app-nav { display: flex; align-items: center; gap: 24px; flex: 1; min-width: 0; }
+.app-nav a {
+  font-family: "Share Tech Mono", monospace; font-size: 12px; letter-spacing: 0.1em;
+  text-transform: uppercase; color: var(--text-label); text-decoration: none; white-space: nowrap;
+  padding-block: 6px; border-bottom: 1px solid transparent; transition: color 0.2s, border-color 0.2s;
+}
+.app-nav a:hover { color: var(--accent-ink); }
+.app-nav a[aria-current="page"] { color: var(--text-heading); border-bottom-color: var(--accent-ink); }
+
+.app-session { display: flex; align-items: center; gap: 20px; margin-left: auto; flex-shrink: 0; }
+
+/* User menu — <details>/<summary>; a framework may swap in its own popover
+   but keeps the classes and the item order. */
+.user-menu { position: relative; }
+.user-menu > summary { list-style: none; }
+.user-menu > summary::-webkit-details-marker { display: none; }
+.user-menu-trigger {
+  display: flex; align-items: center; gap: 10px; padding: 4px 0; cursor: pointer;
+  border-radius: 4px; color: var(--text-subtle); transition: color 0.2s;
+}
+.user-menu-trigger:hover, .user-menu[open] > .user-menu-trigger { color: var(--text-heading); }
+.user-menu-email {
+  font-family: "Share Tech Mono", monospace; font-size: 12px; letter-spacing: 0.05em;
+  max-width: 24ch; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+}
+.user-initials {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 24px; height: 24px; border-radius: 4px; flex-shrink: 0;
+  font-family: "Share Tech Mono", monospace; font-size: 12px; letter-spacing: 0.05em; text-transform: uppercase;
+  color: var(--accent-ink); background: var(--accent-wash); border: 1px solid var(--accent-line);
+}
+.user-menu-chevron {
+  width: 8px; height: 8px; border-right: 1px solid currentColor; border-bottom: 1px solid currentColor;
+  transform: translateY(-2px) rotate(45deg); transition: transform 0.2s;
+}
+.user-menu[open] .user-menu-chevron { transform: translateY(2px) rotate(225deg); }
+.user-menu-panel {
+  position: absolute; top: calc(100% + 8px); right: 0; z-index: 70;
+  min-width: 240px; padding: 6px;
+  background: var(--bg-surface); border: 1px solid var(--border-hover);
+  border-radius: 6px; box-shadow: 0 12px 32px rgba(0, 0, 0, 0.28);
+}
+[data-theme="daylight"] .user-menu-panel { box-shadow: 0 12px 32px rgba(11, 26, 20, 0.12); }
+.user-menu-head { padding: 8px 10px 10px; margin-bottom: 6px; border-bottom: 1px solid var(--border); }
+.user-menu-head .section-label { letter-spacing: 0.15em; margin-bottom: 4px; }
+.user-menu-head .user-menu-email { max-width: none; color: var(--text-body); }
+.user-menu-item {
+  display: flex; align-items: center; gap: 10px; width: 100%; padding: 10px; border-radius: 4px; text-align: left;
+  font-family: "Share Tech Mono", monospace; font-size: 12px; letter-spacing: 0.1em; text-transform: uppercase;
+  color: var(--text-label); background: none; border: 0; cursor: pointer; text-decoration: none;
+  transition: background 0.2s, color 0.2s;
+}
+.user-menu-item:hover { background: var(--bg-surface-hover); color: var(--text-heading); }
+.user-menu-signout { margin-top: 6px; border-top: 1px solid var(--border); border-radius: 0 0 4px 4px; padding-top: 12px; }
+.user-menu-signout:hover { color: var(--danger-ink); }
+
+.status {
+  display: inline-flex; align-items: center; gap: 8px;
+  font-family: "Share Tech Mono", monospace; font-size: 12px; letter-spacing: 0.1em;
+  text-transform: uppercase; color: var(--text-label); white-space: nowrap;
+}
+.status::before {
+  content: ""; width: 6px; height: 6px; border-radius: 50%; background: var(--accent);
+  animation: status-pulse 2.4s ease-out infinite;
+}
+.status.is-degraded::before { background: var(--warning); animation: none; }
+.status.is-down::before { background: var(--danger); animation: none; }
+@keyframes status-pulse {
+  0% { box-shadow: 0 0 0 0 var(--accent-line); } 70% { box-shadow: 0 0 0 6px transparent; } 100% { box-shadow: 0 0 0 0 transparent; }
+}
+
+.page-header { padding-bottom: 24px; margin-bottom: 32px; border-bottom: 1px solid var(--border); }
+.page-header .eyebrow { margin-bottom: 8px; }
+.page-header .subtitle { margin-top: 8px; }
+.page-header-row { display: flex; align-items: flex-end; justify-content: space-between; gap: 16px 24px; flex-wrap: wrap; }
+
+.app-footer {
+  position: relative; z-index: 1;
+  display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between;
+  gap: 12px 24px; padding: 16px 48px;
+  background: var(--bg-surface); border-top: 1px solid var(--border);
+  font-family: "Share Tech Mono", monospace; font-size: 12px; letter-spacing: 0.1em;
+  text-transform: uppercase; color: var(--text-dim);
+}
+.app-footer a { color: inherit; text-decoration: none; transition: color 0.2s; }
+.app-footer a:hover { color: var(--accent-ink); }
+.app-footer-links { display: flex; flex-wrap: wrap; align-items: center; gap: 20px; }
+
+@media (max-width: 768px) {
+  .app-main { padding: 24px; }
+  .app-footer { padding-inline: 24px; }
+  .app-bar { flex-wrap: wrap; gap: 0 24px; padding-inline: 24px; min-height: 0; }
+  .app-brand, .app-session { min-height: 56px; }
+  .app-nav { order: 3; flex-basis: 100%; gap: 20px; overflow-x: auto; scrollbar-width: none; padding-bottom: 10px; }
+  .app-nav::-webkit-scrollbar { display: none; }
+  .app-nav a { padding-block: 2px 4px; }
+}
+@media (max-width: 640px) {
+  .app-context, .user-menu-trigger .user-menu-email { display: none; }
+  .app-footer { justify-content: center; text-align: center; }
+}
+```
+
+Copy rules for the shell: the product name in the brand, never "Rising" (the mark says that);
+the exit is `Sign out` in every product — no "Disconnect", "Log out" or other variants; the
+footer ident is `// PRODUCT · BUILD <date> · <short sha>` so a screenshot always says which
+build it came from.
+
 ### Empty State
 Eyebrow → one-line explanation in `--text-muted` → one `btn-secondary`. Centered, max-width
 420px, 96px vertical padding. Never a bare "No results."
@@ -681,8 +942,9 @@ Every Rising Company product must include a subtle backlink to https://rising.co
 - Text: "rising.company" (lowercase, standalone) or wrap an existing "rising company" mention
 - Style: footer mono token — Share Tech Mono, 12px, 0.1–0.2em letter-spacing, `var(--text-dim)`, uppercase if standalone
 - Hover: transition to `var(--accent-ink)` over 0.2s, no underline
-- Placement: auth screens (below the form, 24–48px gap), app layouts (footer or sidebar
-  bottom, near logout), landing/marketing pages (inline within the site footer copy)
+- Placement: auth screens (below the form, 24–48px gap), app layouts (last link in the
+  `.app-footer`, or the sidebar bottom near logout), landing/marketing pages (inline within
+  the site footer copy)
 
 ```css
 .rising-backlink {
