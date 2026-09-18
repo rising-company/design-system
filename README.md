@@ -5,6 +5,8 @@ One brand, two themes. Same type pairing, same spacing, same voice, same token n
 - **Mission** (dark) — mission control / technical HUD. Operator-facing surfaces: consoles, dashboards, diagram and map views, admin.
 - **Daylight** (light) — the same system in daylight. User-facing surfaces: landing pages, marketing, onboarding, sign-in for people who aren't staff.
 
+**Animation quality is the first priority of the design.** Motion is designed before it is written, built on [Motion](https://motion.dev), and a still view beats a careless one. See "Motion" below.
+
 Live: <https://design-system.rising.company>
 
 ## What's here
@@ -50,6 +52,17 @@ A product may ship both: Daylight for its public surface, Mission for the app be
 - **`--accent` is a fill, not an ink.** Mint `#3af0a0` is 1.4:1 on white. In Daylight use it as a button/badge *background* with `--accent-on` text; for accent text, icons and 1px borders use `--accent-ink` (which darkens to `#0b7a4e`).
 - **Scanlines and corner brackets are Mission-only.** They're driven by `--chrome-scanline` and `--chrome-bracket-display`, so the same CSS rule goes inert in Daylight. Don't port the HUD texture across.
 - **12px is the floor for Share Tech Mono, and mono tracking is in `em`.** Its stems are about 7% of the em, so below 12px they sample to under one device pixel on a 1× monitor and go grey — while looking perfectly crisp on the Retina laptop you designed on. Rajdhani body copy has a matching floor of 15px at weight 500. See "Two rules hold the mono scale together" in `llms.txt`.
+
+## Motion
+
+Motion is the first thing a person feels on a screen and the first thing that reads as cheap when it is wrong — so it is handled with more care than anything else in the system, not less. Before an animation is written, answer what moves, why, how it enters, how it leaves, and what it does under reduced motion. No answer → no animation.
+
+- **One engine: [Motion](https://motion.dev)** (`npm i motion`; `motion/react` in React, `motion` elsewhere). No hand-rolled `setTimeout` / `requestAnimationFrame` choreography, no second library. Plain CSS `transition` stays for hover, focus and color.
+- **One default:** `<MotionConfig reducedMotion="user" transition={{ type: "spring", visualDuration: 0.3, bounce: 0 }}>` at the app root. Springs move, tweens fade, `bounce: 0` always — nothing bounces.
+- **One scale:** Quick 0.2s (hover, color) · Base spring 0.3 (menus, panels, layout) · Slow spring 0.5 / 0.6s reveal (whole surfaces) · Ambient ≥ 2.4s (the status pulse only). Exits faster than entries, inside `AnimatePresence`.
+- **Transform and opacity only,** small distances (8px reveals, 4px menus), never block input, reduced motion verified with the OS setting on, 60fps at 4× CPU throttle, reviewed live before merging.
+
+The full spec — scale, distances, eight rules, recipes — is the "Motion" section of `llms.txt`.
 
 ## Local preview
 

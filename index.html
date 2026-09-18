@@ -751,6 +751,41 @@
   .code-block .c-sel  { color: var(--text-heading); }
   .code-block .c-prop { color: var(--text-muted); }
 
+  /* Motion exhibits */
+  .mo-stage {
+    position: relative; height: 208px; border: 1px solid var(--border); border-radius: 6px;
+    background: var(--bg-base); overflow: hidden; margin-top: 4px;
+  }
+  .mo-stage .btn { position: absolute; top: 16px; right: 16px; }
+  .mo-panel {
+    position: absolute; top: 56px; right: 16px; width: 200px;
+    background: var(--bg-surface); border: 1px solid var(--border); border-radius: 4px;
+    box-shadow: var(--card-shadow); padding: 6px 0; transform-origin: top right;
+    opacity: 0; visibility: hidden;
+  }
+  .mo-panel .mo-item {
+    font-family: "Rajdhani", sans-serif; font-size: 15px; font-weight: 500;
+    color: var(--text-muted); padding: 7px 14px;
+  }
+  .mo-panel .mo-item.is-signout { border-top: 1px solid var(--border-subtle); margin-top: 4px; padding-top: 10px; }
+  .mo-list { position: absolute; inset: 16px 104px 16px 16px; display: flex; flex-direction: column; gap: 6px; }
+  .mo-row {
+    height: 26px; border: 1px solid var(--border); border-radius: 4px; background: var(--bg-surface);
+    display: flex; align-items: center; gap: 10px; padding: 0 12px;
+    font-family: "Share Tech Mono", monospace; font-size: 12px; letter-spacing: 0.1em;
+    color: var(--text-label); text-transform: uppercase; opacity: 0; white-space: nowrap; overflow: hidden;
+  }
+  .mo-row i { width: 6px; height: 6px; border-radius: 50%; background: var(--accent); }
+  .mo-stage .mo-replay { position: absolute; top: 16px; right: 16px; }
+  .mo-rules { counter-reset: rule; }
+  .mo-rules .voice-card { position: relative; padding-left: 52px; }
+  .mo-rules .voice-card::before {
+    counter-increment: rule; content: "0" counter(rule);
+    position: absolute; left: 20px; top: 22px;
+    font-family: "Share Tech Mono", monospace; font-size: 12px; letter-spacing: 0.1em;
+    color: var(--text-label);
+  }
+
   /* Voice rules */
   .state-chip {
     font-family: "Share Tech Mono", monospace;
@@ -849,9 +884,10 @@
   <a href="#components">04 Components</a>
   <a href="#controls">05 Controls</a>
   <a href="#patterns">06 Patterns</a>
-  <a href="#effects">07 Effects</a>
-  <a href="#voice">08 Voice</a>
-  <a href="#brand">09 Brand</a>
+  <a href="#motion">07 Motion</a>
+  <a href="#effects">08 Effects</a>
+  <a href="#voice">09 Voice</a>
+  <a href="#brand">10 Brand</a>
 </nav>
 
 <div class="container">
@@ -1442,9 +1478,136 @@
 </section>
 
 <!-- ═══ 07 EFFECTS ═══ -->
-<section id="effects" class="reveal" style="--i: 7">
+<!-- ═══ 07 MOTION ═══ -->
+<section id="motion" class="reveal" style="--i: 7">
   <div class="sec-head">
     <span class="sec-num">07</span>
+    <h2 class="sec-title">Motion</h2>
+    <span class="sec-rule"></span>
+  </div>
+
+  <p class="voice-body" style="max-width: 68ch; margin-bottom: 8px;">
+    <strong>Animation quality is the first priority of the design.</strong> Motion is the first thing a person feels on a screen and the first thing that reads as cheap when it is wrong &mdash; one mistimed panel undoes careful type and color in a single frame. So motion is designed, not added. Before an animation is written, answer what moves, why, how it enters, how it leaves, and what it does under reduced motion. No answer &rarr; no animation. <em>A still view beats a careless one.</em>
+  </p>
+  <p class="voice-body" style="max-width: 68ch; margin-bottom: 32px;">
+    Everything beyond CSS hover and focus transitions is built on <a href="https://motion.dev" style="color: var(--accent-ink); text-decoration: none;">Motion</a> &mdash; one engine, one set of curves, so every product moves the same way. Identical in Mission and Daylight.
+  </p>
+
+  <div class="section-label">// Library &mdash; motion.dev, required</div>
+  <div class="code-block"><span class="c-com">// npm i motion</span>
+<span class="c-tag">import</span> { motion, AnimatePresence, MotionConfig, useReducedMotion } <span class="c-tag">from</span> <span class="c-str">"motion/react"</span>
+<span class="c-tag">import</span> { animate, stagger } <span class="c-tag">from</span> <span class="c-str">"motion"</span>                       <span class="c-com">// vanilla / non-React</span>
+
+<span class="c-com">// wrap every React app root once — springs by default, reduced motion honoured</span>
+&lt;<span class="c-sel">MotionConfig</span> <span class="c-attr">reducedMotion</span>=<span class="c-str">"user"</span> <span class="c-attr">transition</span>={{ type: <span class="c-str">"spring"</span>, visualDuration: 0.3, bounce: 0 }}&gt;</div>
+  <div class="fx-desc" style="margin-bottom: 32px;">No hand-rolled setTimeout / requestAnimationFrame / class-toggle choreography. No second engine (GSAP, react-spring, anime.js). Plain CSS <code>transition</code> stays for hover, focus and color.</div>
+
+  <div class="section-label">// Scale &mdash; pick from it, never invent a value</div>
+  <table class="token-table" style="margin-bottom: 32px;">
+    <thead><tr><th style="width: 16%;">Tier</th><th style="width: 40%;">Value</th><th>Use</th></tr></thead>
+    <tbody>
+      <tr><td class="t-name">Quick</td><td>0.2s ease &middot; { duration: 0.2, ease: "easeOut" }</td><td class="t-use">Hover, focus, color, border, opacity &mdash; the transition on every control</td></tr>
+      <tr><td class="t-name">Base</td><td>spring &middot; visualDuration 0.3 &middot; bounce 0</td><td class="t-use">Anything that moves or resizes: menus, panels, drawers, toasts, rows, layout changes</td></tr>
+      <tr><td class="t-name">Slow</td><td>spring &middot; visualDuration 0.5 &middot; bounce 0 &nbsp;/&nbsp; 0.6s ease reveal</td><td class="t-use">Whole surfaces: page reveal, route change, modal and scrim</td></tr>
+      <tr><td class="t-name">Ambient</td><td>&ge; 2.4s ease-out, looping</td><td class="t-use">The status pulse &mdash; and nothing else</td></tr>
+    </tbody>
+  </table>
+
+  <div class="section-label">// Live &mdash; driven by Motion from the CDN</div>
+  <div class="demo-row">
+    <div class="demo-panel">
+      <div class="fx-label">Panel &middot; Base</div>
+      <div class="mo-stage">
+        <button type="button" class="btn btn-secondary btn-sm" id="mo-panel-btn" aria-expanded="false" aria-controls="mo-panel">Account &#9662;</button>
+        <div class="mo-panel" id="mo-panel">
+          <div class="mo-item">Profile</div>
+          <div class="mo-item">Preferences</div>
+          <div class="mo-item is-signout">Sign out</div>
+        </div>
+      </div>
+      <div class="fx-desc">Enters y 4 &rarr; 0, scale 0.98 &rarr; 1 from its anchor on the Base spring. Exits in 0.15s, fade-led. Toggle it mid-flight &mdash; it reverses from where it is.</div>
+    </div>
+    <div class="demo-panel">
+      <div class="fx-label">Stagger &middot; 60ms</div>
+      <div class="mo-stage">
+        <div class="mo-list" id="mo-list">
+          <div class="mo-row"><i></i>Huddle &middot; open</div>
+          <div class="mo-row"><i></i>Venue &middot; open</div>
+          <div class="mo-row"><i></i>Safe &middot; open</div>
+          <div class="mo-row"><i></i>OS &middot; open</div>
+        </div>
+        <button type="button" class="btn btn-ghost btn-sm mo-replay" id="mo-replay">Replay</button>
+      </div>
+      <div class="fx-desc">Rows enter y 8 &rarr; 0 with opacity, 60ms apart, capped at eight. Past eight, batch &mdash; a 30-row table does not enter one row at a time.</div>
+    </div>
+    <div class="demo-panel">
+      <div class="fx-label">Load Reveal &middot; Slow</div>
+      <div class="fx-selection">Sections rise 8px and fade in, 90ms stagger &mdash; the page you are reading booted like an instrument panel.</div>
+      <div class="fx-desc">0.6s ease &middot; one reveal per page &middot; off under prefers-reduced-motion, content fully visible.</div>
+    </div>
+  </div>
+
+  <div class="section-label" style="margin-top: 32px;">// Rules</div>
+  <div class="voice-grid mo-rules">
+    <div class="voice-card">
+      <div class="voice-rule">Motion has a job</div>
+      <div class="voice-example">Reveal, confirm, orient or connect. Name the job in the code. If you can&rsquo;t, cut the animation.</div>
+    </div>
+    <div class="voice-card">
+      <div class="voice-rule">Transform &amp; opacity only</div>
+      <div class="voice-example"><span class="mono">x · y · scale · rotate · opacity</span>. Never width, height, top, left, margin, padding, box-shadow or filter &mdash; size and position changes go through <span class="mono">layout</span>.</div>
+    </div>
+    <div class="voice-card">
+      <div class="voice-rule">Never block input</div>
+      <div class="voice-example">Nothing waits on an animation; a user can click through a reveal. Nothing runs longer than Slow except the status pulse.</div>
+    </div>
+    <div class="voice-card">
+      <div class="voice-rule">One entrance per view</div>
+      <div class="voice-example">The page reveals, or the panel opens &mdash; a section that is revealing does not also stagger the cards inside it.</div>
+    </div>
+    <div class="voice-card">
+      <div class="voice-rule">Loops are for live state</div>
+      <div class="voice-example">The status dot pulses because the system is live. A skeleton may breathe on opacity. Nothing else loops, shimmers or spins.</div>
+    </div>
+    <div class="voice-card">
+      <div class="voice-rule">Reduced motion is a state</div>
+      <div class="voice-example">Not a fallback. Transforms off, opacity kept, content at its final state. Verify with the OS setting on, not by assumption.</div>
+    </div>
+    <div class="voice-card">
+      <div class="voice-rule">60fps on a 1&times; machine</div>
+      <div class="voice-example">Test with CPU throttling at 4&times;. If it drops frames, simplify &mdash; fewer elements, no blur, no <span class="mono">layout</span> on long lists.</div>
+    </div>
+    <div class="voice-card">
+      <div class="voice-rule">Review it in motion</div>
+      <div class="voice-example">A screenshot cannot approve an animation. Watch entrance, exit, mid-flight interruption and reduced motion live before merging.</div>
+    </div>
+  </div>
+
+  <div class="section-label" style="margin-top: 32px;">// Distances &mdash; small. Motion suggests where something came from; it does not travel there</div>
+  <div class="voice-grid">
+    <div class="voice-card">
+      <div class="voice-rule">Enter / reveal</div>
+      <div class="voice-example"><span class="mono">y: 8 → 0</span> with opacity &mdash; sections, cards, toasts.</div>
+    </div>
+    <div class="voice-card">
+      <div class="voice-rule">Menus &middot; popovers</div>
+      <div class="voice-example"><span class="mono">y: 4 → 0 · scale: 0.98 → 1</span>, growing from their anchor via <span class="mono">transformOrigin</span>.</div>
+    </div>
+    <div class="voice-card">
+      <div class="voice-rule">Exits</div>
+      <div class="voice-example">About 0.6&times; the entry, fade-led, inside <span class="mono">AnimatePresence</span>. Nothing pops out of existence.</div>
+    </div>
+    <div class="voice-card">
+      <div class="voice-rule">Never</div>
+      <div class="voice-example">Scale from 0. Slide from off-screen unless it lives there (a drawer). Bounce &mdash; <span class="mono">bounce: 0</span>, always.</div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ 08 EFFECTS ═══ -->
+<section id="effects" class="reveal" style="--i: 8">
+  <div class="sec-head">
+    <span class="sec-num">08</span>
     <h2 class="sec-title">Effects &amp; Interaction</h2>
     <span class="sec-rule"></span>
   </div>
@@ -1483,18 +1646,13 @@
       <div class="fx-selection">Select this text — mint highlight with dark type in both themes. Every copy action carries the brand.</div>
       <div class="fx-desc"><code>::selection</code> — background <code>--accent</code>, color <code>--accent-on</code>. Mint is a fill, so it holds in Daylight unchanged.</div>
     </div>
-    <div class="demo-panel">
-      <div class="fx-label">Load Reveal</div>
-      <div class="fx-selection">Sections rise 8px and fade in, 90ms stagger — the page boots like an instrument panel.</div>
-      <div class="fx-desc">0.6s ease · respects prefers-reduced-motion.</div>
-    </div>
   </div>
 </section>
 
-<!-- ═══ 08 VOICE ═══ -->
-<section id="voice" class="reveal" style="--i: 8">
+<!-- ═══ 09 VOICE ═══ -->
+<section id="voice" class="reveal" style="--i: 9">
   <div class="sec-head">
-    <span class="sec-num">08</span>
+    <span class="sec-num">09</span>
     <h2 class="sec-title">Voice &amp; Tone</h2>
     <span class="sec-rule"></span>
   </div>
@@ -1519,9 +1677,9 @@
   </div>
 </section>
 
-<section id="brand" class="reveal" style="--i: 9">
+<section id="brand" class="reveal" style="--i: 10">
   <div class="sec-head">
-    <span class="sec-num">09</span>
+    <span class="sec-num">10</span>
     <h2 class="sec-title">Brand Assets</h2>
     <span class="sec-rule"></span>
   </div>
@@ -1567,7 +1725,7 @@
   </table>
 </section>
 
-<footer class="reveal" style="--i: 10">// design-system —
+<footer class="reveal" style="--i: 11">// design-system —
   <a href="https://rising.company" target="_blank" rel="noopener noreferrer">rising company</a>
   &middot; machine spec: <a href="/llms.txt">llms.txt</a>
   &middot; stylesheet: <a href="/rising.css">rising.css</a>
@@ -1654,5 +1812,45 @@
   sections.forEach(function (s) { if (s) spy.observe(s); });
 </script>
 
+<script type="module">
+  // Motion exhibits — the same engine and values the spec prescribes.
+  import { animate, stagger } from "https://cdn.jsdelivr.net/npm/motion@12/+esm";
+
+  var reduced = window.matchMedia("(prefers-reduced-motion: reduce)");
+  var base = { type: "spring", visualDuration: 0.3, bounce: 0 };
+
+  // Panel — enters on the Base spring from its anchor, exits fade-led in 0.15s.
+  var btn = document.getElementById("mo-panel-btn");
+  var panel = document.getElementById("mo-panel");
+  var open = false;
+  btn.addEventListener("click", function () {
+    open = !open;
+    btn.setAttribute("aria-expanded", String(open));
+    if (open) {
+      panel.style.visibility = "visible";
+      animate(panel,
+        reduced.matches ? { opacity: 1 } : { opacity: 1, y: 0, scale: 1 },
+        reduced.matches ? { duration: 0.2 } : base);
+    } else {
+      animate(panel,
+        reduced.matches ? { opacity: 0 } : { opacity: 0, y: 4 },
+        { duration: 0.15 }).finished.then(function () { if (!open) panel.style.visibility = "hidden"; });
+    }
+  });
+  if (!reduced.matches) { panel.style.transform = "translateY(4px) scale(0.98)"; }
+
+  // Stagger — rows enter y 8 → 0 with opacity, 60ms apart.
+  var rows = document.querySelectorAll("#mo-list .mo-row");
+  function replay() {
+    animate(rows,
+      reduced.matches ? { opacity: [0, 1] } : { opacity: [0, 1], y: [8, 0] },
+      reduced.matches ? { duration: 0.2 } : Object.assign({ delay: stagger(0.06) }, base));
+  }
+  document.getElementById("mo-replay").addEventListener("click", replay);
+  var once = new IntersectionObserver(function (entries) {
+    if (entries.some(function (e) { return e.isIntersecting; })) { replay(); once.disconnect(); }
+  }, { threshold: 0.4 });
+  once.observe(document.getElementById("mo-list"));
+</script>
 </body>
 </html>

@@ -5,6 +5,10 @@
 >
 > - **Mission** (dark) — mission control / technical HUD. Internal and operator-facing surfaces.
 > - **Daylight** (light) — same system in daylight. Public and user-facing surfaces.
+>
+> **Animation quality is the first priority of the design.** Motion is designed before it is
+> written, built on [Motion](https://motion.dev), and a still view beats a careless one.
+> See "Motion" below.
 
 ## Themes
 
@@ -315,10 +319,165 @@ stops resolving words and starts spelling out letters.
 - Control: 4px — buttons, inputs, tooltips
 - Badge: 3px — badges, small tags
 
-## Transitions
+## Motion
 
-All interactive transitions: 0.2s default easing. Properties: border-color, background,
-color, opacity, transform.
+**Animation quality is the first priority of Rising Company design.** Motion is the first
+thing a person feels on a screen and the first thing that reads as cheap when it is wrong —
+one mistimed panel undoes careful type and color in a single frame. So motion is designed,
+not added. Before an animation is written, answer five questions: what moves, why, how it
+enters, how it leaves, and what it does under reduced motion. If any of them has no answer,
+the element does not animate. **A still view beats a careless one.**
+
+Motion is identical in Mission and Daylight — same curves, same distances, same durations.
+
+### Library — Motion (motion.dev), required
+
+Everything beyond the CSS hover/focus transitions below is built on
+[Motion](https://motion.dev) — `npm i motion`. One engine and one set of curves, so every
+product moves the same way.
+
+- React: `import { motion, AnimatePresence, MotionConfig, useReducedMotion } from "motion/react"`
+- Vanilla / non-React: `import { animate, stagger } from "motion"`
+- Do not hand-roll animation — no `setTimeout` choreography, no `requestAnimationFrame`
+  loops, no class-toggle sequences — and do not add a second engine (GSAP, react-spring,
+  anime.js). Static CSS `transition` stays for hover, focus and color; that is what it's for.
+
+Wrap every React app root once:
+
+```jsx
+<MotionConfig reducedMotion="user" transition={{ type: "spring", visualDuration: 0.3, bounce: 0 }}>
+  {children}
+</MotionConfig>
+```
+
+`reducedMotion="user"` turns off transform and layout animation for people who asked for
+it and keeps opacity — the same contract as the CSS block at the end of this section. The
+default transition is a critically damped spring: natural deceleration, interruptible, no
+overshoot.
+
+### Scale
+
+Durations and curves are a scale, like spacing. Pick from it; do not invent a value.
+
+| Tier | Value | Use |
+|---|---|---|
+| Quick | 0.2s `ease` (CSS) · `{ duration: 0.2, ease: "easeOut" }` | hover, focus, color, border, opacity — the transitions on every control |
+| Base | `{ type: "spring", visualDuration: 0.3, bounce: 0 }` | anything that moves or resizes: menus, panels, drawers, toasts, list rows, layout changes |
+| Slow | `{ type: "spring", visualDuration: 0.5, bounce: 0 }` · 0.6s `ease` (CSS load reveal) | whole surfaces: page reveal, route transition, modal and scrim |
+| Ambient | ≥ 2.4s `ease-out`, looping | the status pulse — and nothing else |
+
+- **Springs move, tweens fade.** Anything with a position or size uses the spring; opacity
+  and color use the Quick tween. Springs are interruptible — a hover-out halfway through a
+  hover reverses from where it is, not from the end.
+- **Exits are faster than entries** — about 0.6× the entry and fade-led:
+  `exit: { opacity: 0, transition: { duration: 0.15 } }`. Nothing pops out of existence;
+  conditionally rendered elements sit inside `AnimatePresence`.
+- **`bounce: 0`, always.** Nothing bounces, overshoots or wobbles. The brand is an
+  instrument panel, not a toy.
+- Stagger 40–90ms per item and cap the whole sequence at 600ms. Past eight items, batch —
+  a 30-row table does not enter one row at a time.
+
+### Distances
+
+Small. Motion suggests where something came from; it does not travel there.
+
+- Enter / reveal — sections, cards, toasts: `y: 8 → 0` with opacity.
+- Menus, tooltips, popovers: `y: 4 → 0`, `scale: 0.98 → 1`, growing from their anchor via
+  `transformOrigin`.
+- Never scale from 0. Never slide from off-screen unless the element lives off-screen (a
+  drawer or sheet) — then translate the panel at Base and fade the scrim at Quick.
+
+### Rules
+
+1. **Motion has a job** — reveal, confirm, orient (where did this come from) or connect
+   (this became that). Name the job in the code. If you can't, cut the animation.
+2. **Transform and opacity only.** `x`, `y`, `scale`, `rotate`, `opacity`. Never animate
+   `width`, `height`, `top`, `left`, `margin`, `padding`, `box-shadow` or `filter`. Size and
+   position changes go through Motion's `layout` prop, which runs them as transforms.
+3. **Never block input.** Nothing waits on an animation; a user can click through a reveal.
+   Nothing runs longer than Slow except the status pulse.
+4. **One entrance per view.** The page reveals, or the panel opens — a section that is
+   revealing does not also stagger the cards inside it.
+5. **Loops are for live state.** The status dot pulses because the system is live. A
+   skeleton may breathe on opacity at Ambient. Nothing else loops, shimmers or spins except
+   a spinner.
+6. **Reduced motion is a state, not a fallback.** Every animation has a defined reduced
+   version — transforms off, opacity kept, content at its final state. Verify it by
+   toggling the OS setting, not by assumption.
+7. **60fps on a 1× machine.** Test with DevTools CPU throttling at 4×. If it drops frames,
+   simplify: fewer elements, no blur, no `layout` on long lists. `will-change` only on the
+   element about to move, and removed after.
+8. **Review it in motion.** A screenshot cannot approve an animation. Watch it live before
+   merging — entrance, exit, interruption (toggle it mid-flight) and reduced motion.
+
+### Recipes
+
+Panel / menu — the user menu, popovers, toasts:
+
+```jsx
+<AnimatePresence>
+  {open && (
+    <motion.div
+      initial={{ opacity: 0, y: 4, scale: 0.98 }}
+      animate={{ opacity: 1, y: 0, scale: 1 }}
+      exit={{ opacity: 0, y: 4, transition: { duration: 0.15 } }}
+      style={{ transformOrigin: "top right" }}
+    />
+  )}
+</AnimatePresence>
+```
+
+Staggered list — cards, results; cap at eight:
+
+```jsx
+<motion.ul initial="hidden" animate="show" variants={{ show: { transition: { staggerChildren: 0.06 } } }}>
+  {items.map((item) => (
+    <motion.li key={item.id} variants={{ hidden: { opacity: 0, y: 8 }, show: { opacity: 1, y: 0 } }} />
+  ))}
+</motion.ul>
+```
+
+Layout change — a card growing, a row leaving:
+
+```jsx
+<motion.div layout />
+```
+
+Vanilla, no React:
+
+```js
+import { animate, stagger } from "motion"
+animate(".card", { opacity: [0, 1], y: [8, 0] }, { type: "spring", visualDuration: 0.3, bounce: 0, delay: stagger(0.06) })
+```
+
+### CSS transitions
+
+Hover, focus and color states on controls stay in CSS — Quick tier, default `ease`:
+
+```css
+transition: background 0.2s, border-color 0.2s, color 0.2s, opacity 0.2s;
+```
+
+Properties: border-color, background, color, opacity, transform. Nothing else.
+
+### Load Reveal (optional)
+
+Staggered boot-up on page load — sections fade up in document order: opacity 0 → 1,
+translateY 8px → 0, 0.6s ease, 90ms stagger per section. CSS keyframes on a static page;
+`variants` with `staggerChildren: 0.09` in an app. One reveal per page — it is the page's
+entrance, not each component's. Under `prefers-reduced-motion`: animation none, content
+fully visible.
+
+### Reduced motion (required)
+
+`rising.css` ships this; every product keeps it, alongside `MotionConfig reducedMotion="user"`:
+
+```css
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after { animation: none !important; transition: none !important; }
+}
+```
 
 ## Interaction States
 
@@ -336,11 +495,6 @@ Keyboard focus only — style via `:focus-visible`, never plain `:focus`:
 ### Disabled
 No new colors — reuse the low-emphasis ramp: text/icon `--text-label`, border
 `--border-subtle`, background unchanged. No hover transitions, `cursor: not-allowed`.
-
-### Load Reveal (optional)
-Staggered boot-up on page load — sections fade up in document order: opacity 0 → 1,
-translateY 8px → 0, 0.6s ease, 90ms stagger per section. Must respect
-`prefers-reduced-motion` (animation: none, content fully visible).
 
 ## Visual Effects
 
@@ -1002,5 +1156,6 @@ decorating data, and the mark has stopped meaning anything.
 - Sparse grids: auto-fill responsive, ample gap. Content breathes.
 - Layered depth: Base → Surface → Surface Hover. Elevation through background shifts;
   Daylight adds one hairline shadow, never more.
-- Subtle interaction: 0.2s transitions, border shifts, gradient reveals. Nothing bounces.
+- Motion is designed, not added — see "Motion". Subtle interaction: 0.2s transitions,
+  border shifts, gradient reveals, springs with `bounce: 0`. Nothing bounces.
 - Scanlines and brackets are Mission-only. Do not port them to Daylight.

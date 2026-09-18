@@ -14,6 +14,8 @@ Apply this design system when building frontend/UI for Rising Company projects.
 
 Stack-agnostic: adapt these tokens and patterns to whatever framework the target project uses.
 
+**Animation quality is the first priority of the design.** Handle every animation with care — design it before writing it, build it on [Motion](https://motion.dev), and if in doubt leave the element still. See "Motion" below.
+
 Full spec: https://design-system.rising.company/llms.txt
 Drop-in stylesheet: https://design-system.rising.company/rising.css
 
@@ -145,9 +147,73 @@ Page `48px` (24px < 768px) · Landing band `96px` (64px < 768px) · Section `32p
 
 Card `6px` · Control (buttons, inputs, tooltips) `4px` · Badge `3px`
 
-## Transitions
+## Motion
 
-All: `0.2s` default easing. Properties: border-color, background, color, opacity, transform.
+**Animation quality comes first.** Motion is the first thing a person feels on a screen and the first thing that reads as cheap when it is wrong. Before writing any animation, answer: what moves, why, how it enters, how it leaves, and what it does under reduced motion. No answer → no animation. **A still view beats a careless one.** Motion is identical in both themes.
+
+**Library — Motion (motion.dev), required.** `npm i motion`. React: `import { motion, AnimatePresence, MotionConfig, useReducedMotion } from "motion/react"`. Vanilla: `import { animate, stagger } from "motion"`. No hand-rolled `setTimeout` / `requestAnimationFrame` / class-toggle choreography, no second engine (GSAP, react-spring, anime.js). Plain CSS `transition` stays for hover, focus and color.
+
+Wrap every React app root once:
+```jsx
+<MotionConfig reducedMotion="user" transition={{ type: "spring", visualDuration: 0.3, bounce: 0 }}>
+```
+
+**Scale** — pick from it, never invent a value:
+
+| Tier | Value | Use |
+|---|---|---|
+| Quick | `0.2s ease` (CSS) · `{ duration: 0.2, ease: "easeOut" }` | hover, focus, color, border, opacity |
+| Base | `{ type: "spring", visualDuration: 0.3, bounce: 0 }` | anything that moves or resizes: menus, panels, drawers, toasts, rows, layout |
+| Slow | `{ type: "spring", visualDuration: 0.5, bounce: 0 }` · `0.6s ease` (CSS reveal) | whole surfaces: page reveal, route change, modal + scrim |
+| Ambient | ≥ `2.4s ease-out` loop | the status pulse only |
+
+- Springs move, tweens fade. Exits ≈ 0.6× the entry, fade-led, inside `AnimatePresence` — nothing pops out.
+- `bounce: 0`, always. Nothing bounces, overshoots or wobbles.
+- Stagger 40–90ms, whole sequence ≤ 600ms, batch past eight items.
+- Distances are small: enter `y: 8 → 0`; menus/popovers `y: 4`, `scale: 0.98`, from their anchor. Never scale from 0; never slide from off-screen unless it's a drawer.
+
+**Rules:**
+1. Motion has a job — reveal, confirm, orient or connect. Can't name it → cut it.
+2. Transform and opacity only. Never animate width/height/top/left/margin/padding/box-shadow/filter — use `layout` for size and position changes.
+3. Never block input. Nothing runs longer than Slow except the status pulse.
+4. One entrance per view — a revealing section does not also stagger its children.
+5. Loops are for live state (the status dot; a skeleton breathing on opacity). Nothing else loops, shimmers or spins.
+6. Reduced motion is a state, not a fallback: transforms off, opacity kept, content at final state. Verify with the OS setting on.
+7. 60fps on a 1× machine — test with DevTools CPU throttle 4×; if it drops frames, simplify.
+8. Review it in motion — entrance, exit, mid-flight interruption and reduced motion — before merging. A screenshot cannot approve an animation.
+
+**Recipes:**
+```jsx
+// Panel / menu / toast
+<AnimatePresence>
+  {open && <motion.div initial={{ opacity: 0, y: 4, scale: 0.98 }} animate={{ opacity: 1, y: 0, scale: 1 }}
+    exit={{ opacity: 0, y: 4, transition: { duration: 0.15 } }} style={{ transformOrigin: "top right" }} />}
+</AnimatePresence>
+
+// Staggered list (cap at 8)
+<motion.ul initial="hidden" animate="show" variants={{ show: { transition: { staggerChildren: 0.06 } } }}>
+  <motion.li variants={{ hidden: { opacity: 0, y: 8 }, show: { opacity: 1, y: 0 } }} />
+</motion.ul>
+
+// Size / position change
+<motion.div layout />
+```
+```js
+// Vanilla
+animate(".card", { opacity: [0, 1], y: [8, 0] }, { type: "spring", visualDuration: 0.3, bounce: 0, delay: stagger(0.06) })
+```
+
+**CSS transitions** — Quick tier on every control: `transition: background 0.2s, border-color 0.2s, color 0.2s, opacity 0.2s;`. Properties: border-color, background, color, opacity, transform. Nothing else.
+
+**Load reveal (optional)** — staggered boot-up: sections fade up in document order (opacity 0 → 1, translateY 8px → 0, 0.6s ease, 90ms stagger). CSS keyframes on a static page, `variants` + `staggerChildren: 0.09` in an app. One per page. Must respect `prefers-reduced-motion`.
+
+**Reduced motion (required)** — keep the `rising.css` block alongside `MotionConfig reducedMotion="user"`:
+```css
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after { animation: none !important; transition: none !important; }
+}
+```
 
 ## Interaction States
 
@@ -162,8 +228,6 @@ All: `0.2s` default easing. Properties: border-color, background, color, opacity
 ```
 
 **Disabled** — no new colors; reuse the low-emphasis ramp: text/icon `--text-label`, border `--border-subtle`, background unchanged. `cursor: not-allowed`.
-
-**Load reveal (optional)** — staggered boot-up: sections fade up in document order (opacity 0 → 1, translateY 8px → 0, 0.6s ease, 90ms stagger). Must respect `prefers-reduced-motion`.
 
 ## Buttons
 
@@ -276,7 +340,7 @@ Identical in both themes. Daylight is lighter in *value*, not in tone.
 - **Theme-appropriate ground:** Mission's darkness is a feature; Daylight's white is a feature. Neither is empty space. 48px page margins in both.
 - Sparse grids: `repeat(auto-fill, minmax(280px, 1fr))`, 16px gap
 - Layered depth: Base → Surface → Surface Hover. Daylight adds one hairline shadow, never more.
-- Subtle interaction: nothing bounces or jumps
+- Motion is designed, not added — see "Motion". Springs with `bounce: 0`; nothing bounces or jumps
 - Scanlines and brackets are Mission-only
 
 ## Component Patterns
