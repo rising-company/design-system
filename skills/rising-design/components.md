@@ -19,7 +19,7 @@ This is the full anchor-card recipe: it layers `display: block` / `text-decorati
 
 ```html
 <a class="card" href="#">
-  <div class="card-tag">// Category · Subcategory</div>
+  <div class="card-tag">Category · Subcategory</div>
   <div class="card-title">Card Title</div>
   <div class="card-desc">
     Brief description of what this card links to or represents.
@@ -210,7 +210,7 @@ Floating overlay that appears on hover, showing name, category/material, and des
 ```html
 <div class="tooltip">
   <div class="tt-name">Component Name</div>
-  <div class="tt-mat">// Material or Category</div>
+  <div class="tt-mat">Material or Category</div>
   <div class="tt-desc">Short description of the component or element.</div>
 </div>
 ```
@@ -359,7 +359,7 @@ Full-viewport heads-up display with scanlines, corner brackets, and positioned c
   <div class="title-block">
     <h1>// System Label</h1>
     <h2>DIAGRAM TITLE<br />LINE TWO</h2>
-    <div class="sub">// Subtitle · Interaction hint</div>
+    <div class="sub">Subtitle · Interaction hint</div>
   </div>
 
   <div class="stats-panel">
@@ -661,20 +661,20 @@ Mono, uppercase, tracked — reads as a system control in both themes.
 
 ## Form Field
 
-The label carries the `//` prefix — it is system commentary, same as a section label.
+The label has no `//` — fields are items in a set; the prefix goes on the label that opens the form (`// Sign in`), once.
 
 ### HTML
 
 ```html
 <div class="field">
-  <label class="field-label" for="email">// Email</label>
+  <label class="field-label" for="email">Email</label>
   <input class="input" id="email" type="email" placeholder="you@company.com"
          autocomplete="email" required>
   <p class="field-help">We'll send a sign-in link — no password.</p>
 </div>
 
 <div class="field is-error">
-  <label class="field-label" for="email2">// Email</label>
+  <label class="field-label" for="email2">Email</label>
   <input class="input" id="email2" type="email" aria-invalid="true" aria-describedby="email2-err">
   <p class="field-error" id="email2-err">Not a valid address.</p>
 </div>
@@ -850,9 +850,9 @@ Worked example: `patterns/landing.html` in the design-system repo.
     <h1 class="hero-title">Huddle</h1>
     <p class="lede">Find a meeting time without the back-and-forth.</p>
     <ul class="auth-points">
-      <li>// One link — everyone marks their times</li>
-      <li>// No calendar access required</li>
-      <li>// Guests reply without an account</li>
+      <li>One link — everyone marks their times</li>
+      <li>No calendar access required</li>
+      <li>Guests reply without an account</li>
     </ul>
   </section>
 
@@ -860,7 +860,7 @@ Worked example: `patterns/landing.html` in the design-system repo.
     <div class="card auth-card">
       <div class="section-label">// Sign in</div>
       <div class="field">
-        <label class="field-label" for="email">// Email</label>
+        <label class="field-label" for="email">Email</label>
         <input class="input" id="email" type="email" placeholder="you@company.com" autocomplete="email">
         <p class="field-help">We'll email you a sign-in link. No password to remember.</p>
       </div>
@@ -887,6 +887,7 @@ Worked example: `patterns/landing.html` in the design-system repo.
   font-family: "Share Tech Mono", monospace;
   font-size: 12px; letter-spacing: 0.05em; color: var(--text-subtle);
 }
+.auth-points li::before { content: \"+\"; color: var(--accent-ink); margin-right: 10px; }
 
 .auth-card { max-width: 400px; width: 100%; display: flex; flex-direction: column; gap: 24px; }
 

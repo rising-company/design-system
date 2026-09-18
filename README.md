@@ -65,4 +65,4 @@ Vercel, served from the repo root (`vercel.json` sets `outputDirectory: "."`). P
 
 ## Voice
 
-Terse technical fragments for chrome; plain sentences for anything a stranger reads. Em dashes over commas. Middle dot (·) as inline separator. No exclamation marks, no emoji. `//` prefix on system commentary (eyebrows, labels, form labels, footers).
+Terse technical fragments for chrome; plain sentences for anything a stranger reads. Em dashes over commas. Middle dot (·) as inline separator. No exclamation marks, no emoji. `//` prefix opens a region, once — the eyebrow, the label over a group, the footer ident — never on data, items in a set, or controls.

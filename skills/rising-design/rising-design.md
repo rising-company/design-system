@@ -178,7 +178,7 @@ All: `0.2s` default easing. Properties: border-color, background, color, opacity
 
 `field` wrapper → `field-label` → `input` → `field-help` or `field-error`. Add `is-error` to the wrapper for the error state.
 
-- Field labels carry the `//` prefix — they are system commentary, same as section labels: `// Email`.
+- Field labels have no `//` — fields are items in a set; the prefix goes on the form's opening label (`// Sign in`), once.
 - **Inputs use 16px text.** Anything smaller triggers zoom-on-focus in mobile Safari.
 - Placeholders use `--text-label`, never `--text-dim`.
 - Help and error copy are plain English sentences, not terse operator fragments.
@@ -264,7 +264,7 @@ Every Rising Company product must include a subtle backlink to `https://rising.c
 
 Identical in both themes. Daylight is lighter in *value*, not in tone.
 
-- `//` prefix on eyebrows, section labels, form labels, footers — signals system commentary
+- `//` opens a region, once — the eyebrow over a title, the label over a group, the footer ident. Never on data (`OPEN · 5 REPLIES`), items in a set (card tags, list items, field labels), controls, or anything already framed. More than ~4 per viewport means some are decorating data.
 - Uppercase: eyebrows, section labels, page/hero titles, stat labels, buttons
 - Normal case: card titles, body, descriptions, ledes, help text
 - Terse technical fragments for chrome; **plain sentences for anything a stranger reads** — landing ledes, help text and error messages are written for humans, not operators
