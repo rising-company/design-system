@@ -925,11 +925,11 @@ Worked examples: `patterns/auth-split.html` (Daylight) and `patterns/auth-center
 
 The chrome behind the auth boundary: app bar on top, one page header per view, app footer at the bottom. Same markup in both themes. Chrome sits on `--bg-surface`, content on `--bg-base` — that one-step lift is the whole hierarchy.
 
-**App bar** — 56px, sticky, full-bleed with the 48px gutter. Three slots: **brand** (favicon mark + product name as an 18px `.wordmark`, optional `.app-context` naming the tenant/environment), **nav** (3–5 mono links, current one `aria-current="page"` → `--text-heading` + 1px `--accent-ink` rule), **session** (right-aligned: `.status`, then the user menu — trigger is initials chip + email + chevron; panel is `// Signed in as` + email, the product's account items, then Sign out last, ruled off, `--danger-ink` on hover). Status stays outside the menu. The exit is always "Sign out". No `// Rising` eyebrow — the mark says that. No CTA button — that's the landing `.nav`.
+**App bar** — 56px, sticky, full-bleed with the 48px gutter. Four slots: **brand** (favicon mark + product name as an 18px `.wordmark`, linking to the product's home), **byline** (`.app-byline` — `by rising.company`, always; mono label voice, `by` in `--text-dim`, domain in `--text-label`, `--accent-ink` on hover; it is the link to https://rising.company, same tab, and the one consistent way home from every product — the brand itself is never the way home), optional `.app-context` after it naming a *real* tenant/environment (`· ACME`, `· STAGING`; omitted when there is none), **nav** (3–5 mono links, current one `aria-current="page"` → `--text-heading` + 1px `--accent-ink` rule), **session** (right-aligned: `.status`, then the user menu — trigger is initials chip + email + chevron; panel is `// Signed in as` + email, the product's account items, then Sign out last, ruled off, `--danger-ink` on hover). Status stays outside the menu. The exit is always "Sign out". No `// Rising` eyebrow — the mark says that. No CTA button — that's the landing `.nav`.
 
 **App footer** — 16px vertical padding, mono `--text-dim` uppercase. Left `// PRODUCT · BUILD <date> · <sha>`; right two or three links and the rising.company backlink last. A status strip, not a sitemap.
 
-Below 768px the bar becomes two rows (brand + session, then the nav scrolling sideways) with 24px gutters. Below 640px the context and the trigger's email hide (the initials chip stays) and the footer centers. `<details>` has no light-dismiss — close on outside click and Escape (see the pattern's script). Sidebar products (os, safe) keep their sidebar: brand + context at the top, session + build + backlink at the bottom, no separate footer.
+Below 768px the bar becomes two rows (brand + session, then the nav scrolling sideways) with 24px gutters. Below 640px the byline, the context and the trigger's email hide (the initials chip stays; the footer backlink is the way home) and the footer centers. `<details>` has no light-dismiss — close on outside click and Escape (see the pattern's script). Sidebar products (os, safe) keep their sidebar: brand + byline + context at the top, session + build + backlink at the bottom, no separate footer.
 
 ### HTML
 
@@ -940,7 +940,7 @@ Below 768px the bar becomes two rows (brand + session, then the nav scrolling si
       <img src="https://design-system.rising.company/branding/favicon.svg" alt="">
       <span class="wordmark">Huddle</span>
     </a>
-    <span class="app-context">Rising Company</span>
+    <a class="app-byline" href="https://rising.company">by <span>rising.company</span></a>
     <nav class="app-nav" aria-label="Primary">
       <a href="/huddles" aria-current="page">Huddles</a>
       <a href="/templates">Templates</a>
@@ -1005,6 +1005,14 @@ Below 768px the bar becomes two rows (brand + session, then the nav scrolling si
 .app-brand { display: flex; align-items: center; gap: 12px; flex-shrink: 0; color: var(--text-heading); text-decoration: none; }
 .app-brand img, .app-brand svg { width: 24px; height: 24px; border-radius: 4px; }
 .app-brand .wordmark { font-size: 18px; letter-spacing: 3px; }
+.app-byline {
+  font-family: "Share Tech Mono", monospace; font-size: 12px; letter-spacing: 0.1em;
+  text-transform: uppercase; color: var(--text-dim); text-decoration: none; white-space: nowrap;
+  transition: color 0.2s;
+}
+.app-brand + .app-byline { margin-left: -20px; }   /* bar gap 32px → brand gap 12px */
+.app-byline span { color: var(--text-label); transition: color 0.2s; }
+.app-byline:hover, .app-byline:hover span { color: var(--accent-ink); }
 .app-context {
   font-family: "Share Tech Mono", monospace; font-size: 12px; letter-spacing: 0.1em;
   text-transform: uppercase; color: var(--text-label); white-space: nowrap;
@@ -1104,12 +1112,13 @@ Below 768px the bar becomes two rows (brand + session, then the nav scrolling si
   .app-footer { padding-inline: 24px; }
   .app-bar { flex-wrap: wrap; gap: 0 24px; padding-inline: 24px; min-height: 0; }
   .app-brand, .app-session { min-height: 56px; }
+  .app-brand + .app-byline { margin-left: -12px; }
   .app-nav { order: 3; flex-basis: 100%; gap: 20px; overflow-x: auto; scrollbar-width: none; padding-bottom: 10px; }
   .app-nav::-webkit-scrollbar { display: none; }
   .app-nav a { padding-block: 2px 4px; }
 }
 @media (max-width: 640px) {
-  .app-context, .user-menu-trigger .user-menu-email { display: none; }
+  .app-byline, .app-context, .user-menu-trigger .user-menu-email { display: none; }
   .app-footer { justify-content: center; text-align: center; }
 }
 ```

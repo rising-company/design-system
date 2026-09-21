@@ -809,7 +809,7 @@ pieces so that moving between products feels like moving between rooms of one bu
 
 ```
 ┌──────────────────────────────────────────────────────────────────┐
-│ [mark] PRODUCT · CONTEXT    NAV NAV NAV        ● ONLINE  [BC] who ⌄  │  app-bar   56px, sticky, --bg-surface
+│ [mark] PRODUCT BY RISING.COMPANY · CONTEXT   NAV NAV NAV   ● ONLINE  [BC] who ⌄  │  app-bar   56px, sticky, --bg-surface
 ├──────────────────────────────────────────────────────────────────┤
 │ // EYEBROW                                                        │
 │ PAGE TITLE                                        [ action ]      │  page-header
@@ -827,8 +827,14 @@ pieces so that moving between products feels like moving between rooms of one bu
    - **Brand** — the favicon mark (24px, from `branding/favicon.svg`) + the product name as a
      `.wordmark` at 18px. Links to the product's home route. The mark carries the Rising
      identity, so the name is the product's own — there is no `// Rising` eyebrow up here.
-     Optional `.app-context` after it (mono, `--text-label`, `·`-separated) names the tenant,
-     workspace or environment: `· RISING COMPANY`, `· STAGING`.
+   - **Byline** — `.app-byline`, always: `by rising.company`, 12px from the wordmark, in the
+     mono label voice (`by` in `--text-dim`, the domain in `--text-label`, whole thing
+     `--accent-ink` on hover). It is the link to https://rising.company and the one consistent
+     way home from every product. Same tab — it is navigation, not a reference. Never make the
+     mark or the wordmark the way home: the brand is one target, the product's own.
+   - **Context** — optional `.app-context` after the byline (mono, `--text-label`,
+     `·`-separated) names a *real* tenant, workspace or environment: `· ACME`, `· STAGING`.
+     Omit it when there is none; the byline already says whose product this is.
    - **Nav** — the product's top-level sections as mono 12px uppercase links, `--text-label`,
      hover `--accent-ink`. The current one takes `aria-current="page"`: `--text-heading` with a
      1px `--accent-ink` rule under it. Three to five links; more than that is a sidebar product.
@@ -862,10 +868,11 @@ Rules:
 - **Corner brackets are for viewport-scale surfaces** (auth, HUD overlays, maps). The bar and
   footer already frame the app; don't add brackets on top of them.
 - **Sidebar products** (os, safe) keep the sidebar for module navigation. The slots relocate,
-  they do not change: brand + context at the sidebar top, session + build + backlink at the
+  they do not change: brand + byline + context at the sidebar top, session + build + backlink at the
   sidebar bottom, and no app footer — the sidebar bottom *is* the footer.
 - Below 768px the bar becomes two rows — brand + session, then the nav scrolling sideways —
-  and the gutters drop to 24px. Below 640px the context and email hide; the footer centers.
+  and the gutters drop to 24px. Below 640px the byline, context and email hide (the footer
+  backlink is the way home there); the footer centers.
 
 ```html
 <body class="app">
@@ -874,7 +881,7 @@ Rules:
       <img src="https://design-system.rising.company/branding/favicon.svg" alt="">
       <span class="wordmark">Huddle</span>
     </a>
-    <span class="app-context">Rising Company</span>
+    <a class="app-byline" href="https://rising.company">by <span>rising.company</span></a>
     <nav class="app-nav" aria-label="Primary">
       <a href="/huddles" aria-current="page">Huddles</a>
       <a href="/templates">Templates</a>
@@ -937,6 +944,14 @@ Rules:
 .app-brand { display: flex; align-items: center; gap: 12px; flex-shrink: 0; color: var(--text-heading); text-decoration: none; }
 .app-brand img, .app-brand svg { width: 24px; height: 24px; border-radius: 4px; }
 .app-brand .wordmark { font-size: 18px; letter-spacing: 3px; }
+.app-byline {
+  font-family: "Share Tech Mono", monospace; font-size: 12px; letter-spacing: 0.1em;
+  text-transform: uppercase; color: var(--text-dim); text-decoration: none; white-space: nowrap;
+  transition: color 0.2s;
+}
+.app-brand + .app-byline { margin-left: -20px; }   /* bar gap 32px → brand gap 12px */
+.app-byline span { color: var(--text-label); transition: color 0.2s; }
+.app-byline:hover, .app-byline:hover span { color: var(--accent-ink); }
 .app-context {
   font-family: "Share Tech Mono", monospace; font-size: 12px; letter-spacing: 0.1em;
   text-transform: uppercase; color: var(--text-label); white-space: nowrap;
@@ -1038,12 +1053,13 @@ Rules:
   .app-footer { padding-inline: 24px; }
   .app-bar { flex-wrap: wrap; gap: 0 24px; padding-inline: 24px; min-height: 0; }
   .app-brand, .app-session { min-height: 56px; }
+  .app-brand + .app-byline { margin-left: -12px; }
   .app-nav { order: 3; flex-basis: 100%; gap: 20px; overflow-x: auto; scrollbar-width: none; padding-bottom: 10px; }
   .app-nav::-webkit-scrollbar { display: none; }
   .app-nav a { padding-block: 2px 4px; }
 }
 @media (max-width: 640px) {
-  .app-context, .user-menu-trigger .user-menu-email { display: none; }
+  .app-byline, .app-context, .user-menu-trigger .user-menu-email { display: none; }
   .app-footer { justify-content: center; text-align: center; }
 }
 ```
@@ -1104,6 +1120,10 @@ Every Rising Company product must include a subtle backlink to https://rising.co
 - Placement: auth screens (below the form, 24–48px gap), app layouts (last link in the
   `.app-footer`, or the sidebar bottom near logout), landing/marketing pages (inline within
   the site footer copy)
+
+Signed-in products additionally carry the **app-bar byline** — `.app-byline`, `by rising.company`
+after the product wordmark (see App shell). The byline is the *way home* and opens in the same
+tab; the footer backlink is the *attribution* and opens in a new one. Products have both.
 
 ```css
 .rising-backlink {

@@ -20,7 +20,9 @@
 
 <!--
   The app shell is the chrome behind the auth boundary. Three pieces:
-    app-bar    — brand · primary nav · session. Sticky, on --bg-surface.
+    app-bar    — brand · byline · primary nav · session. Sticky, on --bg-surface.
+                 The byline ("by rising.company") is the way home; it opens
+                 in the same tab because it is navigation, not a reference.
     app-main   — the view. One .page-header at the top, then content.
     app-footer — ident · links · the rising.company backlink.
   Same markup in both themes; switch data-theme on <html>.
@@ -30,7 +32,7 @@
     <img src="../branding/favicon.svg" alt="">
     <span class="wordmark">Huddle</span>
   </a>
-  <span class="app-context">Rising Company</span>
+  <a class="app-byline" href="https://rising.company">by <span>rising.company</span></a>
 
   <nav class="app-nav" aria-label="Primary">
     <a href="#" aria-current="page">Huddles</a>

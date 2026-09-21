@@ -355,7 +355,7 @@ a.card:hover::before, .card.is-interactive:hover::before { opacity: 1; }
    Distinct from .nav / .site-footer, which belong to the landing page.
 
    <body class="app">
-     <header class="app-bar">   brand · nav · session   </header>
+     <header class="app-bar">   brand · byline · nav · session   </header>
      <main class="app-main">    .page-header + content   </main>
      <footer class="app-footer"> ident · links · backlink </footer>
    </body>
@@ -377,15 +377,30 @@ a.card:hover::before, .card.is-interactive:hover::before { opacity: 1; }
   border-bottom: 1px solid var(--border);
 }
 
-/* Brand: the favicon mark + product name. The mark carries the Rising
-   identity so the name can be the product's own. Optional .app-context
-   after it names the tenant / workspace / environment. */
+/* Brand: the favicon mark + product name, linking to the product's home.
+   The mark carries the Rising identity so the name can be the product's
+   own. The .app-byline after it is the way back to rising.company;
+   .app-context after that names a real tenant / workspace / environment
+   and is omitted when there is none. */
 .app-brand {
   display: flex; align-items: center; gap: 12px; flex-shrink: 0;
   color: var(--text-heading); text-decoration: none;
 }
 .app-brand img, .app-brand svg { width: 24px; height: 24px; border-radius: 4px; flex-shrink: 0; }
 .app-brand .wordmark { font-size: 18px; letter-spacing: 3px; }
+
+/* Byline: the way home. "by rising.company" after the wordmark, in the
+   label voice, and it is the link — same tab, this is navigation. The
+   negative margin pulls it from the bar's 32px gap to the brand's 12px. */
+.app-byline {
+  font-family: "Share Tech Mono", monospace;
+  font-size: 12px; letter-spacing: 0.1em; text-transform: uppercase;
+  color: var(--text-dim); text-decoration: none; white-space: nowrap;
+  transition: color 0.2s;
+}
+.app-brand + .app-byline { margin-left: -20px; }
+.app-byline span { color: var(--text-label); transition: color 0.2s; }
+.app-byline:hover, .app-byline:hover span { color: var(--accent-ink); }
 
 .app-context {
   font-family: "Share Tech Mono", monospace;
@@ -552,6 +567,7 @@ a.card:hover::before, .card.is-interactive:hover::before { opacity: 1; }
      second, scrolling sideways rather than wrapping. */
   .app-bar { flex-wrap: wrap; gap: 0 24px; padding-inline: 24px; min-height: 0; }
   .app-brand, .app-session { min-height: 56px; }
+  .app-brand + .app-byline { margin-left: -12px; }
   .app-nav {
     order: 3; flex-basis: 100%; gap: 20px;
     overflow-x: auto; scrollbar-width: none; padding-bottom: 10px;
@@ -561,7 +577,7 @@ a.card:hover::before, .card.is-interactive:hover::before { opacity: 1; }
 }
 
 @media (max-width: 640px) {
-  .app-context, .user-menu-trigger .user-menu-email { display: none; }
+  .app-byline, .app-context, .user-menu-trigger .user-menu-email { display: none; }
   .app-footer { justify-content: center; text-align: center; }
 }
 
