@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="mission">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Rising OS — App Shell (sidebar) Pattern</title>
+<link rel="icon" type="image/svg+xml" href="../branding/favicon.svg">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Rajdhani:wght@300;500;700&display=swap">
+<link rel="stylesheet" href="../rising.css">
+<style>
+  /* Page-specific only — everything else comes from rising.css */
+  .card { overflow-x: auto; }
+  .entry-table { width: 100%; border-collapse: collapse; min-width: 480px; }
+  .entry-table th, .entry-table td { text-align: left; padding: 12px 16px; border-bottom: 1px solid var(--border); }
+  .entry-table th { font-family: "Share Tech Mono", monospace; font-size: 12px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-label); font-weight: normal; }
+  .entry-table td { font-family: "Share Tech Mono", monospace; font-size: 13px; color: var(--text-body); }
+</style>
+</head>
+<body class="app has-sidebar">
+
+<div class="atmosphere"></div>
+
+<!--
+  A sidebar product (os, safe). Same slots as the bar product, relocated:
+    app-sidebar  — top: brand · byline · context. middle: modules. bottom:
+                   session · build · backlink. Desktop only.
+    app-bar-mobile / app-footer-mobile — the ordinary bar and footer,
+                   shown below 768px in place of the sidebar. Modules become
+                   the scrolling nav row; the org switcher moves into the
+                   user menu.
+  Resize under 768px to see the swap.
+-->
+<nav class="app-sidebar" aria-label="Sidebar">
+  <div class="app-sidebar-top">
+    <a class="app-brand" href="#" aria-label="Rising OS home">
+      <img src="../branding/favicon.svg" alt="">
+      <span class="wordmark">Rising OS</span>
+    </a>
+    <a class="app-byline" href="https://rising.company">by <span>rising.company</span></a>
+    <span class="status" title="All systems normal">Online</span>
+  </div>
+
+  <div class="app-sidebar-rule"></div>
+
+  <div class="app-sidebar-nav">
+    <div class="section-label">// Modules</div>
+    <a href="#" aria-current="page"><span class="tag">WRK</span><span class="label">Work Log</span></a>
+    <a href="#"><span class="tag">INV</span><span class="label">Invoices</span></a>
+    <a href="#"><span class="tag">TRX</span><span class="label">Transactions</span></a>
+    <a href="#"><span class="tag">ACC</span><span class="label">Accounting</span></a>
+    <a href="#"><span class="tag">CLI</span><span class="label">Clients</span></a>
+    <a href="#"><span class="tag">SET</span><span class="label">Settings</span></a>
+  </div>
+
+  <div class="app-sidebar-rule"></div>
+
+  <div class="app-sidebar-bottom">
+    <div class="section-label">// Signed in as</div>
+    <div class="user-menu-email">ben@rising.company</div>
+    <a href="#">Switch organization</a>
+    <button class="user-menu-signout" type="button">Sign out</button>
+    <div class="app-sidebar-rule"></div>
+    <div class="build" title="Build date and commit">build 2026-09-21 · 5f532ec</div>
+    <a class="rising-backlink" href="https://rising.company" target="_blank" rel="noopener noreferrer">rising.company</a>
+  </div>
+</nav>
+
+<!-- Phone chrome: the same bar every product has. Modules are the nav row. -->
+<header class="app-bar app-bar-mobile">
+  <a class="app-brand" href="#" aria-label="Rising OS home">
+    <img src="../branding/favicon.svg" alt="">
+    <span class="wordmark">Rising OS</span>
+  </a>
+  <a class="app-byline" href="https://rising.company">by <span>rising.company</span></a>
+
+  <nav class="app-nav" aria-label="Modules">
+    <a href="#" aria-current="page">Work Log</a>
+    <a href="#">Invoices</a>
+    <a href="#">Transactions</a>
+    <a href="#">Accounting</a>
+    <a href="#">Clients</a>
+    <a href="#">Settings</a>
+  </nav>
+
+  <div class="app-session">
+    <span class="status" title="All systems normal">Online</span>
+    <details class="user-menu">
+      <summary class="user-menu-trigger" aria-label="Account menu">
+        <span class="user-initials" aria-hidden="true">BC</span>
+        <span class="user-menu-email">ben@rising.company</span>
+        <span class="user-menu-chevron" aria-hidden="true"></span>
+      </summary>
+      <div class="user-menu-panel">
+        <div class="user-menu-head">
+          <div class="section-label">// Signed in as</div>
+          <div class="user-menu-email">ben@rising.company</div>
+        </div>
+        <a class="user-menu-item" href="#">Switch organization</a>
+        <button class="user-menu-item user-menu-signout" type="button">Sign out</button>
+      </div>
+    </details>
+  </div>
+</header>
+
+<main class="app-main">
+  <div class="page-header">
+    <div class="eyebrow">// Work log</div>
+    <div class="page-header-row">
+      <h1 class="page-title">September 2026</h1>
+      <a class="btn btn-primary btn-sm" href="#">Log entry</a>
+    </div>
+    <p class="subtitle">3 entries &middot; 14.5 h &middot; 2 clients</p>
+  </div>
+
+  <div class="card">
+    <table class="entry-table">
+      <thead><tr><th>Date</th><th>Client</th><th>Hours</th><th>Description</th></tr></thead>
+      <tbody>
+        <tr><td>Sep 19</td><td>Maple Candy</td><td>6.0</td><td>Order pipeline review</td></tr>
+        <tr><td>Sep 18</td><td>Rising</td><td>4.5</td><td>App shell sync</td></tr>
+        <tr><td>Sep 17</td><td>Maple Candy</td><td>4.0</td><td>Tax wizard QA</td></tr>
+      </tbody>
+    </table>
+  </div>
+</main>
+
+<footer class="app-footer app-footer-mobile">
+  <span>// Rising OS &middot; build 2026-09-21 &middot; 5f532ec</span>
+  <span class="app-footer-links">
+    <a class="rising-backlink" href="https://rising.company" target="_blank" rel="noopener noreferrer">rising.company</a>
+  </span>
+</footer>
+
+<script>
+  // <details> has no light-dismiss of its own: close the user menu on an
+  // outside click or Escape. A framework's popover replaces all of this.
+  document.addEventListener("click", function (e) {
+    document.querySelectorAll(".user-menu[open]").forEach(function (m) {
+      if (!m.contains(e.target)) m.removeAttribute("open");
+    });
+  });
+  document.addEventListener("keydown", function (e) {
+    if (e.key === "Escape") document.querySelectorAll(".user-menu[open]").forEach(function (m) { m.removeAttribute("open"); });
+  });
+</script>
+
+</body>
+</html>

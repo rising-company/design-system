@@ -558,22 +558,107 @@ a.card:hover::before, .card.is-interactive:hover::before { opacity: 1; }
 .app-footer a:hover { color: var(--accent-ink); }
 .app-footer-links { display: flex; flex-wrap: wrap; align-items: center; gap: 20px; }
 
+/* ── Sidebar products ── */
+/* os and safe navigate by module, so they keep a 260px sidebar instead of
+   the nav row. The slots are the same, relocated: brand + byline + context
+   at the top, modules in the middle, session + build + backlink at the
+   bottom — the sidebar bottom is the app footer.
+
+   <body class="app has-sidebar">
+     <nav class="app-sidebar"> top · nav · bottom </nav>
+     <header class="app-bar app-bar-mobile">   …   </header>   phone only
+     <main class="app-main"> … </main>
+     <footer class="app-footer app-footer-mobile"> … </footer> phone only
+   </body>
+
+   The sidebar is desktop chrome. Below 768px it hides and the product
+   renders the ordinary .app-bar and .app-footer instead — the same mobile
+   form as every other product, modules as the scrolling nav row and the
+   org switcher inside the user menu. No drawer. */
+.app.has-sidebar { flex-direction: row; }
+.app.has-sidebar > .app-main { min-width: 0; }
+
+.app-sidebar {
+  display: flex; flex-direction: column; flex-shrink: 0;
+  width: 260px; position: sticky; top: 0; height: 100vh;
+  background: var(--bg-surface); border-right: 1px solid var(--border);
+}
+.app-sidebar-top { padding: 40px 32px 28px; display: flex; flex-direction: column; gap: 12px; }
+.app-sidebar-top .app-brand .wordmark { font-size: 24px; letter-spacing: 2px; }
+.app-sidebar-top .app-brand + .app-byline { margin: -4px 0 0; }
+.app-sidebar-top .app-context::before { content: none; }
+.app-sidebar-top .app-context { margin-right: 0; }
+
+.app-sidebar-rule { height: 1px; margin: 0 24px; background: var(--border); flex-shrink: 0; }
+
+.app-sidebar-nav { padding: 28px 20px; flex: 1; min-height: 0; overflow-y: auto; }
+.app-sidebar-nav .section-label { margin: 0 4px 20px; }
+.app-sidebar-nav a {
+  position: relative; display: flex; align-items: center; gap: 12px;
+  padding: 10px 12px; border-radius: 6px; text-decoration: none;
+  color: var(--text-muted); transition: background 0.2s, color 0.2s;
+}
+.app-sidebar-nav a + a { margin-top: 4px; }
+.app-sidebar-nav a:hover { color: var(--text-heading); background: color-mix(in srgb, var(--bg-surface-hover) 50%, transparent); }
+.app-sidebar-nav a[aria-current="page"] { color: var(--text-heading); background: var(--bg-surface-hover); }
+.app-sidebar-nav a[aria-current="page"]::before {
+  content: ""; position: absolute; left: 0; top: 50%; transform: translateY(-50%);
+  width: 2px; height: 16px; border-radius: 1px; background: var(--accent);
+}
+.app-sidebar-nav .tag {
+  font-family: "Share Tech Mono", monospace; font-size: 12px; letter-spacing: 1px;
+  width: 28px; flex-shrink: 0; color: var(--text-subtle); transition: color 0.2s;
+}
+.app-sidebar-nav a:hover .tag { color: var(--text-muted); }
+.app-sidebar-nav a[aria-current="page"] .tag { color: var(--accent-ink); }
+.app-sidebar-nav .label { font-family: "Rajdhani", sans-serif; font-size: 14px; font-weight: 500; letter-spacing: 1px; }
+
+/* Bottom: session, then a rule, then build + backlink. Sign out last. */
+.app-sidebar-bottom { padding: 20px 32px; display: flex; flex-direction: column; gap: 8px; }
+.app-sidebar-bottom .section-label { letter-spacing: 0.15em; }
+.app-sidebar-bottom .user-menu-email { max-width: none; color: var(--text-subtle); }
+.app-sidebar-bottom a, .app-sidebar-bottom button {
+  align-self: flex-start; padding: 0; background: none; border: 0; cursor: pointer;
+  font-family: "Share Tech Mono", monospace; font-size: 12px; letter-spacing: 0.1em;
+  text-transform: uppercase; color: var(--text-label); text-decoration: none; transition: color 0.2s;
+}
+.app-sidebar-bottom a:hover, .app-sidebar-bottom button:hover { color: var(--text-heading); }
+.app-sidebar-bottom .user-menu-signout { margin: 0; border: 0; padding: 0; width: auto; }
+.app-sidebar-bottom .user-menu-signout:hover { color: var(--danger-ink); }
+.app-sidebar-bottom .app-sidebar-rule { margin: 12px 0; }
+.app-sidebar-bottom .build { font-family: "Share Tech Mono", monospace; font-size: 12px; letter-spacing: 0.05em; text-transform: uppercase; color: var(--text-dim); white-space: nowrap; }
+.app-sidebar-bottom .rising-backlink { color: var(--text-dim); }
+.app-sidebar-bottom .rising-backlink:hover { color: var(--accent-ink); }
+
+/* The phone chrome of a sidebar product: hidden until the sidebar hides. */
+.app-bar-mobile, .app-footer-mobile { display: none; }
+
 /* ── Responsive ── */
 @media (max-width: 768px) {
   .app-main { padding: 24px; }
   .app-footer { padding-inline: 24px; }
+
+  /* Sidebar products swap the sidebar for the bar and the footer. */
+  .app.has-sidebar { flex-direction: column; }
+  .app-sidebar { display: none; }
+  .app-bar-mobile, .app-footer-mobile { display: flex; }
 
   /* The bar becomes two rows: brand + session on the first, nav on the
      second, scrolling sideways rather than wrapping. */
   .app-bar { flex-wrap: wrap; gap: 0 24px; padding-inline: 24px; min-height: 0; }
   .app-brand, .app-session { min-height: 56px; }
   .app-brand + .app-byline { margin-left: -12px; }
+  /* The nav row is a 44px touch row. It bleeds to the viewport edges so
+     the links scroll under the gutters, and a 24px fade at each edge says
+     there is more; the active rule sits on the bar's bottom border. */
   .app-nav {
-    order: 3; flex-basis: 100%; gap: 20px;
-    overflow-x: auto; scrollbar-width: none; padding-bottom: 10px;
+    order: 3; flex-basis: 100%; gap: 24px;
+    overflow-x: auto; scrollbar-width: none;
+    margin-inline: -24px; padding-inline: 24px;
+    mask-image: linear-gradient(to right, transparent, #000 24px, #000 calc(100% - 24px), transparent);
   }
   .app-nav::-webkit-scrollbar { display: none; }
-  .app-nav a { padding-block: 2px 4px; }
+  .app-nav a { padding: 16px 0 15px; line-height: 1; }
 }
 
 @media (max-width: 640px) {

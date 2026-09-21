@@ -929,7 +929,9 @@ The chrome behind the auth boundary: app bar on top, one page header per view, a
 
 **App footer** — 16px vertical padding, mono `--text-dim` uppercase. Left `// PRODUCT · BUILD <date> · <sha>`; right two or three links and the rising.company backlink last. A status strip, not a sitemap.
 
-Below 768px the bar becomes two rows (brand + session, then the nav scrolling sideways) with 24px gutters. Below 640px the byline, the context and the trigger's email hide (the initials chip stays; the footer backlink is the way home) and the footer centers. `<details>` has no light-dismiss — close on outside click and Escape (see the pattern's script). Sidebar products (os, safe) keep their sidebar: brand + byline + context at the top, session + build + backlink at the bottom, no separate footer.
+**Mobile (≤ 768px) — one form for every product.** Bar products: two rows — brand + session (56px), then the nav as a **44px touch row** that bleeds to the viewport edges, scrolls sideways under the 24px gutters with a 24px fade at each edge, and carries the active link's 1px rule on the bar's bottom border. Gutters 24px. Below 640px the byline, the context and the trigger's email hide (the initials chip stays; the footer backlink is the way home) and the footer centers. `<details>` has no light-dismiss — close on outside click and Escape (see the pattern's script).
+
+**Sidebar products** (os, safe) keep a 260px `.app-sidebar` on desktop — `<body class="app has-sidebar">`, `.app-sidebar-top` (brand + byline + context), `.app-sidebar-nav` (`// Modules`, links as `.tag` + `.label`, current one `aria-current="page"` with a 2px accent bar), `.app-sidebar-bottom` (`// Signed in as`, email, account items, Sign out, rule, build, backlink). The sidebar is desktop chrome: below 768px it hides and the product renders the ordinary `.app-bar.app-bar-mobile` + `.app-footer.app-footer-mobile` (hidden above 768px) — modules as the scrolling nav row (labels only), status + user menu top-right, org switcher and account items inside the user menu, build + backlink in the footer. No drawer. Worked example: `patterns/app-shell-sidebar.html`.
 
 ### HTML
 
@@ -1107,15 +1109,68 @@ Below 768px the bar becomes two rows (brand + session, then the nav scrolling si
 .app-footer a:hover { color: var(--accent-ink); }
 .app-footer-links { display: flex; flex-wrap: wrap; align-items: center; gap: 20px; }
 
+/* Sidebar products — desktop chrome; hidden below 768px (see above) */
+.app.has-sidebar { flex-direction: row; }
+.app.has-sidebar > .app-main { min-width: 0; }
+.app-sidebar {
+  display: flex; flex-direction: column; flex-shrink: 0; width: 260px;
+  position: sticky; top: 0; height: 100vh;
+  background: var(--bg-surface); border-right: 1px solid var(--border);
+}
+.app-sidebar-top { padding: 40px 32px 28px; display: flex; flex-direction: column; gap: 12px; }
+.app-sidebar-top .app-brand .wordmark { font-size: 24px; letter-spacing: 2px; }
+.app-sidebar-top .app-brand + .app-byline { margin: -4px 0 0; }
+.app-sidebar-top .app-context::before { content: none; }
+.app-sidebar-rule { height: 1px; margin: 0 24px; background: var(--border); flex-shrink: 0; }
+.app-sidebar-nav { padding: 28px 20px; flex: 1; min-height: 0; overflow-y: auto; }
+.app-sidebar-nav .section-label { margin: 0 4px 20px; }
+.app-sidebar-nav a {
+  position: relative; display: flex; align-items: center; gap: 12px; padding: 10px 12px;
+  border-radius: 6px; text-decoration: none; color: var(--text-muted); transition: background 0.2s, color 0.2s;
+}
+.app-sidebar-nav a + a { margin-top: 4px; }
+.app-sidebar-nav a:hover { color: var(--text-heading); background: color-mix(in srgb, var(--bg-surface-hover) 50%, transparent); }
+.app-sidebar-nav a[aria-current="page"] { color: var(--text-heading); background: var(--bg-surface-hover); }
+.app-sidebar-nav a[aria-current="page"]::before {
+  content: ""; position: absolute; left: 0; top: 50%; transform: translateY(-50%);
+  width: 2px; height: 16px; border-radius: 1px; background: var(--accent);
+}
+.app-sidebar-nav .tag { font-family: "Share Tech Mono", monospace; font-size: 12px; letter-spacing: 1px; width: 28px; flex-shrink: 0; color: var(--text-subtle); }
+.app-sidebar-nav a[aria-current="page"] .tag { color: var(--accent-ink); }
+.app-sidebar-nav .label { font-family: "Rajdhani", sans-serif; font-size: 14px; font-weight: 500; letter-spacing: 1px; }
+.app-sidebar-bottom { padding: 20px 32px; display: flex; flex-direction: column; gap: 8px; }
+.app-sidebar-bottom .user-menu-email { max-width: none; color: var(--text-subtle); }
+.app-sidebar-bottom a, .app-sidebar-bottom button {
+  align-self: flex-start; padding: 0; background: none; border: 0; cursor: pointer;
+  font-family: "Share Tech Mono", monospace; font-size: 12px; letter-spacing: 0.1em;
+  text-transform: uppercase; color: var(--text-label); text-decoration: none; transition: color 0.2s;
+}
+.app-sidebar-bottom a:hover, .app-sidebar-bottom button:hover { color: var(--text-heading); }
+.app-sidebar-bottom .user-menu-signout { margin: 0; border: 0; padding: 0; width: auto; }
+.app-sidebar-bottom .user-menu-signout:hover { color: var(--danger-ink); }
+.app-sidebar-bottom .app-sidebar-rule { margin: 12px 0; }
+.app-sidebar-bottom .build { font-family: "Share Tech Mono", monospace; font-size: 12px; letter-spacing: 0.05em; text-transform: uppercase; color: var(--text-dim); white-space: nowrap; }
+.app-sidebar-bottom .rising-backlink { color: var(--text-dim); }
+.app-bar-mobile, .app-footer-mobile { display: none; }
+
 @media (max-width: 768px) {
   .app-main { padding: 24px; }
   .app-footer { padding-inline: 24px; }
   .app-bar { flex-wrap: wrap; gap: 0 24px; padding-inline: 24px; min-height: 0; }
   .app-brand, .app-session { min-height: 56px; }
   .app-brand + .app-byline { margin-left: -12px; }
-  .app-nav { order: 3; flex-basis: 100%; gap: 20px; overflow-x: auto; scrollbar-width: none; padding-bottom: 10px; }
+  /* 44px touch row, full-bleed scroll under the gutters, 24px edge fade */
+  .app-nav {
+    order: 3; flex-basis: 100%; gap: 24px; overflow-x: auto; scrollbar-width: none;
+    margin-inline: -24px; padding-inline: 24px;
+    mask-image: linear-gradient(to right, transparent, #000 24px, #000 calc(100% - 24px), transparent);
+  }
   .app-nav::-webkit-scrollbar { display: none; }
-  .app-nav a { padding-block: 2px 4px; }
+  .app-nav a { padding: 16px 0 15px; line-height: 1; }
+  /* Sidebar products swap the sidebar for the bar and the footer */
+  .app.has-sidebar { flex-direction: column; }
+  .app-sidebar { display: none; }
+  .app-bar-mobile, .app-footer-mobile { display: flex; }
 }
 @media (max-width: 640px) {
   .app-byline, .app-context, .user-menu-trigger .user-menu-email { display: none; }
