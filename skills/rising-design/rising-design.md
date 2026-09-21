@@ -253,7 +253,7 @@ animate(".card", { opacity: [0, 1], y: [8, 0] }, { type: "spring", visualDuratio
 
 A user-facing product needs a landing page before it needs a login box. Required order:
 
-1. **Nav** — wordmark left; links + one `btn-sm` CTA right. 64px, sticky, bottom border.
+1. **Nav** — `.nav-brand` left (wordmark + the `.app-byline` `by rising.company`, the way home here too); links + one `btn-sm` CTA right. 64px, sticky, bottom border. Below 640px byline and links hide; no backlink among the links (the footer keeps its own).
 2. **Hero** — eyebrow → hero title → lede (one sentence, ≤ 90 chars) → action row (`btn-primary btn-lg` + `btn-ghost btn-lg`) → mono trust line. Max-width 720px centered.
 3. **Proof strip** — one row of mono stats, or a single-line quote. Optional.
 4. **How it works** — 3 numbered steps, reusing the `01 / 02 / 03` mono numerals.

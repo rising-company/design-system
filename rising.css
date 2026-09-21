@@ -339,6 +339,12 @@ a.card:hover::before, .card.is-interactive:hover::before { opacity: 1; }
   text-decoration: none;
 }
 
+/* Brand group: the wordmark and, 12px after it, the same "by rising.company"
+   byline the app bar carries — the way home from a landing page too. The
+   byline hides below 640px with the rest of the nav's small text. */
+.nav-brand { display: flex; align-items: center; gap: 12px; min-width: 0; }
+.nav-brand .wordmark { white-space: nowrap; }
+
 .nav-links { display: flex; align-items: center; gap: 28px; }
 
 .nav-links a {

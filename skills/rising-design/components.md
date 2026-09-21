@@ -738,7 +738,7 @@ A user-facing product needs a landing page before it needs a login box.
 
 ### Required order
 
-1. **Nav** — wordmark left; links + one `btn-sm` CTA right. 64px tall, sticky, `border-bottom: 1px solid var(--border)`, `background: var(--bg-base)`.
+1. **Nav** — `.nav-brand` left: the wordmark and, 12px after it, the `.app-byline` (`by rising.company`) — the way home from a landing page too; links + one `btn-sm` CTA right. 64px tall, sticky, `border-bottom: 1px solid var(--border)`, `background: var(--bg-base)`. Below 640px the byline and links hide. No backlink among the links — the footer keeps its own.
 2. **Hero** — eyebrow → hero title → lede → action row → mono trust line.
 3. **Proof strip** — one row of mono stats or a single-line quote. Optional.
 4. **How it works** — 3 numbered steps reusing the `01 / 02 / 03` mono numerals.
@@ -751,7 +751,10 @@ A user-facing product needs a landing page before it needs a login box.
 ```html
 <header class="nav">
   <div class="shell nav-inner">
-    <a class="wordmark" href="#top">Huddle</a>
+    <div class="nav-brand">
+      <a class="wordmark" href="#top">Huddle</a>
+      <a class="app-byline" href="https://rising.company">by <span>rising.company</span></a>
+    </div>
     <nav class="nav-links">
       <a href="#how">How it works</a>
       <a href="#features">Features</a>
@@ -792,6 +795,8 @@ A user-facing product needs a landing page before it needs a login box.
   background: var(--bg-base);
   border-bottom: 1px solid var(--border);
 }
+.nav-brand { display: flex; align-items: center; gap: 12px; min-width: 0; }
+.nav-brand .wordmark { white-space: nowrap; }
 
 .hero { text-align: center; max-width: 720px; margin: 0 auto; padding: 96px 0 64px; }
 

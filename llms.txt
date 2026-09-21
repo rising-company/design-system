@@ -688,8 +688,12 @@ controls bottom-right).
 
 A user-facing product needs a landing page before it needs a login box. Required order:
 
-1. **Nav** — wordmark left; links + one `btn-sm` CTA right. 64px tall, `border-bottom: 1px
-   solid var(--border)`, sticky, `background: var(--bg-base)`.
+1. **Nav** — `.nav-brand` left: the wordmark and, 12px after it, the same `.app-byline`
+   (`by rising.company`) the app bar carries — the way home from a landing page too; links +
+   one `btn-sm` CTA right. 64px tall, `border-bottom: 1px solid var(--border)`, sticky,
+   `background: var(--bg-base)`. Below 640px the byline and the links hide; the wordmark
+   (and the CTA, if any) is the whole phone nav. Don't repeat the backlink among the links —
+   the byline is the header's; the footer keeps its own.
 2. **Hero** — eyebrow (`// Rising Company`) → hero title → lede (one sentence, ≤ 90 chars) →
    action row (`btn-primary btn-lg` + `btn-ghost btn-lg`) → mono trust line
    (`NO PASSWORD · NO CALENDAR ACCESS · FREE`). Max-width 720px for centered heroes.
