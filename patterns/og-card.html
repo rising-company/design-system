@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="daylight">
+<head>
+<meta charset="UTF-8">
+<title>Link preview card — Rising Company pattern</title>
+<!--
+  The link preview card, at exactly 1200x630. Not a page anyone visits — it is the
+  source a product's committed /og.png is shot from, kept in the repo so the card can
+  be regenerated from the product's own data rather than redrawn by hand.
+
+  Spec: llms.txt → "Link Preview Card (required)". Copy this file into the product as
+  tools/og.html, swap the six parts for the product's own argument, and shoot it:
+
+    python3 -m http.server 8000
+    agent-browser set viewport 1240 720 2      # 2x — the card is 1200x630 CSS px
+    agent-browser open http://localhost:8000/tools/og.html
+    agent-browser wait --load networkidle
+    agent-browser screenshot "#og-card" og.png # writes 2400x1260
+
+  The example below is Huddle's card. The middle band is a picture of the product's
+  own object — Huddle's availability grid, with the slot that clears for everyone —
+  so the card and the page it links to make the same argument. A logo on a rectangle
+  is not a card; it tells a reader nothing they did not already know from the URL.
+-->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Rajdhani:wght@300;500;700&display=swap">
+<link rel="stylesheet" href="../rising.css">
+<style>
+  /* Neutral grey so the card's own white edge is visible while composing. Nothing
+     outside #og-card is in the shot. */
+  body { background: #666; display: grid; place-items: center; min-height: 100vh; padding: 40px 0; }
+
+  #og-card {
+    width: 1200px; height: 630px; overflow: hidden; position: relative;
+    background: var(--bg-surface);
+    padding: 52px 64px; box-sizing: border-box;
+    display: flex; flex-direction: column;
+    font-family: "Rajdhani", sans-serif;
+  }
+
+  /* 1 — the rising arrow's own gradient, down the left edge. The only brand mark the
+     card needs; the wordmark would cost a third of the headline's room. */
+  #og-card::before {
+    content: ""; position: absolute; left: 0; top: 0; bottom: 0; width: 6px;
+    background: linear-gradient(180deg, var(--accent), var(--accent-2));
+  }
+
+  /* 2 — eyebrow: the domain, once, as the system naming what follows. */
+  .og-eyebrow {
+    font-family: "Share Tech Mono", monospace; font-size: 17px; letter-spacing: 0.18em;
+    text-transform: uppercase; color: var(--accent-ink); margin-bottom: 14px;
+  }
+
+  /* 3 — headline: the argument, with the one decisive value in accent ink. Never the
+     product name alone — og:site_name already carries that. */
+  .og-head {
+    font-size: 62px; line-height: 1.02; font-weight: 700; letter-spacing: 0.5px;
+    color: var(--text-heading); margin: 0 0 12px; text-wrap: balance;
+  }
+  .og-head em { font-style: normal; color: var(--accent-ink); }
+
+  /* 4 — lede: one plain sentence, written for a stranger scrolling a timeline. */
+  .og-lede {
+    font-size: 25px; font-weight: 500; line-height: 1.32; color: var(--text-muted);
+    margin: 0 0 26px; max-width: 70ch; text-wrap: balance;
+  }
+
+  /* 5 — evidence: the product's own object, drawn from the product's own data.
+     Everything below this comment is Huddle's; replace it wholesale. */
+  .og-grid {
+    /* Derived from tokens, not new colors: the two states have to survive a feed
+       downscaling the card to ~400px wide, and --accent-wash on --bg-surface-hover
+       does not. See llms.txt, "Two states have to read at thumbnail size". */
+    --free: color-mix(in srgb, var(--accent) 30%, var(--bg-surface));
+    --busy: var(--bg-surface-hover);
+    display: grid; grid-template-columns: 172px repeat(7, 1fr); gap: 5px;
+    align-items: center; margin-bottom: 12px;
+  }
+  .og-grid .slot {
+    font-family: "Share Tech Mono", monospace; font-size: 14px; letter-spacing: 0.08em;
+    text-transform: uppercase; color: var(--text-label); text-align: center;
+    padding-bottom: 6px; line-height: 1.25;
+  }
+  .og-grid .slot.is-pick { color: var(--accent-ink); }
+  .og-grid .who {
+    font-family: "Share Tech Mono", monospace; font-size: 15px; letter-spacing: 0.1em;
+    text-transform: uppercase; color: var(--text-label);
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis; padding-right: 12px;
+  }
+  .og-grid i { display: block; height: 36px; border-radius: 3px; background: var(--busy); }
+  .og-grid i.free { background: var(--free); }
+  .og-grid i.pick { background: var(--accent); box-shadow: inset 0 0 0 2px var(--accent-ink); }
+
+  /* 6 — footer: what the colors mean, left; what the numbers are as of, right. */
+  .og-foot {
+    margin-top: auto; padding-top: 20px; border-top: 1px solid var(--border-subtle);
+    display: flex; align-items: flex-end; justify-content: space-between; gap: 24px;
+  }
+  .og-legend {
+    display: flex; flex-wrap: wrap; gap: 6px 20px;
+    font-family: "Share Tech Mono", monospace; font-size: 14px; letter-spacing: 0.08em;
+    text-transform: uppercase; color: var(--text-label);
+  }
+  .og-legend span { display: inline-flex; align-items: center; gap: 7px; }
+  .og-legend i { width: 11px; height: 11px; border-radius: 2px; background: var(--key); }
+  .og-stamp {
+    font-family: "Share Tech Mono", monospace; font-size: 14px; letter-spacing: 0.08em;
+    color: var(--text-dim); text-align: right; white-space: nowrap; line-height: 1.7;
+  }
+  .og-stamp b { font-weight: normal; color: var(--text-muted); }
+</style>
+</head>
+<body>
+
+<div id="og-card">
+  <div class="og-eyebrow">// huddle.rising.company</div>
+  <h1 class="og-head">Six calendars. <em>One time.</em> No thread.</h1>
+  <p class="og-lede">Everyone marks what works. Huddle holds the first slot that clears for all six.</p>
+
+  <div class="og-grid" id="grid"></div>
+
+  <div class="og-foot">
+    <div class="og-legend">
+      <span><i style="--key: color-mix(in srgb, var(--accent) 30%, var(--bg-surface))"></i>Free</span>
+      <span><i style="--key: var(--bg-surface-hover)"></i>Busy</span>
+      <span><i style="--key: var(--accent)"></i>Everyone free</span>
+    </div>
+    <div class="og-stamp">No sign-up · No calendar access<br><b>Wed 14:00 · the only slot that clears</b></div>
+  </div>
+</div>
+
+<script type="module">
+  /* A real product builds this from its own data — Huddle from the huddle, True Cost
+     to Phone from data/pricing.json. Hand-drawing the evidence is how a card ends up
+     disagreeing with the page it links to. */
+  const SLOTS = ["Tue<br>09", "Tue<br>14", "Wed<br>09", "Wed<br>11", "Wed<br>14", "Thu<br>10", "Thu<br>16"];
+  const PICK = 4;
+  const PEOPLE = [
+    ["Amara O.",  [1, 0, 1, 0, 1, 1, 0]],
+    ["Ben C.",    [0, 1, 1, 1, 1, 0, 1]],
+    ["Dev R.",    [1, 1, 0, 1, 1, 1, 0]],
+    ["Iris M.",   [0, 1, 1, 0, 1, 0, 1]],
+    ["Kwame A.",  [1, 0, 0, 1, 1, 1, 1]],
+    ["Sofia L.",  [0, 0, 1, 1, 1, 0, 1]],
+  ];
+
+  const cells = [
+    `<div></div>`,
+    ...SLOTS.map((s, i) => `<div class="slot${i === PICK ? " is-pick" : ""}">${s}</div>`),
+  ];
+  for (const [name, free] of PEOPLE) {
+    cells.push(`<div class="who">${name}</div>`);
+    cells.push(...free.map((f, i) => `<i class="${i === PICK ? "pick" : f ? "free" : ""}"></i>`));
+  }
+  document.getElementById("grid").innerHTML = cells.join("");
+
+  /* The shoot waits on this: web fonts land after first paint, and a card screenshotted
+     mid-swap ships with fallback type baked into every share. */
+  document.fonts.ready.then(() => document.documentElement.setAttribute("data-og-ready", "1"));
+</script>
+
+</body>
+</html>
