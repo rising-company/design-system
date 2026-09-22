@@ -14,7 +14,8 @@ Live: <https://design-system.rising.company>
 - `index.html` — single-page visual reference with a live theme toggle. Renders every token (colors, type, controls, components, patterns) styled in the system itself.
 - `rising.css` — drop-in token + component layer. Link it and set `data-theme`; that's the whole setup.
 - `llms.txt` — the canonical spec, written for AI agents and humans. When in doubt, this file is the source of truth.
-- `patterns/` — worked page patterns: `landing.html`, `auth-split.html` (Daylight), `auth-centered.html`, `app-shell.html` (Mission).
+- `patterns/` — worked page patterns: `landing.html`, `auth-split.html` (Daylight), `auth-centered.html`, `app-shell.html` (Mission), `og-card.html` (the link preview card every product ships).
+- `tools/og.html` → `og.png` — this site's own link preview card, built from that pattern.
 - `skills/rising-design/` — Claude skill that loads the spec into agent context.
 - `branding/` — brand image assets (favicon, Apple touch icon, wordmark logos). See "Brand assets" in `llms.txt` for the file list, sizes and which one to use where.
 
@@ -45,13 +46,33 @@ A product may ship both: Daylight for its public surface, Mission for the app be
 
 2. Read `llms.txt` for the full spec: tokens, text styles, spacing, controls, components, page patterns and voice rules.
 
-3. Include the rising.company backlink — every product must link back. See the "Rising Company Backlink" section in `llms.txt`.
+3. Ship the two required brand artifacts — both are per-product obligations, not options:
+   the **rising.company backlink** (every product links back) and the **link preview card**
+   (every product's shares carry its own argument). See "Rising Company Backlink" and
+   "Link Preview Card" in `llms.txt`, and "Link previews" below.
 
 ### Three traps
 
 - **`--accent` is a fill, not an ink.** Mint `#3af0a0` is 1.4:1 on white. In Daylight use it as a button/badge *background* with `--accent-on` text; for accent text, icons and 1px borders use `--accent-ink` (which darkens to `#0b7a4e`).
 - **Scanlines and corner brackets are Mission-only.** They're driven by `--chrome-scanline` and `--chrome-bracket-display`, so the same CSS rule goes inert in Daylight. Don't port the HUD texture across.
 - **12px is the floor for Share Tech Mono, and mono tracking is in `em`.** Its stems are about 7% of the em, so below 12px they sample to under one device pixel on a 1× monitor and go grey — while looking perfectly crisp on the Retina laptop you designed on. Rajdhani body copy has a matching floor of 15px at weight 500. See "Two rules hold the mono scale together" in `llms.txt`.
+
+## Link previews
+
+**Every Rising product ships a link preview card** — a product travels by link, and the card
+is its first impression more often than its home page is. It is 1200 × 630, always Daylight,
+and it makes the product's argument out of the product's own data: the chart, the grid, the
+ranking the page itself computes. A wordmark on a colored rectangle tells a reader nothing
+the URL did not already say.
+
+Copy `patterns/og-card.html` into the product as `tools/og.html`, replace the evidence band,
+shoot it at 2× to `og.png`, and wire the tags — with a `?v=` date stamp on `og:image`, because
+scrapers cache by URL and will serve a stale card for days without one. Pin the card's numbers
+with a test so moving the data fails loudly rather than quietly advertising a price that is no
+longer true.
+
+Full spec, anatomy and tag list: "Link Preview Card (required branding)" in `llms.txt`. This
+site follows it — `tools/og.html` → `og.png`.
 
 ## Motion
 

@@ -1146,6 +1146,11 @@ build it came from.
 Eyebrow → one-line explanation in `--text-muted` → one `btn-secondary`. Centered, max-width
 420px, 96px vertical padding. Never a bare "No results."
 
+### Link Preview Card
+The one page pattern nobody visits and everybody sees: 1200 × 630, Daylight, shot to a PNG
+the product's shares carry. Worked template `patterns/og-card.html`; the spec and the tags
+it goes with are in "Link Preview Card (required branding)" below. Required of every product.
+
 ---
 
 ## Brand Assets
@@ -1157,7 +1162,7 @@ the product — never redraw the mark.
 | File | Size | Alpha | Use |
 |---|---|---|---|
 | `favicon.svg` | 64×64 viewBox | yes | Browser tab icon. Preferred favicon — scales cleanly. Dark base, rounded corners baked in. |
-| `favicon.png` | 512×512 | yes | Raster fallback for the favicon, PWA manifest icons, OG/social thumbnails. Rounded corners baked in. |
+| `favicon.png` | 512×512 | yes | Raster fallback for the favicon, PWA manifest icons. Not the social thumbnail — that is the link preview card. Rounded corners baked in. |
 | `favicon-xl.png` | 1024×1024 | yes | Same mark at 2× — app-store listings, splash screens, any place asking for ≥512px. |
 | `apple-icon.png` | 180×180 | no (opaque) | `<link rel="apple-touch-icon">` and Next.js `app/apple-icon.png`. Square corners on purpose — iOS applies its own mask; a pre-rounded or transparent icon shows black wedges. |
 | `rising-logo-white.png` | 2026×898 | no (white bg) | Horizontal wordmark (arrow + "RISING COMPANY"). Daylight surfaces only, on `--bg-surface` white. |
@@ -1206,6 +1211,107 @@ tab; the footer backlink is the *attribution* and opens in a new one. Products h
 }
 .rising-backlink:hover { color: var(--accent-ink); }
 ```
+
+---
+
+## Link Preview Card (required branding)
+
+Every Rising Company product ships a link preview card. A product travels by link — a
+Slack message, a text, a post — and the card is the product's first impression far more
+often than its home page is. Shipped without one, a share renders as a bare rectangle
+with a URL under it; shipped with a wordmark on a colored field, it tells a reader
+nothing the URL did not already say.
+
+**The card makes the product's argument, using the product's own data.** True Cost to
+Phone's card is its own carrier chart — same segments, same colors, same cheapest-first
+ranking — so someone can take the point from the card and click to verify rather than to
+find out. If the product has a number, the number is on the card.
+
+Worked template: `patterns/og-card.html`. Copy it into the product as `tools/og.html`,
+replace the evidence band, and shoot it. The card is not hand-drawn and not a screenshot
+of the live page — it is a rendered artifact the repo can rebuild.
+
+### Anatomy
+
+1200 × 630 CSS px, **Daylight always** (a stranger in a timeline sees it first — the same
+rule that makes landing pages Daylight), `--bg-surface` ground, 52px / 64px padding.
+
+1. **Edge rule** — 6px down the left, `linear-gradient(180deg, var(--accent), var(--accent-2))`.
+   That gradient is the rising arrow; it is the whole brand mark the card needs. A wordmark
+   would cost a third of the headline's room.
+2. **Eyebrow** — `// product.rising.company`, Share Tech Mono 17px / 0.18em / `--accent-ink`.
+   The `//` opens the card the way it opens any region, once.
+3. **Headline** — Rajdhani 700, 62px, `--text-heading`, with the one decisive value in
+   `--accent-ink`. The argument, not the product name: `og:site_name` already carries the name.
+4. **Lede** — Rajdhani 500, 25px, `--text-muted`, one plain sentence written for a stranger.
+5. **Evidence** — the product's own object, built from the product's own data: the chart,
+   the grid, the ranking, the state. This is the band that does the work.
+6. **Footer** — `--border-subtle` rule, legend left (what the colors mean), stamp right
+   (`--text-dim`, what the numbers are as of).
+
+### Two rules the card lives or dies by
+
+- **It has to read at thumbnail size.** Feeds render the card at 300–400px wide, so
+  everything on it is sized for a 3× downscale: headline ≥ 48px, lede ≥ 24px, nothing
+  mono below 14px, and no two states distinguishable only by a hairline or a wash.
+  `--accent-wash` on `--bg-surface-hover` is invisible at 400px; derive a real tint
+  (`color-mix(in srgb, var(--accent) 30%, var(--bg-surface))`) instead.
+- **Shoot at 2×.** The card is 1200 × 630 CSS px, captured at `deviceScaleFactor: 2` to a
+  2400 × 1260 PNG, and `og:image:width` / `:height` declare the **file's** pixels. Wait on
+  web fonts before the shot — `document.fonts.ready` sets `data-og-ready`; a card captured
+  mid-swap bakes fallback type into every share ever made of it.
+
+```sh
+python3 -m http.server 8000
+agent-browser set viewport 1240 760 2
+agent-browser open http://localhost:8000/tools/og.html
+agent-browser wait --load networkidle
+agent-browser screenshot "#og-card" og.png   # writes 2400x1260
+```
+
+### The tags
+
+All absolute — scrapers do not resolve relative URLs — and `og:image` carries a `?v=`
+stamp that is the date the card was last true:
+
+```html
+<link rel="canonical" href="https://product.rising.company/">
+<meta name="description" content="…">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Product">
+<meta property="og:url" content="https://product.rising.company/">
+<meta property="og:title" content="The argument, in six words.">
+<meta property="og:description" content="One plain sentence. No marketing adjectives.">
+<meta property="og:image" content="https://product.rising.company/og.png?v=2026-09-22">
+<meta property="og:image:width" content="2400">
+<meta property="og:image:height" content="1260">
+<meta property="og:image:alt" content="The card's argument in words, for readers who never see the image.">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="The argument, in six words.">
+<meta name="twitter:description" content="One plain sentence. No marketing adjectives.">
+<meta name="twitter:image" content="https://product.rising.company/og.png?v=2026-09-22">
+```
+
+- **The `?v=` stamp is not optional.** Facebook, Slack and X cache `og:image` by URL. A
+  regenerated card behind an unchanged URL keeps serving last month's numbers for days —
+  the exact failure that regenerating the card was meant to prevent. Bump the stamp in the
+  same commit that replaces the PNG.
+- **`og:image:alt` carries the argument in words.** It is the card for screen readers and
+  for every scraper that does not fetch the image.
+- **`og:title` is the headline, not the page title.** Same words as the card.
+
+### Keeping it honest
+
+A card built from product data goes stale the moment the data moves, and nothing in a
+browser notices. **Pin it with a test** (`tests/og.test.mjs` in True Cost to Phone): assert
+the numbers printed on the committed PNG against what the data now produces, and the `?v=`
+stamp against the data's own timestamp. Moving the data without regenerating the card then
+fails a test instead of quietly advertising a price that is no longer true.
+
+Next.js products get the same card from `src/app/opengraph-image.tsx` (`ImageResponse`,
+`size = { width: 1200, height: 630 }`) — the framework emits the tags and a content hash,
+so the `?v=` stamp is handled for you. Everything above still applies: Daylight, the six
+parts, the product's own data, the alt text.
 
 ---
 

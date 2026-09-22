@@ -325,6 +325,30 @@ Every Rising Company product must include a subtle backlink to `https://rising.c
    class="rising-backlink">rising.company</a>
 ```
 
+## Branding: Link Preview Card
+
+Every Rising Company product ships a link preview card. A product travels by link, and the card is its first impression more often than the home page is — a bare rectangle or a wordmark on a colored field tells a reader nothing the URL did not.
+
+**The card makes the product's argument out of the product's own data** — the chart, the grid, the ranking the page itself computes. If the product has a number, the number is on the card. Worked template: `patterns/og-card.html` → copy into the product as `tools/og.html`.
+
+- **1200 × 630 CSS px, Daylight always** (a stranger sees it first), `--bg-surface`, 52px/64px padding
+- Six parts: 6px left edge rule (`linear-gradient(180deg, var(--accent), var(--accent-2))`) · eyebrow `// product.rising.company` (mono 17px, `--accent-ink`) · headline (Rajdhani 700, 62px, decisive value in `--accent-ink`) · lede (25px, `--text-muted`, one plain sentence) · **evidence band** (the product's own object) · footer rule with legend left, stamp right
+- **Reads at thumbnail size:** feeds render it ~350px wide. Headline ≥ 48px, lede ≥ 24px, mono ≥ 14px, no state distinguished only by a hairline or a wash
+- **Shot at 2×** to 2400 × 1260, after `document.fonts.ready` — a card captured mid font-swap bakes fallback type into every share
+
+```sh
+agent-browser set viewport 1240 760 2
+agent-browser open http://localhost:8000/tools/og.html
+agent-browser wait --load networkidle
+agent-browser screenshot "#og-card" og.png
+```
+
+Tags, all absolute: `canonical`, `og:type` `og:site_name` `og:url` `og:title` `og:description` `og:image` `og:image:width` `og:image:height` `og:image:alt`, `twitter:card=summary_large_image` `twitter:title` `twitter:description` `twitter:image`. `og:title` is the headline, not the page title. `og:image:alt` states the argument in words.
+
+**`og:image` carries a `?v=YYYY-MM-DD` stamp** — scrapers cache by URL, so a regenerated card behind an unchanged URL serves stale numbers for days. Bump it in the commit that replaces the PNG, and pin the card's numbers and the stamp with a test so moving the data fails loudly. Next.js: `src/app/opengraph-image.tsx` with `ImageResponse` at 1200 × 630 — same six parts, framework handles the stamp.
+
+Full spec: <https://design-system.rising.company/llms.txt> → "Link Preview Card (required branding)".
+
 ## Voice & Tone
 
 Identical in both themes. Daylight is lighter in *value*, not in tone.

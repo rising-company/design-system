@@ -4,6 +4,31 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Rising Company — Design System</title>
+<meta name="description" content="One brand, two themes. Mission for operators, Daylight for everyone else — the same tokens, type, spacing, motion and voice in both. Tokens, components, page patterns and a drop-in stylesheet.">
+<link rel="canonical" href="https://design-system.rising.company/">
+
+<!-- ── Link preview ──
+     Required of every Rising product — llms.txt, "Link Preview Card (required)".
+     The card is a picture of this system's own argument (tools/og.html → og.png):
+     the same markup under both themes, not a wordmark on a rectangle.
+
+     The ?v= stamp is the date the card was shot. Scrapers cache og:image by URL, so
+     a regenerated card behind an unchanged URL keeps serving the old picture to
+     Slack, Facebook and X for days. Bump it whenever og.png is re-shot. -->
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Rising Company Design System">
+<meta property="og:url" content="https://design-system.rising.company/">
+<meta property="og:title" content="One brand. Two themes.">
+<meta property="og:description" content="Mission for operators, Daylight for everyone else — same type, same spacing, the same token names in both. One stylesheet, one attribute.">
+<meta property="og:image" content="https://design-system.rising.company/og.png?v=2026-09-22">
+<meta property="og:image:width" content="2400">
+<meta property="og:image:height" content="1260">
+<meta property="og:image:alt" content="The same console panel rendered twice: dark on the left under the Mission theme, light on the right under Daylight, with identical markup and the shared token names --bg-base, --border, --text-body and --accent printed beneath.">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="One brand. Two themes.">
+<meta name="twitter:description" content="Mission for operators, Daylight for everyone else — same type, same spacing, the same token names in both.">
+<meta name="twitter:image" content="https://design-system.rising.company/og.png?v=2026-09-22">
+
 <link rel="icon" type="image/svg+xml" href="/branding/favicon.svg">
 <link rel="apple-touch-icon" sizes="180x180" href="/branding/apple-icon.png">
 <script defer src="/_vercel/insights/script.js"></script>
@@ -171,6 +196,15 @@
   .pattern-frame .frame-bar a:hover { text-decoration: underline; }
 
   .pattern-frame iframe { display: block; width: 100%; height: 520px; border: 0; background: var(--bg-base); }
+
+  /* The link preview card is a PNG in the end, so it is shown as one — scaled the way a
+     feed scales it, which is also the test of whether it still reads. */
+  .pattern-frame img.og-shot { display: block; width: 100%; height: auto; }
+  .og-row { display: flex; flex-wrap: wrap; gap: 24px; margin-top: 24px; align-items: flex-start; }
+  .og-row .pattern-frame { flex: 1 1 520px; min-width: 300px; }
+  /* Beats the .og-row .pattern-frame basis above — this one is pinned to feed width. */
+  .og-row .og-thumb { flex: 0 0 350px; min-width: 0; }
+  .og-thumb .frame-bar { justify-content: center; }
 
   /* Phone-width previews: a 375px iframe, so the mobile form is seen, not described. */
   .phone-row { display: flex; flex-wrap: wrap; gap: 24px; margin-top: 24px; align-items: flex-start; }
@@ -1509,6 +1543,47 @@
     Eyebrow &rarr; one-line explanation in <code>--text-muted</code> &rarr; one <code>btn-secondary</code>.
     Centered, max-width 420px, 96px vertical padding. Never a bare &ldquo;No results.&rdquo;
   </p>
+
+  <div class="section-label" style="margin-top: 32px;">// Link preview card &mdash; required of every product</div>
+  <p class="voice-body" style="max-width: 68ch; margin-bottom: 24px;">
+    The one page pattern nobody visits and everybody sees. A product travels by link, so the
+    card is its first impression more often than its home page is &mdash; and it earns that
+    by making the product&rsquo;s argument out of the product&rsquo;s own data, not by putting
+    a wordmark on a colored rectangle. 1200 &times; 630, Daylight always, shot at 2&times;.
+  </p>
+
+  <div class="og-row">
+    <div class="pattern-frame">
+      <div class="frame-bar">
+        <span>// patterns/og-card.html &middot; daylight</span>
+        <a href="patterns/og-card.html" target="_blank" rel="noopener">Open the template &rarr;</a>
+      </div>
+      <img class="og-shot" src="/og.png" alt="This site's own link preview card: the same console panel rendered twice, dark under Mission and light under Daylight, over the shared token names." loading="lazy">
+    </div>
+    <div class="pattern-frame og-thumb">
+      <div class="frame-bar"><span>// as a feed renders it &middot; 350px</span></div>
+      <img class="og-shot" src="/og.png" alt="The same card at the width a social feed gives it." loading="lazy">
+    </div>
+  </div>
+
+  <div class="voice-grid" style="margin-top: 24px;">
+    <div class="voice-card">
+      <div class="vc-label">Six parts</div>
+      <div class="vc-body">Edge rule (the arrow&rsquo;s gradient) &rarr; eyebrow <code>// product.rising.company</code> &rarr; headline with the decisive value in <code>--accent-ink</code> &rarr; one-sentence lede &rarr; <strong>the evidence band</strong> &rarr; footer rule with legend left, stamp right.</div>
+    </div>
+    <div class="voice-card">
+      <div class="vc-label">It has to read at 350px</div>
+      <div class="vc-body">Feeds downscale the card about 3&times;. Headline &ge; 48px, lede &ge; 24px, nothing mono under 14px, and no two states told apart by a hairline or a wash &mdash; <code>--accent-wash</code> disappears at that size.</div>
+    </div>
+    <div class="voice-card">
+      <div class="vc-label">Stamp the URL</div>
+      <div class="vc-body">Scrapers cache <code>og:image</code> by URL. A regenerated card behind an unchanged URL serves last month&rsquo;s numbers for days &mdash; so the image carries <code>?v=YYYY-MM-DD</code>, bumped in the commit that replaces the PNG.</div>
+    </div>
+    <div class="voice-card">
+      <div class="vc-label">Pin it with a test</div>
+      <div class="vc-body">A card built from product data goes stale the moment the data moves and nothing notices. Assert the numbers on the committed PNG against what the data now produces, and the stamp against the data&rsquo;s timestamp.</div>
+    </div>
+  </div>
 </section>
 
 <!-- ═══ 07 EFFECTS ═══ -->

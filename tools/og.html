@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="daylight">
+<head>
+<meta charset="UTF-8">
+<title>og.png source — Rising Company Design System</title>
+<!--
+  The design system's own link preview card, at exactly 1200x630. Not a page anyone
+  visits — it is the source /og.png is shot from, kept in the repo so the card can be
+  regenerated when the system changes rather than redrawn by hand.
+
+  Built from patterns/og-card.html, which is the template every Rising product copies.
+  The spec is llms.txt → "Link Preview Card (required)". Regenerate:
+
+    python3 -m http.server 8000
+    agent-browser set viewport 1240 760 2
+    agent-browser open http://localhost:8000/tools/og.html
+    agent-browser wait --load networkidle
+    agent-browser screenshot "#og-card" og.png   # writes 2400x1260
+
+  Then bump the ?v= stamp on og:image and twitter:image in index.html to the date the
+  card was shot. Scrapers cache og:image by URL, so a regenerated card behind an
+  unchanged URL keeps serving the old picture for days.
+
+  The evidence band is this system's own argument, made rather than asserted: the same
+  markup, the same token names, rendered twice under two values of data-theme.
+-->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Rajdhani:wght@300;500;700&display=swap">
+<link rel="stylesheet" href="../rising.css">
+<style>
+  body { background: #666; display: grid; place-items: center; min-height: 100vh; padding: 40px 0; }
+
+  #og-card {
+    width: 1200px; height: 630px; overflow: hidden; position: relative;
+    background: var(--bg-surface);
+    padding: 52px 64px; box-sizing: border-box;
+    display: flex; flex-direction: column;
+    font-family: "Rajdhani", sans-serif;
+  }
+  #og-card::before {
+    content: ""; position: absolute; left: 0; top: 0; bottom: 0; width: 6px;
+    background: linear-gradient(180deg, var(--accent), var(--accent-2));
+  }
+
+  .og-eyebrow {
+    font-family: "Share Tech Mono", monospace; font-size: 17px; letter-spacing: 0.18em;
+    text-transform: uppercase; color: var(--accent-ink); margin-bottom: 14px;
+  }
+  .og-head {
+    font-size: 62px; line-height: 1.02; font-weight: 700; letter-spacing: 0.5px;
+    color: var(--text-heading); margin: 0 0 12px; text-wrap: balance;
+  }
+  .og-head em { font-style: normal; color: var(--accent-ink); }
+  .og-lede {
+    font-size: 25px; font-weight: 500; line-height: 1.32; color: var(--text-muted);
+    margin: 0 0 24px; max-width: 70ch; text-wrap: balance;
+  }
+
+  /* The evidence: one pane per theme, identical markup inside. Both panes read their
+     colors from the same four token names — that is the whole claim. */
+  .panes { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+  .pane {
+    background: var(--bg-base); border: 1px solid var(--border); border-radius: 4px;
+    padding: 22px 24px 24px; position: relative; overflow: hidden;
+  }
+  /* Mission carries its scanline; Daylight's token makes the same rule inert. */
+  .pane::after {
+    content: ""; position: absolute; inset: 0; pointer-events: none;
+    background: repeating-linear-gradient(0deg, var(--chrome-scanline) 0 1px, transparent 1px 3px);
+  }
+  .pane-label {
+    font-family: "Share Tech Mono", monospace; font-size: 14px; letter-spacing: 0.18em;
+    text-transform: uppercase; color: var(--accent-ink); margin-bottom: 8px;
+  }
+  .pane-title {
+    font-size: 27px; font-weight: 700; letter-spacing: 0.4px; text-transform: uppercase;
+    color: var(--text-heading); margin-bottom: 14px; line-height: 1.1;
+  }
+  .pane-stats { display: flex; gap: 28px; margin-bottom: 18px; }
+  .stat-label {
+    font-family: "Share Tech Mono", monospace; font-size: 13px; letter-spacing: 0.12em;
+    text-transform: uppercase; color: var(--text-label);
+  }
+  .stat-value {
+    font-family: "Share Tech Mono", monospace; font-size: 24px; letter-spacing: 0.04em;
+    color: var(--text-body); font-variant-numeric: tabular-nums;
+  }
+  .pane-btn {
+    display: inline-block; background: var(--accent); color: var(--accent-on);
+    font-size: 16px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase;
+    padding: 9px 20px; border-radius: 3px;
+  }
+
+  /* The line that names what the two panes share. */
+  .shared {
+    margin-top: 16px;
+    font-family: "Share Tech Mono", monospace; font-size: 15px; letter-spacing: 0.1em;
+    color: var(--text-label); text-transform: uppercase;
+  }
+  /* Token names are code — uppercasing them would print a name that does not exist. */
+  .shared b { font-weight: normal; color: var(--accent-ink); text-transform: none; }
+
+  .og-foot {
+    margin-top: auto; padding-top: 18px; border-top: 1px solid var(--border-subtle);
+    display: flex; align-items: flex-end; justify-content: space-between; gap: 24px;
+  }
+  .og-legend {
+    display: flex; flex-wrap: wrap; gap: 6px 20px;
+    font-family: "Share Tech Mono", monospace; font-size: 14px; letter-spacing: 0.08em;
+    text-transform: uppercase; color: var(--text-label);
+  }
+  .og-stamp {
+    font-family: "Share Tech Mono", monospace; font-size: 14px; letter-spacing: 0.08em;
+    color: var(--text-dim); text-align: right; white-space: nowrap; line-height: 1.7;
+  }
+  .og-stamp b { font-weight: normal; color: var(--text-muted); }
+</style>
+</head>
+<body>
+
+<div id="og-card">
+  <div class="og-eyebrow">// design-system.rising.company</div>
+  <h1 class="og-head">One brand. <em>Two themes.</em></h1>
+  <p class="og-lede">Mission for operators, Daylight for everyone else — same type, same spacing, the same token names in both.</p>
+
+  <div class="panes">
+    <div class="pane" data-theme="mission">
+      <div class="pane-label">// Mission</div>
+      <div class="pane-title">Operator console</div>
+      <div class="pane-stats">
+        <div><div class="stat-label">Sessions</div><div class="stat-value">1,284</div></div>
+        <div><div class="stat-label">Latency</div><div class="stat-value">41ms</div></div>
+      </div>
+      <span class="pane-btn">Open</span>
+    </div>
+    <div class="pane" data-theme="daylight">
+      <div class="pane-label">// Daylight</div>
+      <div class="pane-title">Landing page</div>
+      <div class="pane-stats">
+        <div><div class="stat-label">Sessions</div><div class="stat-value">1,284</div></div>
+        <div><div class="stat-label">Latency</div><div class="stat-value">41ms</div></div>
+      </div>
+      <span class="pane-btn">Open</span>
+    </div>
+  </div>
+
+  <div class="shared">Same markup · <b>--bg-base · --border · --text-body · --accent</b></div>
+
+  <div class="og-foot">
+    <div class="og-legend">
+      <span>Tokens</span><span>Components</span><span>Patterns</span><span>Motion</span>
+    </div>
+    <div class="og-stamp">rising.css — one link, one attribute<br><b>Switch at the auth boundary, not per page</b></div>
+  </div>
+</div>
+
+<script type="module">
+  /* Web fonts land after first paint; a card shot mid-swap ships fallback type into
+     every share. The shoot waits on this flag. */
+  document.fonts.ready.then(() => document.documentElement.setAttribute("data-og-ready", "1"));
+</script>
+
+</body>
+</html>
