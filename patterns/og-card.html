@@ -17,6 +17,11 @@
     agent-browser wait --load networkidle
     agent-browser screenshot "#og-card" og.png # writes 2400x1260
 
+  Card-only classes take the og- prefix. This page links rising.css, where .band, .card,
+  .eyebrow and .btn already mean something — an unprefixed class quietly inherits the
+  component layer, and since the card is overflow: hidden the damage shows up as a shot
+  that looks cropped rather than broken.
+
   The example below is Huddle's card. The middle band is a picture of the product's
   own object — Huddle's availability grid, with the slot that clears for everyone —
   so the card and the page it links to make the same argument. A logo on a rectangle

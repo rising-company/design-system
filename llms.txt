@@ -1260,6 +1260,11 @@ rule that makes landing pages Daylight), `--bg-surface` ground, 52px / 64px padd
   2400 × 1260 PNG, and `og:image:width` / `:height` declare the **file's** pixels. Wait on
   web fonts before the shot — `document.fonts.ready` sets `data-og-ready`; a card captured
   mid-swap bakes fallback type into every share ever made of it.
+- **Prefix every card-only class `og-`.** The renderer links `rising.css`, so a class named
+  `.band`, `.card`, `.eyebrow`, `.btn` or `.status` silently inherits the component layer.
+  A card that named its evidence band `.band` picked up the landing pattern's 96px of
+  vertical padding, which pushed the footer off the bottom edge — and because the card is
+  `overflow: hidden`, the shot came out looking merely cropped rather than broken.
 
 ```sh
 python3 -m http.server 8000
