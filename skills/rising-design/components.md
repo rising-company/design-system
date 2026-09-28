@@ -291,6 +291,13 @@ header h1 {
   color: var(--text-heading);
   letter-spacing: 3px;
   text-transform: uppercase;
+  min-width: 0;
+  overflow-wrap: anywhere; /* a record's name can be one long word */
+}
+
+@media (max-width: 768px) {
+  header { padding: 24px; }
+  header h1 { font-size: 26px; }
 }
 
 header p {

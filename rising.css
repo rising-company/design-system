@@ -176,7 +176,12 @@ body::before {
 .page-title {
   font-size: 36px; font-weight: 700; letter-spacing: 3px;
   text-transform: uppercase; color: var(--text-heading); line-height: 1.1;
+  /* A title can carry data (a venue's name); a long word breaks rather
+     than widening the page. */
+  min-width: 0; overflow-wrap: anywhere;
 }
+/* On a phone 36px fits barely a dozen characters; see "On phones" in llms.txt. */
+@media (max-width: 768px) { .page-title { font-size: 26px; } }
 
 .hero-title {
   font-family: "Rajdhani", sans-serif; font-weight: 700;
