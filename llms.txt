@@ -273,7 +273,7 @@ Error banner: `#ff4a2414` / `#ff4a2450` / `#ff4a24` in Mission; `#c02a1012` / `#
 |---|---|---|---|---|---|---|
 | Eyebrow | Share Tech Mono | 12px | normal | 0.2em | uppercase | `--accent-ink` |
 | Hero Title | Rajdhani | `clamp(36px, 7vw, 56px)` | 700 | 2px | uppercase | `--text-heading` |
-| Page Title | Rajdhani | 36px | 700 | 3px | uppercase | `--text-heading` |
+| Page Title | Rajdhani | 36px (26px below 768px) | 700 | 3px | uppercase | `--text-heading` |
 | Section Heading | Rajdhani | 28px | 700 | 2px | none | `--text-heading` |
 | Card Title | Rajdhani | 20px | 700 | 1px | none | `--text-heading` |
 | Lede | Rajdhani | 18px | 500 | normal | none | `--text-muted` |
@@ -286,6 +286,28 @@ Error banner: `#ff4a2414` / `#ff4a2450` / `#ff4a24` in Mission; `#c02a1012` / `#
 | Footer | Share Tech Mono | 12px | normal | 0.1em | none | `--text-dim` |
 
 Line-height: headings 1.1 · lede 1.5 · body 1.6 · mono metadata 1.5–1.9.
+
+### On phones (≤ 768px)
+
+A phone gets the same type scale with one exception: the page title. The rule for
+everything else is **wrap or stack, never shrink.**
+
+- **Page Title drops to 26px.** At 36px with 3px tracking, uppercase Rajdhani fits barely a
+  dozen characters across a 390px phone once the 24px gutters are taken. A title like
+  `SEPTEMBER 2026` next to its ← → actions breaks into two oversized lines that push the
+  content below the fold. 26px keeps it a heading without taking over the screen.
+- **Hero Title already scales** through its `clamp()`. It needs no override.
+- **The floors don't move.** Body stays 15px, mono stays 12px, and inputs stay 16px
+  (anything smaller triggers zoom-on-focus in mobile Safari). When something doesn't fit,
+  it wraps or stacks.
+- **A title that carries data wraps anywhere.** A record's name (a venue, a huddle, a
+  client) can be one long unbroken word. Give the title `min-width: 0` and
+  `overflow-wrap: anywhere` so the word breaks instead of widening the page.
+- **Nothing scrolls the page sideways.** Actions beside a title wrap beneath it
+  (`.page-header-row` wraps). Toolbars wrap. List rows built as columns stack: the
+  primary label on top with its meta line beneath, the amount on the right. Header rows
+  are hidden. The one sideways scroller is the app nav row, and it says so with an edge
+  fade (see "App Shell").
 
 ### Two rules hold the mono scale together
 
@@ -657,6 +679,8 @@ see "App Shell" under Page Patterns for the difference.
 - Inside `.app-main` (which already carries the 48px page padding): `padding-bottom: 24px`,
   `margin-bottom: 32px`, `border-bottom: 1px solid var(--border)`
 - Standalone at the top of a page with no app bar: `padding: 48px 48px 32px`
+- Below 768px: the title is 26px and wraps anywhere, and actions wrap beneath it. See
+  "On phones" under Text Styles.
 
 ### Footer
 Two footers, one voice. `.site-footer` is the landing page's; `.app-footer` is the
@@ -1055,6 +1079,8 @@ and a sidebar product uses it too:
 .page-header .eyebrow { margin-bottom: 8px; }
 .page-header .subtitle { margin-top: 8px; }
 .page-header-row { display: flex; align-items: flex-end; justify-content: space-between; gap: 16px 24px; flex-wrap: wrap; }
+.page-header-row .page-title { min-width: 0; overflow-wrap: anywhere; }
+@media (max-width: 768px) { .page-title { font-size: 26px; } }
 
 .app-footer {
   position: relative; z-index: 1;

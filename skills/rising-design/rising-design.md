@@ -114,7 +114,7 @@ Drive these from tokens so the same rule is inert in the other theme:
 |---|---|---|---|---|---|---|
 | Eyebrow | Mono | 12px | — | 0.2em | upper | `--accent-ink` |
 | Hero Title | Rajdhani | clamp(36–56px) | 700 | 2px | upper | `--text-heading` |
-| Page Title | Rajdhani | 36px | 700 | 3px | upper | `--text-heading` |
+| Page Title | Rajdhani | 36px (26px < 768px) | 700 | 3px | upper | `--text-heading` |
 | Section Heading | Rajdhani | 28px | 700 | 2px | — | `--text-heading` |
 | Card Title | Rajdhani | 20px | 700 | 1px | — | `--text-heading` |
 | Lede | Rajdhani | 18px | 500 | — | — | `--text-muted` |
@@ -138,6 +138,13 @@ Line-height: headings `1.1` · lede `1.5` · body `1.6` · mono metadata `1.5–
   as disconnected letters at 10px; `em` keeps the ratio fixed whatever the size. The
   widest rung is `0.2em` — resist going past it, because past roughly a quarter of an em
   the eye stops seeing words and starts seeing characters.
+
+**On phones (≤ 768px): wrap or stack, never shrink.** The page title is the one style that
+changes: 26px, because 36px uppercase fits barely a dozen characters on a 390px phone. The
+floors hold (body 15px, mono 12px, inputs 16px). A title that carries data gets
+`min-width: 0; overflow-wrap: anywhere`. Actions beside a title wrap beneath it, toolbars
+wrap, and column-style list rows stack (label with meta beneath, amount right, no header
+row). Nothing scrolls the page sideways except the app nav row.
 
 ## Spacing
 
