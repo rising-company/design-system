@@ -7,7 +7,7 @@
    (light) on <html>.
 
    Requires the fonts:
-   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Share+Tech+Mono&family=Rajdhani:wght@500;700&display=swap">
+   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=Share+Tech+Mono&family=Rajdhani:wght@500;700&display=swap">
    ═══════════════════════════════════════════════════════════════ */
 
 /* ══════════════ THEME TOKENS ══════════════ */
@@ -111,13 +111,13 @@
   }
 
 /* ══════════════ TYPE TOKENS ══════════════ */
-/* Three faces, one job each: Rajdhani for display (titles, wordmark), Inter
+/* Three faces, one job each: Rajdhani for display (titles, wordmark), IBM Plex Sans
    for everything a person reads or presses, Share Tech Mono for readouts
    (labels, data, IDs, build stamps). Seven sizes, each step clearly
    bigger than the last; nothing renders between them. */
 :root {
   --font-display: "Rajdhani", sans-serif;
-  --font-text: "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-text: "IBM Plex Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
   --font-mono: "Share Tech Mono", ui-monospace, monospace;
 
   --type-label: 0.75rem;    /* 12 — mono labels, the floor */
@@ -217,7 +217,7 @@ body::before {
 
 .sec-title { font-family: var(--font-display); font-size: var(--type-section); font-weight: 700; letter-spacing: 2px; color: var(--text-heading); line-height: 1.1; }
 .card-title { font-family: var(--font-display); font-size: var(--type-lead); font-weight: 700; letter-spacing: 1px; color: var(--text-heading); }
-/* Reading text is Inter at 400: Rajdhani is a display face, and at 15px its
+/* Reading text is IBM Plex Sans at 400: Rajdhani is a display face, and at 15px its
    narrow squared letters tire the eye over a paragraph. */
 .lede { font-family: var(--font-text); font-size: var(--type-lead); font-weight: 400; line-height: 1.5; color: var(--text-muted); }
 .body { font-family: var(--font-text); font-size: var(--type-body); font-weight: 400; line-height: 1.6; color: var(--text-muted); }

@@ -4,7 +4,7 @@ Detailed HTML/CSS anatomy for every component pattern. Extract the exact CSS val
 
 All values below reference theme variables (`var(--token)`). Both themes — **Mission** (dark, default) and **Daylight** (light) — define the identical token set, so every component here is written once and works in either. Set `data-theme="mission"` or `data-theme="daylight"` on the root element; see `rising-design.md` for the token values and for how to choose.
 
-Faces are tokens too: `--font-display` (Rajdhani — titles, wordmark), `--font-text` (Inter — body and every control) and `--font-mono` (Share Tech Mono — readouts). `body` is Inter, so a title names its face. Sizes come from the seven-step scale in `rising-design.md` → "Text Styles".
+Faces are tokens too: `--font-display` (Rajdhani — titles, wordmark), `--font-text` (IBM Plex Sans — body and every control) and `--font-mono` (Share Tech Mono — readouts). `body` is IBM Plex Sans, so a title names its face. Sizes come from the seven-step scale in `rising-design.md` → "Text Styles".
 
 The whole layer is also published as a drop-in stylesheet:
 `<link rel="stylesheet" href="https://design-system.rising.company/rising.css">`
@@ -743,7 +743,7 @@ The label has no `//` — fields are items in a set; the prefix goes on the labe
 ### Rules
 
 - **16px input text, always.** Anything smaller triggers zoom-on-focus in mobile Safari.
-- Field labels are Inter 14px / 500 in `--text-body`: they name what to type, for a stranger.
+- Field labels are IBM Plex Sans 14px / 500 in `--text-body`: they name what to type, for a stranger.
 - Placeholders use `--text-dim` (5.5:1) and never stand in for the label.
 - Help and error copy are plain English sentences, not terse operator fragments.
 
@@ -947,7 +947,7 @@ Worked examples: `patterns/auth-split.html` (Daylight) and `patterns/auth-center
 
 The chrome behind the auth boundary: app bar on top, one page header per view, app footer at the bottom. Same markup in both themes. Chrome sits on `--bg-surface`, content on `--bg-base` — that one-step lift is the whole hierarchy.
 
-**App bar** — 56px, sticky, full-bleed with the 48px gutter. Four slots: **brand** (favicon mark + product name as a 20px `.wordmark`, linking to the product's home), **byline** (`.app-byline` — `by rising.company`, always; mono label voice, `by` in `--text-dim`, domain in `--text-muted`, `--accent-ink` on hover; it is the link to https://rising.company, same tab, and the one consistent way home from every product — the brand itself is never the way home), optional `.app-context` after it naming a *real* tenant/environment (`· ACME`, `· STAGING`; omitted when there is none), **nav** (3–5 Inter 14px links in sentence case, current one `aria-current="page"` → `--text-heading` + 1px `--accent-ink` rule), **session** (right-aligned: `.status`, then the user menu — trigger is initials chip + email + chevron; panel is `// Signed in as` + email, the product's account items, then Sign out last, ruled off, `--danger-ink` on hover). Status stays outside the menu. The exit is always "Sign out". No `// Rising` eyebrow — the mark says that. No CTA button — that's the landing `.nav`.
+**App bar** — 56px, sticky, full-bleed with the 48px gutter. Four slots: **brand** (favicon mark + product name as a 20px `.wordmark`, linking to the product's home), **byline** (`.app-byline` — `by rising.company`, always; mono label voice, `by` in `--text-dim`, domain in `--text-muted`, `--accent-ink` on hover; it is the link to https://rising.company, same tab, and the one consistent way home from every product — the brand itself is never the way home), optional `.app-context` after it naming a *real* tenant/environment (`· ACME`, `· STAGING`; omitted when there is none), **nav** (3–5 IBM Plex Sans 14px links in sentence case, current one `aria-current="page"` → `--text-heading` + 1px `--accent-ink` rule), **session** (right-aligned: `.status`, then the user menu — trigger is initials chip + email + chevron; panel is `// Signed in as` + email, the product's account items, then Sign out last, ruled off, `--danger-ink` on hover). Status stays outside the menu. The exit is always "Sign out". No `// Rising` eyebrow — the mark says that. No CTA button — that's the landing `.nav`.
 
 **App footer** — 16px vertical padding, mono `--text-dim` uppercase. Left `// PRODUCT · BUILD <date> · <sha>`; right two or three links and the rising.company backlink last. A status strip, not a sitemap.
 

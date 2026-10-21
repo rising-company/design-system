@@ -44,16 +44,16 @@ Apply with `data-theme` on the root element; `mission` is the default when absen
 ## Fonts
 
 ```
-Import: https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Share+Tech+Mono&family=Rajdhani:wght@500;700&display=swap
+Import: https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=Share+Tech+Mono&family=Rajdhani:wght@500;700&display=swap
 ```
 
 Three faces, one job each:
 
 - **`--font-display` — Rajdhani 700:** titles (hero, page, section, card) and the wordmark.
-- **`--font-text` — Inter 400 / 500 / 600:** everything a person reads or presses — body, lede, help, errors, inputs, **buttons, nav links, menu items, field labels**.
+- **`--font-text` — IBM Plex Sans 400 / 500 / 600:** everything a person reads or presses — body, lede, help, errors, inputs, **buttons, nav links, menu items, field labels**.
 - **`--font-mono` — Share Tech Mono:** readouts — eyebrows, section labels, stats, badges, tags, status, IDs, build stamps, footers.
 
-**The test is what the words are for:** read as a sentence or pressed → Inter; reports system state → mono; names the page → Rajdhani. `body` is Inter, so a bare `<h1>` needs `.page-title` (or `--font-display`) to be Rajdhani. Unchanged across themes.
+**The test is what the words are for:** read as a sentence or pressed → IBM Plex Sans; reports system state → mono; names the page → Rajdhani. `body` is IBM Plex Sans, so a bare `<h1>` needs `.page-title` (or `--font-display`) to be Rajdhani. Unchanged across themes.
 
 ## Tokens
 
@@ -119,11 +119,11 @@ Drive these from tokens so the same rule is inert in the other theme:
 | Page Title | Rajdhani | 36px (28px < 768px) | 700 | 3px | upper | `--text-heading` |
 | Section Heading | Rajdhani | 28px | 700 | 2px | — | `--text-heading` |
 | Card Title | Rajdhani | 20px | 700 | 1px | — | `--text-heading` |
-| Lede | Inter | 20px | 400 | — | — | `--text-muted` |
-| Body | Inter | 16px | 400 | — | — | `--text-muted` |
-| Button | Inter | 16px (14px sm) | 600 | — | sentence | per variant |
-| Nav link · menu item · field label | Inter | 14px | 500 | — | sentence | `--text-muted` / `--text-body` |
-| Help · error | Inter | 14px | 400 / 500 | — | — | `--text-muted` / `--danger-ink` |
+| Lede | IBM Plex Sans | 20px | 400 | — | — | `--text-muted` |
+| Body | IBM Plex Sans | 16px | 400 | — | — | `--text-muted` |
+| Button | IBM Plex Sans | 16px (14px sm) | 600 | — | sentence | per variant |
+| Nav link · menu item · field label | IBM Plex Sans | 14px | 500 | — | sentence | `--text-muted` / `--text-body` |
+| Help · error | IBM Plex Sans | 14px | 400 / 500 | — | — | `--text-muted` / `--danger-ink` |
 | Stat Value | Mono | 20px | — | 0.06em | — | `--accent-ink` |
 | Subtitle | Mono | 14px | — | 0.1em | — | `--text-muted` |
 | Eyebrow | Mono | 12px | — | 0.2em | upper | `--accent-ink` |
@@ -149,7 +149,7 @@ default; it grows when the reader has asked for larger text. Widths that hold te
   as disconnected letters at 10px; `em` keeps the ratio fixed whatever the size. The
   widest rung is `0.2em` — resist going past it, because past roughly a quarter of an em
   the eye stops seeing words and starts seeing characters.
-- **14px is the floor for Inter; reading text is 16px at 400.** Rajdhani never sets a paragraph.
+- **14px is the floor for IBM Plex Sans; reading text is 16px at 400.** Rajdhani never sets a paragraph.
 
 **On phones (≤ 768px): wrap or stack, never shrink.** The page title is the one style that
 changes: it steps down one rung to 28px, because 36px uppercase fits barely a dozen
@@ -257,7 +257,7 @@ animate(".card", { opacity: [0, 1], y: [8, 0] }, { type: "spring", visualDuratio
 
 ## Buttons
 
-`btn` + one of `btn-primary` / `btn-secondary` / `btn-ghost` / `btn-danger`; sizes `btn-sm` (34px, 14px type) / default (44px, 16px) / `btn-lg` (52px, 16px); `btn-block` for full width. Inter 600, **sentence case written in the markup** — no `text-transform`.
+`btn` + one of `btn-primary` / `btn-secondary` / `btn-ghost` / `btn-danger`; sizes `btn-sm` (34px, 14px type) / default (44px, 16px) / `btn-lg` (52px, 16px); `btn-block` for full width. IBM Plex Sans 600, **sentence case written in the markup** — no `text-transform`.
 
 - **`btn-primary`** (solid `--accent`) — the single loudest action on a view. A landing hero CTA, a form submit. One per screen.
 - **`btn-secondary`** (`--accent-wash` + `--accent-line`) — the HUD default for in-app actions. A solid mint slab repeated is too loud inside Mission chrome.
@@ -270,7 +270,7 @@ animate(".card", { opacity: [0, 1], y: [8, 0] }, { type: "spring", visualDuratio
 
 - Field labels have no `//` — fields are items in a set; the prefix goes on the form's opening label (`// Sign in`), once.
 - **Inputs use 16px text.** Anything smaller triggers zoom-on-focus in mobile Safari.
-- Field labels are Inter 14px / 500 in `--text-body` — they name what to type, for a stranger. Errors are Inter 14px / 500 in `--danger-ink`.
+- Field labels are IBM Plex Sans 14px / 500 in `--text-body` — they name what to type, for a stranger. Errors are IBM Plex Sans 14px / 500 in `--danger-ink`.
 - Placeholders use `--text-dim`, and never stand in for the label.
 - Help and error copy are plain English sentences, not terse operator fragments.
 
@@ -303,7 +303,7 @@ Copy rules: say what the product does *before* asking for an address; name the m
 
 The chrome behind the auth boundary — the same three pieces in every signed-in Rising product:
 
-1. **App bar** — 56px, sticky, `--bg-surface`, bottom border, full-bleed with the 48px gutter. Slots left→right: **brand** (favicon mark + product name as a 20px `.wordmark`, → product home), **byline** (`.app-byline` `by rising.company`, always — the link home, same tab; brand is never the way home), optional `· CONTEXT` for a real tenant/environment, **nav** (3–5 Inter 14px links in sentence case, current one `aria-current="page"` → `--text-heading` + 1px `--accent-ink` rule), **session** (right: `.status` dot + label, then the user menu — trigger = 24px initials chip + email + chevron; panel = `// Signed in as` + email, account items, **Sign out** last, ruled off, `--danger-ink` on hover). Status stays outside the menu; the exit is always "Sign out". No `// Rising` eyebrow, no CTA button.
+1. **App bar** — 56px, sticky, `--bg-surface`, bottom border, full-bleed with the 48px gutter. Slots left→right: **brand** (favicon mark + product name as a 20px `.wordmark`, → product home), **byline** (`.app-byline` `by rising.company`, always — the link home, same tab; brand is never the way home), optional `· CONTEXT` for a real tenant/environment, **nav** (3–5 IBM Plex Sans 14px links in sentence case, current one `aria-current="page"` → `--text-heading` + 1px `--accent-ink` rule), **session** (right: `.status` dot + label, then the user menu — trigger = 24px initials chip + email + chevron; panel = `// Signed in as` + email, account items, **Sign out** last, ruled off, `--danger-ink` on hover). Status stays outside the menu; the exit is always "Sign out". No `// Rising` eyebrow, no CTA button.
 2. **Page header** — one per view, inside `.app-main`: eyebrow → `.page-title` (+ actions right, same baseline) → `.subtitle`; 24px below, 32px margin, bottom border. Session controls never go here.
 3. **App footer** — `--bg-surface`, top border, `padding: 16px 48px`, mono `--text-dim` uppercase. Left `// PRODUCT · BUILD <date> · <sha>`; right ≤ 3 links + the rising.company backlink last. Pinned to the bottom by `.app { display:flex; flex-direction:column; min-height:100vh }`.
 

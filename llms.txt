@@ -190,28 +190,31 @@ not through darkness.
 
 ## Fonts
 
-Import: https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Share+Tech+Mono&family=Rajdhani:wght@500;700&display=swap
+Import: https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=Share+Tech+Mono&family=Rajdhani:wght@500;700&display=swap
 
 Three faces, one job each — the tokens live in `rising.css`:
 
 | Token | Face | Weights | Job |
 |---|---|---|---|
 | `--font-display` | "Rajdhani", sans-serif | 700 | titles (hero, page, section, card) and the wordmark |
-| `--font-text` | "Inter", system-ui, sans-serif | 400 · 500 · 600 | everything a person reads or presses: body, lede, help, errors, inputs, buttons, links, menu items, field labels |
+| `--font-text` | "IBM Plex Sans", system-ui, sans-serif | 400 · 500 · 600 | everything a person reads or presses: body, lede, help, errors, inputs, buttons, links, menu items, field labels |
 | `--font-mono` | "Share Tech Mono", monospace | 400 | readouts: eyebrows, section labels, stats, badges, tags, status, IDs, build stamps, footers |
 
 **The test is what the words are for.** If a person reads it as a sentence or presses
-it, it is Inter. If it reports the state of the system — a label over a group, a count,
+it, it is IBM Plex Sans. If it reports the state of the system — a label over a group, a count,
 a date, an ID, a build — it is mono. If it names the page, it is Rajdhani.
 
-`body` is Inter, so anything unclassed reads as text. Titles name their face
+`body` is IBM Plex Sans, so anything unclassed reads as text. Titles name their face
 (`.page-title`, `.sec-title`, `.card-title`, `.hero-title`, `.wordmark` all set
-`--font-display`); a bare `<h1>` with no class is Inter until you give it one.
+`--font-display`); a bare `<h1>` with no class is IBM Plex Sans until you give it one.
 
-Why Inter: Rajdhani is a display face — condensed, squared, lovely at 56px and tiring
-over a 15px paragraph. Inter is drawn for screens at text sizes, has a tall x-height
-that holds up on 1× displays, and stays neutral enough that Rajdhani and the mono keep
-the character. Unchanged across themes.
+Why IBM Plex Sans: Rajdhani is a display face — condensed, squared, lovely at 56px and
+tiring over a 15px paragraph. The text face needs to read cleanly at 14–16px on a 1×
+monitor, and it needs to belong to this brand rather than to every product on the web —
+which rules out Inter and the system UI font. Plex is an engineered grotesk: its squared
+curves and flat terminals rhyme with Rajdhani and the mono, so the three read as one
+instrument panel, while its open apertures and generous x-height keep long text easy.
+Unchanged across themes.
 
 ## Colors
 
@@ -310,12 +313,12 @@ renders between them.
 | Page Title | Rajdhani | 36px (28px below 768px) | 700 | 3px | uppercase | `--text-heading` |
 | Section Heading | Rajdhani | 28px | 700 | 2px | none | `--text-heading` |
 | Card Title | Rajdhani | 20px | 700 | 1px | none | `--text-heading` |
-| Lede | Inter | 20px | 400 | normal | none | `--text-muted` |
-| Body | Inter | 16px | 400 | normal | none | `--text-muted` |
-| Button | Inter | 16px (14px `.btn-sm`) | 600 | normal | none | per variant |
-| Nav Link / Menu Item | Inter | 14px | 500 | normal | none | `--text-muted` / `--text-body` |
-| Field Label | Inter | 14px | 500 | normal | none | `--text-body` |
-| Help / Error | Inter | 14px | 400 / 500 | normal | none | `--text-muted` / `--danger-ink` |
+| Lede | IBM Plex Sans | 20px | 400 | normal | none | `--text-muted` |
+| Body | IBM Plex Sans | 16px | 400 | normal | none | `--text-muted` |
+| Button | IBM Plex Sans | 16px (14px `.btn-sm`) | 600 | normal | none | per variant |
+| Nav Link / Menu Item | IBM Plex Sans | 14px | 500 | normal | none | `--text-muted` / `--text-body` |
+| Field Label | IBM Plex Sans | 14px | 500 | normal | none | `--text-body` |
+| Help / Error | IBM Plex Sans | 14px | 400 / 500 | normal | none | `--text-muted` / `--danger-ink` |
 | Stat Value | Share Tech Mono | 20px | normal | 0.06em | none | `--accent-ink` |
 | Subtitle | Share Tech Mono | 14px | normal | 0.1em | none | `--text-muted` |
 | Eyebrow | Share Tech Mono | 12px | normal | 0.2em | uppercase | `--accent-ink` |
@@ -379,7 +382,7 @@ render as grey blur. The identical text looks crisp on a Retina laptop, which is
 floor has to be a rule rather than a judgement call — the display you designed on is not
 the display it ships to.
 
-**14px is the floor for Inter; reading text is 16px.** Inter's stems are sturdier than the
+**14px is the floor for IBM Plex Sans; reading text is 16px.** Plex's stems are sturdier than the
 mono's, so it holds at 14px for help, errors and controls. A paragraph a person reads
 start to finish is 16px at weight 400 — and Rajdhani never sets a paragraph at all.
 
@@ -668,7 +671,7 @@ it to `none`, where elevation is background shift only. One rule, both themes.
 
 ### Button
 
-Inter 600, sentence case, at body size — a control is something a person reads and
+IBM Plex Sans 600, sentence case, at body size — a control is something a person reads and
 presses, so it speaks in the text face. Write the label in sentence case in the markup
 (`Send magic link`); nothing transforms it. Three variants plus danger; three sizes:
 `.btn-sm` 34px tall at 14px, `.btn` 44px at 16px, `.btn-lg` 52px at 16px.
@@ -768,7 +771,7 @@ the form (`// Sign in`), once. See "// Prefix Convention".
 ```
 
 Inputs use 16px text — anything smaller triggers zoom-on-focus in mobile Safari. The
-label is Inter 14px / 500 in `--text-body`: it names what to type, for a stranger, so it
+label is IBM Plex Sans 14px / 500 in `--text-body`: it names what to type, for a stranger, so it
 is text, not a readout. Placeholders are `--text-dim` and never stand in for the label.
 
 ### Card
@@ -794,7 +797,7 @@ Vertical stack of stat rows:
 - `background: color-mix(in srgb, var(--bg-base) 92%, transparent)`, `border: 1px solid var(--accent-line)`, radius 4px, padding 8px 12px
 - Name: Rajdhani, 16px, weight 700, `var(--text-heading)`, letter-spacing 1px
 - Material line: Share Tech Mono, 12px, `var(--accent-ink)`, letter-spacing 0.1em
-- Description: Inter, 14px, `var(--text-muted)`, line-height 1.5
+- Description: IBM Plex Sans, 14px, `var(--text-muted)`, line-height 1.5
 
 ### Page Header
 The per-view heading, one per page, directly under the app bar. Not the app bar itself —
@@ -987,7 +990,7 @@ pieces so that moving between products feels like moving between rooms of one bu
    - **Context** — optional `.app-context` after the byline (mono, `--text-dim`,
      `·`-separated) names a *real* tenant, workspace or environment: `· ACME`, `· STAGING`.
      Omit it when there is none; the byline already says whose product this is.
-   - **Nav** — the product's top-level sections as Inter 14px / 500 links in sentence case,
+   - **Nav** — the product's top-level sections as IBM Plex Sans 14px / 500 links in sentence case,
      `--text-muted`, hover `--accent-ink`. They are controls, not readouts. The current one takes `aria-current="page"`: `--text-heading` with a
      1px `--accent-ink` rule under it. Three to five links; more than that is a sidebar product.
    - **Session** — right-aligned: an optional `.status` readout, then the **user menu**. Its
