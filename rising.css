@@ -7,7 +7,7 @@
    (light) on <html>.
 
    Requires the fonts:
-   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Rajdhani:wght@300;500;700&display=swap">
+   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=Share+Tech+Mono&family=Rajdhani:wght@500;700&display=swap">
    ═══════════════════════════════════════════════════════════════ */
 
 /* ══════════════ THEME TOKENS ══════════════ */
@@ -26,9 +26,7 @@
     --text-heading: #e8f4ff;
     --text-body: #c8d8e8;
     --text-muted: #84a89a;
-    --text-subtle: #7d9b8c;
-    --text-label: #6e8f80;
-    --text-dim: #61856d;
+    --text-dim: #6e8f80;
 
     --accent: #3af0a0;
     --accent-hover: #6ff7be;
@@ -73,9 +71,7 @@
     --text-heading: #0b1a14;
     --text-body: #26332d;
     --text-muted: #43564c;
-    --text-subtle: #4a5d54;
-    --text-label: #52655b;
-    --text-dim: #61746b;
+    --text-dim: #52655b;
 
     --accent: #3af0a0;
     --accent-hover: #22dc8c;
@@ -105,6 +101,34 @@
     --chrome-grid-line: rgba(11, 26, 20, 0.035);
   }
 
+  /* Four text grays, not six. The two retired names stay as aliases so a
+     product that still says --text-subtle or --text-label keeps rendering;
+     new code uses --text-muted and --text-dim. Declared on every themed
+     element so a nested data-theme resolves against its own ramp. */
+  :root, [data-theme] {
+    --text-subtle: var(--text-muted);
+    --text-label: var(--text-dim);
+  }
+
+/* ══════════════ TYPE TOKENS ══════════════ */
+/* Three faces, one job each: Rajdhani for display (titles, wordmark), IBM Plex Sans
+   for everything a person reads or presses, Share Tech Mono for readouts
+   (labels, data, IDs, build stamps). Seven sizes, each step clearly
+   bigger than the last; nothing renders between them. */
+:root {
+  --font-display: "Rajdhani", sans-serif;
+  --font-text: "IBM Plex Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-mono: "Share Tech Mono", ui-monospace, monospace;
+
+  --type-label: 0.75rem;    /* 12 — mono labels, the floor */
+  --type-small: 0.875rem;   /* 14 — help text, nav links, small buttons */
+  --type-body: 1rem;        /* 16 — body, inputs, buttons */
+  --type-lead: 1.25rem;     /* 20 — lede, card title, stat value */
+  --type-section: 1.75rem;  /* 28 — section heading, page title on phones */
+  --type-page: 2.25rem;     /* 36 — page title */
+  --type-hero: 3.5rem;      /* 56 — hero title, at its widest */
+}
+
 /* ══════════════ BASE ══════════════ */
 * { margin: 0; padding: 0; box-sizing: border-box; }
 
@@ -113,7 +137,8 @@ html { scroll-behavior: smooth; }
 body {
   background: var(--bg-base);
   color: var(--text-body);
-  font-family: "Rajdhani", sans-serif;
+  font-family: var(--font-text);
+  font-size: var(--type-body);
   min-height: 100vh;
   transition: background 0.25s ease, color 0.25s ease;
 }
@@ -162,58 +187,64 @@ body::before {
 
 /* ══════════════ TEXT STYLES ══════════════ */
 .eyebrow {
-  font-family: "Share Tech Mono", monospace;
-  font-size: 0.75rem; letter-spacing: 0.2em; text-transform: uppercase;
+  font-family: var(--font-mono);
+  font-size: var(--type-label); letter-spacing: 0.2em; text-transform: uppercase;
   color: var(--accent-ink);
 }
 
 .section-label {
-  font-family: "Share Tech Mono", monospace;
-  font-size: 0.75rem; letter-spacing: 0.2em; text-transform: uppercase;
-  color: var(--text-label);
+  font-family: var(--font-mono);
+  font-size: var(--type-label); letter-spacing: 0.2em; text-transform: uppercase;
+  color: var(--text-dim);
 }
 
 .page-title {
-  font-size: 2.25rem; font-weight: 700; letter-spacing: 3px;
+  font-family: var(--font-display); font-size: var(--type-page); font-weight: 700; letter-spacing: 3px;
   text-transform: uppercase; color: var(--text-heading); line-height: 1.1;
   /* A title can carry data (a venue's name); a long word breaks rather
      than widening the page. */
   min-width: 0; overflow-wrap: anywhere;
 }
-/* On a phone 36px fits barely a dozen characters; see "On phones" in llms.txt. */
-@media (max-width: 768px) { .page-title { font-size: 1.625rem; } }
+/* On a phone 36px fits barely a dozen characters, so the title steps down one
+   rung to 28; see "On phones" in llms.txt. */
+@media (max-width: 768px) { .page-title { font-size: var(--type-section); } }
 
 .hero-title {
-  font-family: "Rajdhani", sans-serif; font-weight: 700;
-  font-size: clamp(2.25rem, 7vw, 3.5rem); letter-spacing: 2px; line-height: 1.1;
+  font-family: var(--font-display); font-weight: 700;
+  font-size: clamp(var(--type-page), 7vw, var(--type-hero)); letter-spacing: 2px; line-height: 1.1;
   text-transform: uppercase; color: var(--text-heading);
 }
 
-.sec-title { font-size: 1.75rem; font-weight: 700; letter-spacing: 2px; color: var(--text-heading); line-height: 1.1; }
-.card-title { font-size: 1.25rem; font-weight: 700; letter-spacing: 1px; color: var(--text-heading); }
-.lede { font-size: 1.125rem; font-weight: 500; line-height: 1.5; color: var(--text-muted); }
-.body { font-size: 0.9375rem; font-weight: 500; line-height: 1.6; color: var(--text-muted); }
+.sec-title { font-family: var(--font-display); font-size: var(--type-section); font-weight: 700; letter-spacing: 2px; color: var(--text-heading); line-height: 1.1; }
+.card-title { font-family: var(--font-display); font-size: var(--type-lead); font-weight: 700; letter-spacing: 1px; color: var(--text-heading); }
+/* Reading text is IBM Plex Sans at 400: Rajdhani is a display face, and at 15px its
+   narrow squared letters tire the eye over a paragraph. */
+.lede { font-family: var(--font-text); font-size: var(--type-lead); font-weight: 400; line-height: 1.5; color: var(--text-muted); }
+.body { font-family: var(--font-text); font-size: var(--type-body); font-weight: 400; line-height: 1.6; color: var(--text-muted); }
 
 .subtitle {
-  font-family: "Share Tech Mono", monospace;
-  font-size: 0.8125rem; letter-spacing: 0.1em; color: var(--text-subtle);
+  font-family: var(--font-mono);
+  font-size: var(--type-small); letter-spacing: 0.1em; color: var(--text-muted);
 }
 
 .stat-label {
-  font-family: "Share Tech Mono", monospace;
-  font-size: 0.75rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-label);
+  font-family: var(--font-mono);
+  font-size: var(--type-label); letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-dim);
 }
 
 .stat-value {
-  font-family: "Share Tech Mono", monospace;
-  font-size: 1.0625rem; letter-spacing: 0.06em; color: var(--accent-ink);
+  font-family: var(--font-mono);
+  font-size: var(--type-lead); letter-spacing: 0.06em; color: var(--accent-ink);
 }
 
 /* ══════════════ BUTTONS ══════════════ */
+  /* A control is something a person reads and presses, so it speaks in the
+     text face, in sentence case, at body size: the call to action is never
+     the smallest type on the page. Mono caps stay with the readouts. */
   .btn {
-    font-family: "Share Tech Mono", monospace;
-    font-size: 0.75rem; letter-spacing: 0.1em; text-transform: uppercase;
-    padding: 13px 26px; border-radius: 4px; border: 1px solid transparent;
+    font-family: var(--font-text);
+    font-size: var(--type-body); font-weight: 600; line-height: 1.25;
+    padding: 11px 24px; border-radius: 4px; border: 1px solid transparent;
     display: inline-flex; align-items: center; justify-content: center; gap: 10px;
     cursor: pointer; text-decoration: none; white-space: nowrap;
     transition: background 0.2s, border-color 0.2s, color 0.2s, opacity 0.2s, transform 0.2s;
@@ -221,8 +252,8 @@ body::before {
   /* Press: the first thing a finger feels. Touch-down is instant (0s on the
      way in); the release eases back at Quick. */
   .btn:active:not([disabled]):not([aria-busy="true"]) { transform: scale(0.97); transition-duration: 0s; }
-  .btn-sm { font-size: 0.75rem; padding: 9px 18px; letter-spacing: 0.075em; }
-  .btn-lg { font-size: 0.8125rem; padding: 17px 34px; letter-spacing: 0.15em; }
+  .btn-sm { font-size: var(--type-small); padding: 7px 16px; }
+  .btn-lg { padding: 15px 32px; }
   /* A full-width button is the one place a label may wrap — at large text sizes
      a nowrap label would push its card past a phone screen. */
   .btn-block { display: flex; width: 100%; white-space: normal; text-align: center; }
@@ -240,7 +271,7 @@ body::before {
   .btn-danger:hover { background: var(--danger-ink); color: var(--bg-base); }
 
   .btn[disabled], .btn[aria-busy="true"] {
-    color: var(--text-label); background: transparent;
+    color: var(--text-dim); background: transparent;
     border-color: var(--border-subtle); cursor: not-allowed;
   }
 
@@ -249,29 +280,31 @@ body::before {
 /* ══════════════ FORM FIELDS ══════════════ */
 .field { display: flex; flex-direction: column; gap: 8px; }
 
+/* Field labels name what to type, for a stranger: text face, sentence case. */
 .field-label {
-  font-family: "Share Tech Mono", monospace; font-size: 0.75rem;
-  letter-spacing: 0.15em; text-transform: uppercase; color: var(--text-label);
+  font-family: var(--font-text); font-size: var(--type-small); font-weight: 500;
+  color: var(--text-body);
 }
 
 .input {
-  font-family: "Rajdhani", sans-serif; font-size: 1rem; font-weight: 500;
+  font-family: var(--font-text); font-size: var(--type-body); font-weight: 400;
   color: var(--text-body); background: var(--bg-surface);
   border: 1px solid var(--border); border-radius: 4px;
   padding: 13px 14px; width: 100%;
   transition: border-color 0.2s, background 0.2s;
 }
-.input::placeholder { color: var(--text-label); font-weight: 400; }
+.input::placeholder { color: var(--text-dim); font-weight: 400; }
 .input:hover { border-color: var(--border-hover); }
 .input:focus { outline: none; border-color: var(--accent-ink); background: var(--bg-surface-hover); }
 .input:focus-visible { outline: 1px solid var(--accent-ink); outline-offset: 2px; }
-.input[disabled] { color: var(--text-label); border-color: var(--border-subtle); cursor: not-allowed; }
+.input[disabled] { color: var(--text-dim); border-color: var(--border-subtle); cursor: not-allowed; }
 
-.field-help { font-size: 0.875rem; font-weight: 500; color: var(--text-muted); line-height: 1.5; }
+.field-help { font-family: var(--font-text); font-size: var(--type-small); font-weight: 400; color: var(--text-muted); line-height: 1.5; }
 
+/* An error is a sentence for a person, not a readout. */
 .field-error {
-  font-family: "Share Tech Mono", monospace; font-size: 0.75rem;
-  letter-spacing: 0.05em; color: var(--danger-ink);
+  font-family: var(--font-text); font-size: var(--type-small); font-weight: 500;
+  color: var(--danger-ink);
 }
 .field.is-error .input { border-color: var(--danger-ink); }
 
@@ -302,17 +335,17 @@ a.card:hover, .card.is-interactive:hover { border-color: var(--border-hover); ba
 a.card:hover::before, .card.is-interactive:hover::before { opacity: 1; }
 
 .card-tag {
-  font-family: "Share Tech Mono", monospace;
-  font-size: 0.75rem; letter-spacing: 0.15em; text-transform: uppercase;
+  font-family: var(--font-mono);
+  font-size: var(--type-label); letter-spacing: 0.15em; text-transform: uppercase;
   color: var(--accent-ink);
 }
 
 /* ══════════════ BADGE ══════════════ */
 .badge {
   display: inline-block;
-  font-family: "Share Tech Mono", monospace;
-  font-size: 0.75rem; letter-spacing: 0.05em;
-  background: var(--bg-inset); color: var(--text-label);
+  font-family: var(--font-mono);
+  font-size: var(--type-label); letter-spacing: 0.05em;
+  background: var(--bg-inset); color: var(--text-dim);
   border: 1px solid var(--border-subtle); border-radius: 3px;
   padding: 4px 8px;
 }
@@ -344,7 +377,7 @@ a.card:hover::before, .card.is-interactive:hover::before { opacity: 1; }
 .nav-inner { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 8px 24px; width: 100%; }
 
 .wordmark {
-  font-size: 1.25rem; font-weight: 700; letter-spacing: 3px;
+  font-family: var(--font-display); font-size: var(--type-lead); font-weight: 700; letter-spacing: 3px;
   text-transform: uppercase; color: var(--text-heading);
   text-decoration: none;
 }
@@ -358,9 +391,9 @@ a.card:hover::before, .card.is-interactive:hover::before { opacity: 1; }
 .nav-links { display: flex; align-items: center; gap: 28px; }
 
 .nav-links a {
-  font-family: "Share Tech Mono", monospace;
-  font-size: 0.75rem; letter-spacing: 0.1em; text-transform: uppercase;
-  color: var(--text-label); text-decoration: none; white-space: nowrap; transition: color 0.2s;
+  font-family: var(--font-text);
+  font-size: var(--type-small); font-weight: 500;
+  color: var(--text-muted); text-decoration: none; white-space: nowrap; transition: color 0.2s;
 }
 .nav-links a:hover { color: var(--accent-ink); }
 
@@ -403,36 +436,36 @@ a.card:hover::before, .card.is-interactive:hover::before { opacity: 1; }
   color: var(--text-heading); text-decoration: none;
 }
 .app-brand img, .app-brand svg { width: 24px; height: 24px; border-radius: 4px; flex-shrink: 0; }
-.app-brand .wordmark { font-size: 1.125rem; letter-spacing: 3px; }
+.app-brand .wordmark { letter-spacing: 3px; }
 
 /* Byline: the way home. "by rising.company" after the wordmark, in the
    label voice, and it is the link — same tab, this is navigation. The
    negative margin pulls it from the bar's 32px gap to the brand's 12px. */
 .app-byline {
-  font-family: "Share Tech Mono", monospace;
-  font-size: 0.75rem; letter-spacing: 0.1em; text-transform: uppercase;
+  font-family: var(--font-mono);
+  font-size: var(--type-label); letter-spacing: 0.1em; text-transform: uppercase;
   color: var(--text-dim); text-decoration: none; white-space: nowrap;
   transition: color 0.2s;
 }
 .app-brand + .app-byline { margin-left: -20px; }
-.app-byline span { color: var(--text-label); transition: color 0.2s; }
+.app-byline span { color: var(--text-muted); transition: color 0.2s; }
 .app-byline:hover, .app-byline:hover span { color: var(--accent-ink); }
 
 .app-context {
-  font-family: "Share Tech Mono", monospace;
-  font-size: 0.75rem; letter-spacing: 0.1em; text-transform: uppercase;
-  color: var(--text-label); white-space: nowrap;
+  font-family: var(--font-mono);
+  font-size: var(--type-label); letter-spacing: 0.1em; text-transform: uppercase;
+  color: var(--text-dim); white-space: nowrap;
 }
 .app-context::before { content: "·"; margin-right: 12px; color: var(--text-dim); }
 
-/* Primary navigation: mono links, active one carries a 1px accent rule
+/* Primary navigation: text-face links, active one carries a 1px accent rule
    sitting on the bar's bottom border. */
 .app-nav { display: flex; align-items: center; gap: 24px; flex: 1 1 auto; min-width: 0; } /* auto basis: too wide → wraps to its own row */
 
 .app-nav a {
-  font-family: "Share Tech Mono", monospace;
-  font-size: 0.75rem; letter-spacing: 0.1em; text-transform: uppercase;
-  color: var(--text-label); text-decoration: none; white-space: nowrap;
+  font-family: var(--font-text);
+  font-size: var(--type-small); font-weight: 500;
+  color: var(--text-muted); text-decoration: none; white-space: nowrap;
   padding-block: 6px; border-bottom: 1px solid transparent;
   transition: color 0.2s, border-color 0.2s;
 }
@@ -454,14 +487,14 @@ a.card:hover::before, .card.is-interactive:hover::before { opacity: 1; }
 .user-menu-trigger {
   display: flex; align-items: center; gap: 10px;
   padding: 4px 0; cursor: pointer; border-radius: 4px;
-  color: var(--text-subtle); transition: color 0.2s;
+  color: var(--text-muted); transition: color 0.2s;
 }
 .user-menu-trigger:hover, .user-menu[open] > .user-menu-trigger,
 .user-menu-trigger[aria-expanded="true"] { color: var(--text-heading); }
 
 .user-menu-email {
-  font-family: "Share Tech Mono", monospace;
-  font-size: 0.75rem; letter-spacing: 0.05em;
+  font-family: var(--font-mono);
+  font-size: var(--type-label); letter-spacing: 0.05em;
   max-width: 24ch; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
 }
 
@@ -469,7 +502,7 @@ a.card:hover::before, .card.is-interactive:hover::before { opacity: 1; }
 .user-initials {
   display: inline-flex; align-items: center; justify-content: center;
   width: 24px; height: 24px; border-radius: 4px; flex-shrink: 0;
-  font-family: "Share Tech Mono", monospace; font-size: 0.75rem; letter-spacing: 0.05em;
+  font-family: var(--font-mono); font-size: var(--type-label); letter-spacing: 0.05em;
   text-transform: uppercase; color: var(--accent-ink);
   background: var(--accent-wash); border: 1px solid var(--accent-line);
 }
@@ -494,15 +527,15 @@ a.card:hover::before, .card.is-interactive:hover::before { opacity: 1; }
   padding: 8px 10px 10px; margin-bottom: 6px;
   border-bottom: 1px solid var(--border);
 }
-.user-menu-head .section-label { font-size: 0.75rem; letter-spacing: 0.15em; margin-bottom: 4px; }
+.user-menu-head .section-label { font-size: var(--type-label); letter-spacing: 0.15em; margin-bottom: 4px; }
 .user-menu-head .user-menu-email { max-width: none; color: var(--text-body); }
 
 .user-menu-item {
   display: flex; align-items: center; gap: 10px; width: 100%;
-  padding: 10px; border-radius: 4px; text-align: left;
-  font-family: "Share Tech Mono", monospace;
-  font-size: 0.75rem; letter-spacing: 0.1em; text-transform: uppercase;
-  color: var(--text-label); background: none; border: 0; cursor: pointer;
+  padding: 8px 10px; border-radius: 4px; text-align: left;
+  font-family: var(--font-text);
+  font-size: var(--type-small); font-weight: 500;
+  color: var(--text-body); background: none; border: 0; cursor: pointer;
   text-decoration: none; transition: background 0.2s, color 0.2s;
 }
 .user-menu-item:hover { background: var(--bg-surface-hover); color: var(--text-heading); }
@@ -513,9 +546,9 @@ a.card:hover::before, .card.is-interactive:hover::before { opacity: 1; }
 
 /* Plain links in the session cluster (help, docs) share the nav-link voice. */
 .app-session > a {
-  font-family: "Share Tech Mono", monospace;
-  font-size: 0.75rem; letter-spacing: 0.1em; text-transform: uppercase;
-  color: var(--text-label); text-decoration: none; transition: color 0.2s;
+  font-family: var(--font-text);
+  font-size: var(--type-small); font-weight: 500;
+  color: var(--text-muted); text-decoration: none; transition: color 0.2s;
 }
 .app-session > a:hover { color: var(--accent-ink); }
 
@@ -523,9 +556,9 @@ a.card:hover::before, .card.is-interactive:hover::before { opacity: 1; }
    .is-down recolour the dot and stop the pulse. */
 .status {
   display: inline-flex; align-items: center; gap: 8px;
-  font-family: "Share Tech Mono", monospace;
-  font-size: 0.75rem; letter-spacing: 0.1em; text-transform: uppercase;
-  color: var(--text-label); white-space: nowrap;
+  font-family: var(--font-mono);
+  font-size: var(--type-label); letter-spacing: 0.1em; text-transform: uppercase;
+  color: var(--text-dim); white-space: nowrap;
 }
 .status::before {
   content: ""; width: 6px; height: 6px; border-radius: 50%;
@@ -566,8 +599,8 @@ a.card:hover::before, .card.is-interactive:hover::before { opacity: 1; }
   gap: 12px 24px; padding: 16px 48px;
   background: var(--bg-surface);
   border-top: 1px solid var(--border);
-  font-family: "Share Tech Mono", monospace;
-  font-size: 0.75rem; letter-spacing: 0.1em; text-transform: uppercase;
+  font-family: var(--font-mono);
+  font-size: var(--type-label); letter-spacing: 0.1em; text-transform: uppercase;
   color: var(--text-dim);
 }
 .app-footer a { color: inherit; text-decoration: none; transition: color 0.2s; }
@@ -601,7 +634,7 @@ a.card:hover::before, .card.is-interactive:hover::before { opacity: 1; }
   background: var(--bg-surface); border-right: 1px solid var(--border);
 }
 .app-sidebar-top { padding: 40px 32px 28px; display: flex; flex-direction: column; gap: 12px; }
-.app-sidebar-top .app-brand .wordmark { font-size: 1.5rem; letter-spacing: 2px; }
+.app-sidebar-top .app-brand .wordmark { letter-spacing: 2px; }
 .app-sidebar-top .app-brand + .app-byline { margin: -4px 0 0; }
 .app-sidebar-top .app-context::before { content: none; }
 .app-sidebar-top .app-context { margin-right: 0; }
@@ -623,28 +656,31 @@ a.card:hover::before, .card.is-interactive:hover::before { opacity: 1; }
   width: 2px; height: 16px; border-radius: 1px; background: var(--accent);
 }
 .app-sidebar-nav .tag {
-  font-family: "Share Tech Mono", monospace; font-size: 0.75rem; letter-spacing: 1px;
-  width: 1.75rem; flex-shrink: 0; color: var(--text-subtle); transition: color 0.2s;
+  font-family: var(--font-mono); font-size: var(--type-label); letter-spacing: 1px;
+  width: 1.75rem; flex-shrink: 0; color: var(--text-muted); transition: color 0.2s;
 }
-.app-sidebar-nav a:hover .tag { color: var(--text-muted); }
+.app-sidebar-nav a:hover .tag { color: var(--text-body); }
 .app-sidebar-nav a[aria-current="page"] .tag { color: var(--accent-ink); }
-.app-sidebar-nav .label { font-family: "Rajdhani", sans-serif; font-size: 0.875rem; font-weight: 500; letter-spacing: 1px; }
+.app-sidebar-nav .label { font-family: var(--font-text); font-size: var(--type-small); font-weight: 500; }
 
 /* Bottom: session, then a rule, then build + backlink. Sign out last. */
 .app-sidebar-bottom { padding: 20px 32px; display: flex; flex-direction: column; gap: 8px; }
 .app-sidebar-bottom .section-label { letter-spacing: 0.15em; }
-.app-sidebar-bottom .user-menu-email { max-width: none; color: var(--text-subtle); }
+.app-sidebar-bottom .user-menu-email { max-width: none; color: var(--text-muted); }
 .app-sidebar-bottom a, .app-sidebar-bottom button {
   align-self: flex-start; padding: 0; background: none; border: 0; cursor: pointer;
-  font-family: "Share Tech Mono", monospace; font-size: 0.75rem; letter-spacing: 0.1em;
-  text-transform: uppercase; color: var(--text-label); text-decoration: none; transition: color 0.2s;
+  font-family: var(--font-text); font-size: var(--type-small); font-weight: 500;
+  color: var(--text-muted); text-decoration: none; transition: color 0.2s;
 }
 .app-sidebar-bottom a:hover, .app-sidebar-bottom button:hover { color: var(--text-heading); }
 .app-sidebar-bottom .user-menu-signout { margin: 0; border: 0; padding: 0; width: auto; }
 .app-sidebar-bottom .user-menu-signout:hover { color: var(--danger-ink); }
 .app-sidebar-bottom .app-sidebar-rule { margin: 12px 0; }
-.app-sidebar-bottom .build { font-family: "Share Tech Mono", monospace; font-size: 0.75rem; letter-spacing: 0.05em; text-transform: uppercase; color: var(--text-dim); white-space: nowrap; }
-.app-sidebar-bottom .rising-backlink { color: var(--text-dim); }
+.app-sidebar-bottom .build { font-family: var(--font-mono); font-size: var(--type-label); letter-spacing: 0.05em; text-transform: uppercase; color: var(--text-dim); white-space: nowrap; }
+.app-sidebar-bottom .rising-backlink {
+  font-family: var(--font-mono); font-size: var(--type-label); font-weight: 400;
+  letter-spacing: 0.2em; text-transform: uppercase; color: var(--text-dim);
+}
 .app-sidebar-bottom .rising-backlink:hover { color: var(--accent-ink); }
 
 /* The phone chrome of a sidebar product: hidden until the sidebar hides. */
@@ -675,7 +711,7 @@ a.card:hover::before, .card.is-interactive:hover::before { opacity: 1; }
     mask-image: linear-gradient(to right, transparent, #000 24px, #000 calc(100% - 24px), transparent);
   }
   .app-nav::-webkit-scrollbar { display: none; }
-  .app-nav a { padding: 16px 0 15px; line-height: 1; }
+  .app-nav a { padding: 15px 0 14px; line-height: 1; }
 }
 
 @media (max-width: 640px) {
@@ -697,16 +733,16 @@ a.card:hover::before, .card.is-interactive:hover::before { opacity: 1; }
 .hero-actions { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; margin-top: 32px; }
 
 .hero-trust {
-  font-family: "Share Tech Mono", monospace;
-  font-size: 0.75rem; letter-spacing: 0.15em; text-transform: uppercase;
-  color: var(--text-label); margin-top: 24px;
+  font-family: var(--font-mono);
+  font-size: var(--type-label); letter-spacing: 0.15em; text-transform: uppercase;
+  color: var(--text-dim); margin-top: 24px;
 }
 
 .steps { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 32px; }
 
 .step-num {
-  font-family: "Share Tech Mono", monospace;
-  font-size: 0.8125rem; letter-spacing: 0.1em; color: var(--accent-ink);
+  font-family: var(--font-mono);
+  font-size: var(--type-small); letter-spacing: 0.1em; color: var(--accent-ink);
   padding-bottom: 12px; margin-bottom: 12px;
   border-bottom: 1px solid var(--border);
 }
@@ -723,8 +759,8 @@ a.card:hover::before, .card.is-interactive:hover::before { opacity: 1; }
 .auth-points {
   list-style: none; padding: 0; margin: 32px 0 0;
   display: flex; flex-direction: column; gap: 12px;
-  font-family: "Share Tech Mono", monospace; font-size: 0.75rem;
-  letter-spacing: 0.05em; color: var(--text-subtle);
+  font-family: var(--font-mono); font-size: var(--type-label);
+  letter-spacing: 0.05em; color: var(--text-muted);
 }
 .auth-points li::before { content: "+"; color: var(--accent-ink); margin-right: 10px; }
 
@@ -742,8 +778,8 @@ a.card:hover::before, .card.is-interactive:hover::before { opacity: 1; }
 
 /* ══════════════ FOOTER ══════════════ */
 .site-footer {
-  font-family: "Share Tech Mono", monospace;
-  font-size: 0.75rem; letter-spacing: 0.1em; color: var(--text-dim);
+  font-family: var(--font-mono);
+  font-size: var(--type-label); letter-spacing: 0.1em; color: var(--text-dim);
   border-top: 1px solid var(--border);
   padding-block: 24px;
 }
@@ -752,8 +788,8 @@ a.card:hover::before, .card.is-interactive:hover::before { opacity: 1; }
 .site-footer a:hover { color: var(--accent-ink); }
 
 .rising-backlink {
-  font-family: "Share Tech Mono", monospace;
-  font-size: 0.75rem; letter-spacing: 0.2em; text-transform: uppercase;
+  font-family: var(--font-mono);
+  font-size: var(--type-label); letter-spacing: 0.2em; text-transform: uppercase;
   color: var(--text-dim); text-decoration: none; transition: color 0.2s;
 }
 .rising-backlink:hover { color: var(--accent-ink); }
@@ -772,8 +808,6 @@ a.card:hover::before, .card.is-interactive:hover::before { opacity: 1; }
 @media (prefers-contrast: more) {
   :root:not([data-theme="daylight"]), [data-theme="mission"] {
     --text-muted: #b8ccc2;
-    --text-subtle: #b8ccc2;
-    --text-label: #a3bdb0;
     --text-dim: #a3bdb0;
     --border: #466b58;
     --border-subtle: #466b58;
@@ -784,8 +818,6 @@ a.card:hover::before, .card.is-interactive:hover::before { opacity: 1; }
   }
   [data-theme="daylight"] {
     --text-muted: #26332d;
-    --text-subtle: #2e3d36;
-    --text-label: #34443c;
     --text-dim: #34443c;
     --accent-ink: #075c3a;
     --border: #7a9085;
