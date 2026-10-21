@@ -12,8 +12,8 @@
 
 ## Themes
 
-Themes are a **product decision, not a viewer preference**. A product picks one theme and
-commits to it. Both themes expose the *same variable names*, so every component below is
+The **default** theme is a product decision: a product picks it by who it serves, below.
+It may then opt in to letting the reader's own appearance setting decide (`data-theme="auto"`). Both themes expose the *same variable names*, so every component below is
 written once and works in either.
 
 ### Picking a theme
@@ -33,8 +33,14 @@ Rules of thumb:
 - **If the user is already logged in and doing operator work, it's Mission.**
 - A product may ship both — Daylight for its public/marketing surface and Mission for the
   app behind the login. Switch at the auth boundary, not per-page.
-- A Daylight product **may** offer Mission as an opt-in user dark mode. A Mission product
-  must not silently flip to Daylight.
+- **The reader's appearance setting may decide — if the product opts in.** A product picks
+  its default theme by the rules above. It may then opt in to `data-theme="auto"`, which
+  follows the reader's OS setting: Mission unless the OS asks for light, then Daylight. A
+  product that hasn't opted in stays on its theme whatever the OS says.
+- **Never override a choice the person made.** If the product offers a theme control, it has
+  three states — *System* (= `auto`), *Mission*, *Daylight* — remembers the choice per
+  person, and renders it on the server so the page never flashes the wrong theme first.
+  Nothing switches theme on its own: not the time of day, not the page, not the route.
 
 ### Applying a theme
 
@@ -42,7 +48,15 @@ Set `data-theme` on the root element. `mission` is the default when the attribut
 
 ```html
 <html data-theme="daylight">
+<html data-theme="auto">   <!-- opt-in: follow the reader's OS appearance -->
 ```
+
+`auto` is pure CSS — a `prefers-color-scheme: light` block that mirrors the Daylight tokens,
+including the Increase Contrast overrides — so there is no script and no flash. Put it on
+`<html>` only. Each theme also sets `color-scheme`, so native scrollbars, date pickers and
+autofill follow the theme. A product with a theme control writes the person's choice
+(`auto`, `mission` or `daylight`) into the server-rendered `<html>` — from a cookie, say —
+rather than swapping it in after load.
 
 ```css
 /* ---- Mission (default / dark) ---- */
