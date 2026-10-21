@@ -837,6 +837,45 @@ The label has no `//` — fields are items in a set; the prefix goes on the labe
 
 ---
 
+## Checkbox & Radio
+
+Native inputs in `accent-color: var(--accent-ink)`; the row is the `<label>` (44px); a group is a `fieldset.field` with `legend.field-label`. Radios for one of 2–5 choices; a checkbox takes effect on submit. Rules: `llms.txt` → "Checkbox & Radio".
+
+```html
+<fieldset class="field">
+  <legend class="field-label">Tell me when</legend>
+  <label class="check"><input type="checkbox" name="notify" value="reply" checked>Someone replies</label>
+  <label class="check"><input type="checkbox" name="notify" value="close">A huddle closes</label>
+</fieldset>
+
+<fieldset class="field">
+  <legend class="field-label">Who sees the replies</legend>
+  <label class="check"><input type="radio" name="see" value="all" checked>Everyone invited</label>
+  <label class="check"><input type="radio" name="see" value="org">Organisers only</label>
+</fieldset>
+
+<fieldset class="field is-error" aria-describedby="terms-err">
+  <legend class="field-label">Terms</legend>
+  <label class="check"><input type="checkbox" name="terms" aria-invalid="true">I agree to the terms of use</label>
+  <p class="field-error" id="terms-err">Agree to the terms to continue.</p>
+</fieldset>
+```
+
+```css
+fieldset.field { border: 0; padding: 0; margin: 0; min-width: 0; gap: 0; }
+fieldset.field > legend { padding: 0; margin-bottom: 4px; }
+fieldset.field > .field-help, fieldset.field > .field-error { margin-top: 4px; }
+.check {
+  display: flex; align-items: center; gap: 12px; min-height: 2.75rem;
+  font-family: var(--font-text); font-size: var(--type-body); line-height: 1.4;
+  color: var(--text-body); cursor: pointer;
+}
+.check input { width: 1.25rem; height: 1.25rem; margin: 0; flex: none; accent-color: var(--accent-ink); cursor: inherit; }
+.check:has(input:disabled) { color: var(--text-dim); cursor: not-allowed; }
+```
+
+---
+
 ## Landing Page
 
 A user-facing product needs a landing page before it needs a login box.

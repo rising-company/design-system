@@ -838,6 +838,57 @@ Inputs use 16px text — anything smaller triggers zoom-on-focus in mobile Safar
 label is IBM Plex Sans 14px / 500 in `--text-body`: it names what to type, for a stranger, so it
 is text, not a readout. Placeholders are `--text-dim` and never stand in for the label.
 
+### Checkbox & Radio
+
+The browser's own inputs, tinted with `accent-color: var(--accent-ink)` — never redrawn. They
+keep the keyboard (Space toggles, arrows move between radios), the screen reader and forced
+colours for free. With `color-scheme` set by the theme, the unchecked edge holds 5.1:1 on
+Mission and 4.5:1 on Daylight.
+
+- **The row is the `<label>`,** 44px tall, so the words are part of the target. The label is a
+  sentence-case phrase in the text face at 16px, never a readout.
+- **A group is a `<fieldset class="field">`** whose `<legend class="field-label">` names the
+  question. Help and error text follow the field rules; an error group points at its message
+  with `aria-describedby` and marks its inputs `aria-invalid="true"`.
+- **Radio:** one choice among two to five, with one chosen by default when there is a sensible
+  default. More than five → a select. Radios in a group share a `name`.
+- **Checkbox:** a choice that takes effect when the form is submitted. A setting that takes
+  effect the moment it's flipped is a switch.
+- **Disabled** rows drop to `--text-dim`; say why in the label or help (`coming soon`).
+
+```html
+<fieldset class="field">
+  <legend class="field-label">Tell me when</legend>
+  <label class="check"><input type="checkbox" name="notify" value="reply" checked>Someone replies</label>
+  <label class="check"><input type="checkbox" name="notify" value="close">A huddle closes</label>
+</fieldset>
+
+<fieldset class="field">
+  <legend class="field-label">Who sees the replies</legend>
+  <label class="check"><input type="radio" name="see" value="all" checked>Everyone invited</label>
+  <label class="check"><input type="radio" name="see" value="org">Organisers only</label>
+</fieldset>
+
+<fieldset class="field is-error" aria-describedby="terms-err">
+  <legend class="field-label">Terms</legend>
+  <label class="check"><input type="checkbox" name="terms" aria-invalid="true">I agree to the terms of use</label>
+  <p class="field-error" id="terms-err">Agree to the terms to continue.</p>
+</fieldset>
+```
+
+```css
+fieldset.field { border: 0; padding: 0; margin: 0; min-width: 0; gap: 0; }
+fieldset.field > legend { padding: 0; margin-bottom: 4px; }
+fieldset.field > .field-help, fieldset.field > .field-error { margin-top: 4px; }
+.check {
+  display: flex; align-items: center; gap: 12px; min-height: 2.75rem;
+  font-family: var(--font-text); font-size: var(--type-body); line-height: 1.4;
+  color: var(--text-body); cursor: pointer;
+}
+.check input { width: 1.25rem; height: 1.25rem; margin: 0; flex: none; accent-color: var(--accent-ink); cursor: inherit; }
+.check:has(input:disabled) { color: var(--text-dim); cursor: not-allowed; }
+```
+
 ### Card
 Structure: tag (category · subcategory, no `//`) → title → description → badge row
 - Container: `background: var(--bg-surface)`, `border: 1px solid var(--border)`, radius 6px, padding 24px

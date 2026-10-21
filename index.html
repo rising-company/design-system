@@ -1495,6 +1495,27 @@
     </div>
   </div>
 
+  <div class="section-label">// Checkbox &amp; radio</div>
+  <div class="control-grid">
+    <fieldset class="field">
+      <legend class="field-label">Tell me when</legend>
+      <label class="check"><input type="checkbox" checked>Someone replies</label>
+      <label class="check"><input type="checkbox">A huddle closes</label>
+      <label class="check"><input type="checkbox" disabled>By text message, coming soon</label>
+    </fieldset>
+    <fieldset class="field">
+      <legend class="field-label">Who sees the replies</legend>
+      <label class="check"><input type="radio" name="demo-see" checked>Everyone invited</label>
+      <label class="check"><input type="radio" name="demo-see">Organisers only</label>
+      <label class="check"><input type="radio" name="demo-see">Only me</label>
+    </fieldset>
+    <fieldset class="field is-error" aria-describedby="demo-terms-err">
+      <legend class="field-label">Terms</legend>
+      <label class="check"><input type="checkbox" aria-invalid="true">I agree to the terms of use</label>
+      <p class="field-error" id="demo-terms-err">Agree to the terms to continue.</p>
+    </fieldset>
+  </div>
+
   <div class="section-label">// Field rules</div>
   <div class="voice-grid">
     <div class="voice-card">
