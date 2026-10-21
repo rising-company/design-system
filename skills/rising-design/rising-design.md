@@ -128,6 +128,10 @@ Drive these from tokens so the same rule is inert in the other theme:
 
 Line-height: headings `1.1` · lede `1.5` · body `1.6` · mono metadata `1.5–1.9`.
 
+**Every `font-size` ships in `rem`** (px ÷ 16 — 12px is `0.75rem`). Identical at the
+default; it grows when the reader has asked for larger text. Widths that hold text grow too
+(sidebar `min(16.25rem, 40vw)`), and at 200% things wrap rather than scroll sideways.
+
 **Two rules hold this scale together, and both exist for 1× displays:**
 
 - **12px is the floor for Share Tech Mono — nothing smaller, ever.** Its stems are about
@@ -219,6 +223,7 @@ animate(".card", { opacity: [0, 1], y: [8, 0] }, { type: "spring", visualDuratio
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
   *, *::before, *::after { animation: none !important; transition: none !important; }
+  .btn:active:not([disabled]):not([aria-busy="true"]) { transform: none; opacity: 0.8; }
 }
 ```
 
@@ -235,6 +240,12 @@ animate(".card", { opacity: [0, 1], y: [8, 0] }, { type: "spring", visualDuratio
 ```
 
 **Disabled** — no new colors; reuse the low-emphasis ramp: text/icon `--text-label`, border `--border-subtle`, background unchanged. `cursor: not-allowed`.
+
+**Press (required)** — every button answers touch-down: `scale(0.97)` instantly, easing back at Quick on release (`whileTap={{ scale: 0.97 }}` in Motion); under reduced motion it dims to `opacity: 0.8`.
+
+**Touch targets (required)** — `@media (pointer: coarse)` gives `.btn`, `.user-menu-trigger`, `.user-menu-item` and `.app-sidebar-nav a` `min-height: 44px`. Keyed on the pointer, not the width.
+
+**Contrast preferences (required)** — `prefers-contrast: more` lifts the low text rungs to AAA (≥ 7:1), firms borders to 3:1 and turns off scanlines, glow and grid, in both themes, through the tokens. `forced-colors: active` drops the texture, borders every `.btn` in `ButtonText`, and keeps the status dot and active sidebar bar via `forced-color-adjust: none`. Values in `llms.txt` → "Contrast Preferences".
 
 ## Buttons
 
