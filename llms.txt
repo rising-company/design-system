@@ -1386,8 +1386,9 @@ the product — never redraw the mark.
 | `favicon.png` | 512×512 | yes | Raster fallback for the favicon, PWA manifest icons. Not the social thumbnail — that is the link preview card. Rounded corners baked in. |
 | `favicon-xl.png` | 1024×1024 | yes | Same mark at 2× — app-store listings, splash screens, any place asking for ≥512px. |
 | `apple-icon.png` | 180×180 | no (opaque) | `<link rel="apple-touch-icon">` and Next.js `app/apple-icon.png`. Square corners on purpose — iOS applies its own mask; a pre-rounded or transparent icon shows black wedges. |
-| `rising-logo-white.png` | 2026×898 | no (white bg) | Horizontal wordmark (arrow + "RISING COMPANY"). Daylight surfaces only, on `--bg-surface` white. |
-| `rising-logo-transparent.png` | 909×393 | **no** — checkerboard is baked in | Do not place on a page. Reference only until a real transparent export replaces it. |
+| `rising-logo-transparent.png` | 1200×497 | yes | Horizontal wordmark (arrow + "RISING COMPANY") for **light** grounds — Daylight `--bg-base` / `--bg-surface`. The lettering holds 3.2:1 on Daylight. |
+| `rising-logo-dark.png` | 1200×497 | yes | The same wordmark for **dark** grounds — Mission `--bg-base` / `--bg-surface`. Arrow opaque in its own gradient; lettering in `--text-heading` `#e8f4ff` (17.5:1). |
+| `rising-logo-white.png` | 2026×898 | no (white bg) | The master both are built from (`tools/logo-from-master.py`). Don't place it on a page — use the transparent file. |
 
 Rules:
 
@@ -1402,8 +1403,12 @@ Rules:
 
 - Next.js App Router: copy `favicon.png` → `app/icon.png` and `apple-icon.png` → `app/apple-icon.png`;
   the framework emits the `<link>` tags itself.
-- Wordmark on Mission (dark) surfaces: there is no dark-safe wordmark yet — use the
-  favicon mark plus the product name set in Rajdhani, not `rising-logo-white.png`.
+- **One wordmark per ground:** `rising-logo-transparent.png` on Daylight, `rising-logo-dark.png`
+  on Mission. Never the light file on a dark ground — its lettering drops to about 3:1 and the
+  arrow goes muddy. Under `data-theme="auto"`, swap the file with
+  `<picture><source srcset="…/rising-logo-dark.png" media="(prefers-color-scheme: dark)">`.
+- Inside a product, the app bar still uses the favicon mark + the product's own name in
+  Rajdhani; the Rising wordmark is for Rising's own surfaces (rising.company, decks, docs).
 - Minimum clear space around the mark: the arrow's own width on all sides. Minimum
   rendered size: 16px (favicon) / 120px wide (wordmark).
 

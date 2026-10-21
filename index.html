@@ -845,7 +845,7 @@
   }
   .brand-card img { display: block; max-width: 100%; height: auto; }
   .brand-card .brand-icon { width: 96px; height: 96px; }
-  .brand-card .brand-wordmark { background: #fff; padding: 12px; border-radius: 4px; }
+  .brand-card .brand-wordmark { padding: 12px; }
   .brand-card .brand-name { font-family: "Share Tech Mono", monospace; font-size: 0.75rem; letter-spacing: 0.1em; color: var(--text-body); }
   .brand-card .brand-meta { font-family: var(--font-text); font-size: 0.875rem; color: var(--text-dim); }
   .brand-card.wide { grid-column: 1 / -1; }
@@ -1866,10 +1866,15 @@
       <div class="brand-name">apple-icon.png</div>
       <div class="brand-meta">180 &middot; opaque &middot; square &mdash; iOS masks it</div>
     </div>
-    <div class="brand-card wide">
-      <img class="brand-wordmark" src="/branding/rising-logo-white.png" alt="Rising Company horizontal wordmark on white" style="max-width: 420px;">
-      <div class="brand-name">rising-logo-white.png</div>
-      <div class="brand-meta">2026&times;898 &middot; white background &middot; Daylight surfaces on white only. No dark-safe wordmark yet &mdash; on Mission use the mark + product name in Rajdhani.</div>
+    <div class="brand-card wide" data-theme="daylight">
+      <img class="brand-wordmark" src="/branding/rising-logo-transparent.png" alt="Rising Company horizontal wordmark for light backgrounds" style="max-width: 420px;">
+      <div class="brand-name">rising-logo-transparent.png</div>
+      <div class="brand-meta">1200&times;497 &middot; alpha &middot; light grounds &mdash; Daylight</div>
+    </div>
+    <div class="brand-card wide" data-theme="mission">
+      <img class="brand-wordmark" src="/branding/rising-logo-dark.png" alt="Rising Company horizontal wordmark for dark backgrounds" style="max-width: 420px;">
+      <div class="brand-name">rising-logo-dark.png</div>
+      <div class="brand-meta">1200&times;497 &middot; alpha &middot; dark grounds &mdash; Mission</div>
     </div>
   </div>
 
@@ -1879,7 +1884,7 @@
       <tr><td class="t-name">&lt;link rel="icon" type="image/svg+xml" href="&hellip;/branding/favicon.svg"&gt;</td><td class="t-use">Any HTML head</td></tr>
       <tr><td class="t-name">&lt;link rel="apple-touch-icon" sizes="180x180" href="&hellip;/branding/apple-icon.png"&gt;</td><td class="t-use">Any HTML head</td></tr>
       <tr><td class="t-name">app/icon.png &middot; app/apple-icon.png</td><td class="t-use">Next.js App Router &mdash; copy the files in; the framework emits the links</td></tr>
-      <tr><td class="t-name">rising-logo-transparent.png</td><td class="t-use">Checkerboard is baked in (no alpha). Do not place on a page.</td></tr>
+      <tr><td class="t-name">rising-logo-transparent.png &middot; rising-logo-dark.png</td><td class="t-use">One wordmark per ground: light file on Daylight, dark file on Mission. Under <code>auto</code>, swap with <code>&lt;picture&gt;</code> and <code>prefers-color-scheme</code>.</td></tr>
     </tbody>
   </table>
 </section>
