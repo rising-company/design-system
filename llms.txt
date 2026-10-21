@@ -686,6 +686,53 @@ it to `none`, where elevation is background shift only. One rule, both themes.
 
 ## Components
 
+### Icon
+
+**Lucide** (lucide.dev, ISC), made ours by its ends: square caps and mitred joins, which echo
+Rajdhani's cut corners and the HUD brackets. Lucide's round default reads friendly and generic.
+No other icon set, and no icon drawn with CSS borders or typed as a glyph (`←`, `+`, `›`).
+
+- **Stroke 1.5px at every size.** The stroke doesn't scale with the icon (`vector-effect:
+  non-scaling-stroke`, Lucide's `absoluteStrokeWidth`), so 16px and 24px icons match.
+- **Three sizes, paired with type:** `.icon-sm` 16px beside 14px text · `.icon` 20px (1.25em)
+  beside 16px text · `.icon-lg` 24px for icon-only buttons and the nav.
+- **`currentColor` only.** An icon takes the colour of the text beside it. Colour never carries
+  the meaning alone: a warning icon sits next to words that say so.
+- **Decorative icons get `aria-hidden="true"`.** An icon-only button is `.btn-icon`, a 44px
+  square, named by `aria-label` and given the same words as a tooltip (`title`).
+
+The sprite `branding/icons.svg` holds the icons the system uses (arrows, chevrons, plus, minus,
+check, x, menu, search, info, the three status circles and triangle, external-link, copy,
+settings, user, log-out). Copy it into the product's public folder — browsers refuse `<use>`
+across origins — and rebuild it with `tools/icons-sprite.py` when you add one. Any other Lucide
+icon takes the same class, so a product on React can use `lucide-react` directly: the class's
+CSS overrides the component's own stroke attributes.
+
+```html
+<!-- Beside a label -->
+<button class="btn btn-secondary">
+  <svg class="icon" aria-hidden="true"><use href="/icons.svg#plus"/></svg>New huddle
+</button>
+<!-- Icon only -->
+<button class="btn btn-ghost btn-icon" aria-label="Copy link" title="Copy link">
+  <svg class="icon" aria-hidden="true"><use href="/icons.svg#copy"/></svg>
+</button>
+<!-- React -->
+<Copy className="icon" aria-hidden />
+```
+
+```css
+.icon {
+  width: 1.25em; height: 1.25em; flex: none; vertical-align: -0.25em;
+  fill: none; stroke: currentColor; stroke-width: 1.5px;
+  stroke-linecap: square; stroke-linejoin: miter;
+}
+.icon * { vector-effect: non-scaling-stroke; }
+.icon-sm { width: 1rem; height: 1rem; }
+.icon-lg { width: 1.5rem; height: 1.5rem; }
+.btn-icon { width: 2.75rem; height: 2.75rem; padding: 0; gap: 0; }
+```
+
 ### Button
 
 IBM Plex Sans 600, sentence case, at body size — a control is something a person reads and
@@ -972,9 +1019,9 @@ backlink. Only appropriate when everyone signing in already knows what the produ
     <h1 class="hero-title">Huddle</h1>
     <p class="lede">Find a meeting time without the back-and-forth.</p>
     <ul class="auth-points">
-      <li>One link — everyone marks their times</li>
-      <li>No calendar access required</li>
-      <li>Works for people without an account</li>
+      <li><svg class="icon icon-sm" aria-hidden="true"><use href="/icons.svg#plus"/></svg>One link — everyone marks their times</li>
+      <li><svg class="icon icon-sm" aria-hidden="true"><use href="/icons.svg#plus"/></svg>No calendar access required</li>
+      <li><svg class="icon icon-sm" aria-hidden="true"><use href="/icons.svg#plus"/></svg>Works for people without an account</li>
     </ul>
   </section>
 
@@ -1007,7 +1054,8 @@ backlink. Only appropriate when everyone signing in already knows what the produ
   font-family: var(--font-mono); font-size: var(--type-label);
   letter-spacing: 0.05em; color: var(--text-muted);
 }
-.auth-points li::before { content: "+"; color: var(--accent-ink); margin-right: 10px; }
+.auth-points li { display: flex; align-items: center; gap: 10px; }
+.auth-points .icon { color: var(--accent-ink); }
 .auth-card { max-width: 400px; width: 100%; display: flex; flex-direction: column; gap: 24px; }
 @media (max-width: 900px) {
   /* min-height: 0 releases the 100vh floor once stacked, or the two panels
@@ -1129,7 +1177,7 @@ and a sidebar product uses it too:
         <summary class="user-menu-trigger" aria-label="Account menu">
           <span class="user-initials" aria-hidden="true">BC</span>
           <span class="user-menu-email">ben@rising.company</span>
-          <span class="user-menu-chevron" aria-hidden="true"></span>
+          <svg class="icon icon-sm user-menu-chevron" aria-hidden="true"><use href="/icons.svg#chevron-down"/></svg>
         </summary>
         <div class="user-menu-panel">
           <div class="user-menu-head">
@@ -1226,12 +1274,9 @@ and a sidebar product uses it too:
   font-family: var(--font-mono); font-size: var(--type-label); letter-spacing: 0.05em; text-transform: uppercase;
   color: var(--accent-ink); background: var(--accent-wash); border: 1px solid var(--accent-line);
 }
-.user-menu-chevron {
-  width: 8px; height: 8px; border-right: 1px solid currentColor; border-bottom: 1px solid currentColor;
-  transform: translateY(-2px) rotate(45deg); transition: transform 0.2s;
-}
+.user-menu-chevron { transition: transform 0.2s; }
 .user-menu[open] .user-menu-chevron,
-.user-menu-trigger[aria-expanded="true"] .user-menu-chevron { transform: translateY(2px) rotate(225deg); }
+.user-menu-trigger[aria-expanded="true"] .user-menu-chevron { transform: rotate(180deg); }
 .user-menu-panel {
   position: absolute; top: calc(100% + 8px); right: 0; z-index: 70;
   min-width: 240px; padding: 6px;
@@ -1388,6 +1433,7 @@ the product — never redraw the mark.
 | `apple-icon.png` | 180×180 | no (opaque) | `<link rel="apple-touch-icon">` and Next.js `app/apple-icon.png`. Square corners on purpose — iOS applies its own mask; a pre-rounded or transparent icon shows black wedges. |
 | `rising-logo-transparent.png` | 1200×497 | yes | Horizontal wordmark (arrow + "RISING COMPANY") for **light** grounds — Daylight `--bg-base` / `--bg-surface`. The lettering holds 3.2:1 on Daylight. |
 | `rising-logo-dark.png` | 1200×497 | yes | The same wordmark for **dark** grounds — Mission `--bg-base` / `--bg-surface`. Arrow opaque in its own gradient; lettering in `--text-heading` `#e8f4ff` (17.5:1). |
+| `icons.svg` | 24×24 symbols | — | The Lucide icons the system uses, squared by `.icon` (see Components → Icon). Copy into the product; `<use>` won't cross origins. Rebuilt by `tools/icons-sprite.py`. |
 | `rising-logo-white.png` | 2026×898 | no (white bg) | The master both are built from (`tools/logo-from-master.py`). Don't place it on a page — use the transparent file. |
 
 Rules:

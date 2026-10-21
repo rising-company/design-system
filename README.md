@@ -17,7 +17,7 @@ Live: <https://design-system.rising.company>
 - `patterns/` — worked page patterns: `landing.html`, `auth-split.html` (Daylight), `auth-centered.html`, `app-shell.html` (Mission), `og-card.html` (the link preview card every product ships).
 - `tools/og.html` → `og.png` — this site's own link preview card, built from that pattern.
 - `skills/rising-design/` — Claude skill that loads the spec into agent context.
-- `branding/` — brand image assets (favicon, Apple touch icon, wordmark logos). See "Brand assets" in `llms.txt` for the file list, sizes and which one to use where.
+- `branding/` — brand image assets (favicon, Apple touch icon, wordmark logos) and `icons.svg`, the Lucide icon sprite. See "Brand assets" in `llms.txt` for the file list, sizes and which one to use where.
 
 ## Picking a theme
 
