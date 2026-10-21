@@ -258,6 +258,10 @@ animate(".card", { opacity: [0, 1], y: [8, 0] }, { type: "spring", visualDuratio
 
 **Contrast preferences (required)** — `prefers-contrast: more` lifts the low text rungs to AAA (≥ 7:1), firms borders to 3:1 and turns off scanlines, glow and grid, in both themes, through the tokens. `forced-colors: active` drops the texture, borders every `.btn` in `ButtonText`, and keeps the status dot and active sidebar bar via `forced-color-adjust: none`. Values in `llms.txt` → "Contrast Preferences".
 
+## Icons
+
+**Lucide**, squared: `stroke-linecap: square; stroke-linejoin: miter`, 1.5px at every size (non-scaling stroke), `currentColor`. `.icon-sm` 16px beside 14px text · `.icon` 20px beside 16px · `.icon-lg` 24px for icon-only and the nav. Decorative → `aria-hidden="true"`; icon-only → `.btn-icon` (44px) with `aria-label` and a matching `title`. Sprite `branding/icons.svg` — copy it into the product. Never draw an icon with CSS borders or type it as a glyph (`←`, `+`). Anatomy in `components.md` → "Icon".
+
 ## Buttons
 
 `btn` + one of `btn-primary` / `btn-secondary` / `btn-ghost` / `btn-danger`; sizes `btn-sm` (34px, 14px type) / default (44px, 16px) / `btn-lg` (52px, 16px); `btn-block` for full width. IBM Plex Sans 600, **sentence case written in the markup** — no `text-transform`.
@@ -330,10 +334,11 @@ Brand imagery lives at `https://design-system.rising.company/branding/` (repo: `
 | `apple-icon.png` | 180×180, opaque, **square** | `apple-touch-icon` / Next.js `app/apple-icon.png` — iOS masks it; don't pre-round |
 | `rising-logo-transparent.png` | 1200×497, alpha | Horizontal wordmark for **light** grounds (Daylight) |
 | `rising-logo-dark.png` | 1200×497, alpha | Same wordmark for **dark** grounds (Mission) — light lettering, opaque arrow |
+| `icons.svg` | 24×24 symbols | Lucide icons the system uses, squared by `.icon` — copy into the product (`tools/icons-sprite.py`) |
 | `rising-logo-white.png` | 2026×898, white bg | Master the two are built from (`tools/logo-from-master.py`) — not for pages |
 
 - Icons always use the dark `#0a0c10` base in both themes — the icon is not themed.
-- On Mission surfaces use the favicon mark + product name in Rajdhani; there is no dark-safe wordmark yet.
+- Inside a product the app bar uses the favicon mark + the product's name in Rajdhani; the wordmark is for Rising's own surfaces.
 - Clear space: the arrow's width on all sides. Minimum size: 16px icon / 120px-wide wordmark.
 
 ```html

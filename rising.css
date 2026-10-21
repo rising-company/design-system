@@ -294,6 +294,21 @@ body::before {
    Panels keep the 20px readout; .stat-lg is for a row of headline figures. */
 .stat-value.stat-lg { font-size: var(--type-section); line-height: 1.1; letter-spacing: 0.04em; }
 
+/* ══════════════ ICONS ══════════════ */
+/* Lucide, made ours by its ends: square caps and mitred joins echo Rajdhani's
+   corners. 1.5px at every size (non-scaling stroke), and always the colour of
+   the text beside it. Sprite: branding/icons.svg, used as
+   <svg class="icon" aria-hidden="true"><use href="/icons.svg#check"/></svg>.
+   Inline SVG (lucide-react) works too: the rules below beat its attributes. */
+.icon {
+  width: 1.25em; height: 1.25em; flex: none; vertical-align: -0.25em;
+  fill: none; stroke: currentColor; stroke-width: 1.5px;
+  stroke-linecap: square; stroke-linejoin: miter;
+}
+.icon * { vector-effect: non-scaling-stroke; }
+.icon-sm { width: 1rem; height: 1rem; }      /* beside 14px text */
+.icon-lg { width: 1.5rem; height: 1.5rem; }  /* icon-only buttons, the nav */
+
 /* ══════════════ BUTTONS ══════════════ */
   /* A control is something a person reads and presses, so it speaks in the
      text face, in sentence case, at body size: the call to action is never
@@ -331,6 +346,9 @@ body::before {
     color: var(--text-dim); background: transparent;
     border-color: var(--border-subtle); cursor: not-allowed;
   }
+
+  /* Icon-only: a full 44px target at every size, and an aria-label for its name. */
+  .btn-icon { width: 2.75rem; height: 2.75rem; padding: 0; gap: 0; }
 
   .btn-row { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; }
 
@@ -608,13 +626,9 @@ a.list-row:active { background: var(--bg-inset); transition-duration: 0s; }
   background: var(--accent-wash); border: 1px solid var(--accent-line);
 }
 
-.user-menu-chevron {
-  width: 8px; height: 8px; flex-shrink: 0;
-  border-right: 1px solid currentColor; border-bottom: 1px solid currentColor;
-  transform: translateY(-2px) rotate(45deg); transition: transform 0.2s;
-}
+.user-menu-chevron { transition: transform 0.2s; }
 .user-menu[open] .user-menu-chevron,
-.user-menu-trigger[aria-expanded="true"] .user-menu-chevron { transform: translateY(2px) rotate(225deg); }
+.user-menu-trigger[aria-expanded="true"] .user-menu-chevron { transform: rotate(180deg); }
 
 .user-menu-panel {
   position: absolute; top: calc(100% + 8px); right: 0; z-index: 70;
@@ -866,7 +880,8 @@ a.list-row:active { background: var(--bg-inset); transition-duration: 0s; }
   font-family: var(--font-mono); font-size: var(--type-label);
   letter-spacing: 0.05em; color: var(--text-muted);
 }
-.auth-points li::before { content: "+"; color: var(--accent-ink); margin-right: 10px; }
+.auth-points li { display: flex; align-items: center; gap: 10px; }
+.auth-points .icon { color: var(--accent-ink); }
 
 /* Pitch and form meet at the seam: each column pushes its content toward the
    middle, so the eye reads one composition rather than two islands. */

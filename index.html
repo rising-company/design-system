@@ -466,8 +466,7 @@
     position: absolute;
     bottom: 24px;
     right: 24px;
-    font-family: "Share Tech Mono", monospace;
-    font-size: 0.875rem;
+    display: flex;
     color: var(--border-hover);
     transition: color 0.2s, transform 0.2s;
   }
@@ -836,6 +835,18 @@
     padding: 6px 10px;
   }
 
+
+  /* ── Icons ───────────────────────────────────────────────── */
+  /* Hairlines drawn by each cell, so a short last row leaves surface, not a slab of rule. */
+  .icon-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(112px, 1fr)); background: var(--bg-surface); border: 1px solid var(--border-subtle); border-radius: 6px; overflow: hidden; margin-bottom: 24px; }
+  .icon-cell { box-shadow: 1px 0 0 var(--border-subtle), 0 1px 0 var(--border-subtle); display: flex; flex-direction: column; align-items: center; gap: 10px; padding: 20px 8px 14px; color: var(--text-heading); }
+  .icon-cell code { font-family: var(--font-mono); font-size: var(--type-label); color: var(--text-dim); background: none; border: 0; padding: 0; }
+  .icon-sizes { display: flex; flex-direction: column; gap: 12px; color: var(--text-body); }
+  .icon-sizes span { display: inline-flex; align-items: center; gap: 8px; }
+  .icon-ends { display: flex; gap: 24px; align-items: center; color: var(--text-heading); }
+  .icon-ends figure { display: flex; flex-direction: column; align-items: center; gap: 8px; margin: 0; }
+  .icon-ends svg { width: 56px; height: 56px; fill: none; stroke: currentColor; stroke-width: 4px; }
+  .icon-ends figcaption { font-family: var(--font-mono); font-size: var(--type-label); color: var(--text-dim); }
 
   /* ── Brand assets ─────────────────────────────────────────── */
   .brand-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 16px; margin-bottom: 24px; }
@@ -1233,7 +1244,7 @@
         <span class="badge">LiFePO4</span>
         <span class="badge">2x 100Ah</span>
       </div>
-      <div class="card-arrow">&#8594;</div>
+      <div class="card-arrow"><svg class="icon icon-sm" aria-hidden="true"><use href="branding/icons.svg#arrow-right"/></svg></div>
     </a>
     <a class="demo-card" href="#components">
       <div class="card-tag">Electrical · Charging</div>
@@ -1243,7 +1254,7 @@
         <span class="badge">120V AC</span>
         <span class="badge">30A</span>
       </div>
-      <div class="card-arrow">&#8594;</div>
+      <div class="card-arrow"><svg class="icon icon-sm" aria-hidden="true"><use href="branding/icons.svg#arrow-right"/></svg></div>
     </a>
   </div>
 
@@ -1407,6 +1418,64 @@
     </div>
   </div>
 
+  <div class="section-label">// Icons &mdash; Lucide, with squared ends</div>
+  <p class="voice-body" style="max-width: 68ch; margin-bottom: 16px;">
+    One set, made ours by its ends: square caps and mitred joins, like Rajdhani&rsquo;s corners and the HUD brackets.
+    A 1.5px stroke at every size, always the colour of the text beside it. These 22 are in
+    <code>branding/icons.svg</code>; the rest of Lucide takes the same <code>.icon</code> class.
+  </p>
+  <div class="icon-grid">
+    <div class="icon-cell"><svg class="icon icon-lg" aria-hidden="true"><use href="branding/icons.svg#arrow-left"/></svg><code>arrow-left</code></div>
+    <div class="icon-cell"><svg class="icon icon-lg" aria-hidden="true"><use href="branding/icons.svg#arrow-right"/></svg><code>arrow-right</code></div>
+    <div class="icon-cell"><svg class="icon icon-lg" aria-hidden="true"><use href="branding/icons.svg#arrow-up"/></svg><code>arrow-up</code></div>
+    <div class="icon-cell"><svg class="icon icon-lg" aria-hidden="true"><use href="branding/icons.svg#arrow-down"/></svg><code>arrow-down</code></div>
+    <div class="icon-cell"><svg class="icon icon-lg" aria-hidden="true"><use href="branding/icons.svg#arrow-up-right"/></svg><code>arrow-up-right</code></div>
+    <div class="icon-cell"><svg class="icon icon-lg" aria-hidden="true"><use href="branding/icons.svg#chevron-down"/></svg><code>chevron-down</code></div>
+    <div class="icon-cell"><svg class="icon icon-lg" aria-hidden="true"><use href="branding/icons.svg#chevron-right"/></svg><code>chevron-right</code></div>
+    <div class="icon-cell"><svg class="icon icon-lg" aria-hidden="true"><use href="branding/icons.svg#plus"/></svg><code>plus</code></div>
+    <div class="icon-cell"><svg class="icon icon-lg" aria-hidden="true"><use href="branding/icons.svg#minus"/></svg><code>minus</code></div>
+    <div class="icon-cell"><svg class="icon icon-lg" aria-hidden="true"><use href="branding/icons.svg#check"/></svg><code>check</code></div>
+    <div class="icon-cell"><svg class="icon icon-lg" aria-hidden="true"><use href="branding/icons.svg#x"/></svg><code>x</code></div>
+    <div class="icon-cell"><svg class="icon icon-lg" aria-hidden="true"><use href="branding/icons.svg#menu"/></svg><code>menu</code></div>
+    <div class="icon-cell"><svg class="icon icon-lg" aria-hidden="true"><use href="branding/icons.svg#search"/></svg><code>search</code></div>
+    <div class="icon-cell"><svg class="icon icon-lg" aria-hidden="true"><use href="branding/icons.svg#info"/></svg><code>info</code></div>
+    <div class="icon-cell"><svg class="icon icon-lg" aria-hidden="true"><use href="branding/icons.svg#circle-check"/></svg><code>circle-check</code></div>
+    <div class="icon-cell"><svg class="icon icon-lg" aria-hidden="true"><use href="branding/icons.svg#circle-alert"/></svg><code>circle-alert</code></div>
+    <div class="icon-cell"><svg class="icon icon-lg" aria-hidden="true"><use href="branding/icons.svg#triangle-alert"/></svg><code>triangle-alert</code></div>
+    <div class="icon-cell"><svg class="icon icon-lg" aria-hidden="true"><use href="branding/icons.svg#external-link"/></svg><code>external-link</code></div>
+    <div class="icon-cell"><svg class="icon icon-lg" aria-hidden="true"><use href="branding/icons.svg#copy"/></svg><code>copy</code></div>
+    <div class="icon-cell"><svg class="icon icon-lg" aria-hidden="true"><use href="branding/icons.svg#settings"/></svg><code>settings</code></div>
+    <div class="icon-cell"><svg class="icon icon-lg" aria-hidden="true"><use href="branding/icons.svg#user"/></svg><code>user</code></div>
+    <div class="icon-cell"><svg class="icon icon-lg" aria-hidden="true"><use href="branding/icons.svg#log-out"/></svg><code>log-out</code></div>
+  </div>
+  <div class="control-grid">
+    <div>
+      <div class="vc-label">Sizes &mdash; paired with type</div>
+      <div class="icon-sizes">
+        <span style="font-size: var(--type-small);"><svg class="icon icon-sm" aria-hidden="true"><use href="branding/icons.svg#check"/></svg>16px beside 14px text</span>
+        <span><svg class="icon" aria-hidden="true"><use href="branding/icons.svg#check"/></svg>20px beside 16px text</span>
+        <span><svg class="icon icon-lg" aria-hidden="true"><use href="branding/icons.svg#check"/></svg>24px &mdash; icon-only, the nav</span>
+      </div>
+    </div>
+    <div>
+      <div class="vc-label">In a button</div>
+      <div class="btn-row">
+        <button class="btn btn-secondary"><svg class="icon" aria-hidden="true"><use href="branding/icons.svg#plus"/></svg>New huddle</button>
+        <button class="btn btn-ghost btn-icon" aria-label="Copy link" title="Copy link"><svg class="icon" aria-hidden="true"><use href="branding/icons.svg#copy"/></svg></button>
+        <button class="btn btn-ghost btn-icon" aria-label="Settings" title="Settings"><svg class="icon" aria-hidden="true"><use href="branding/icons.svg#settings"/></svg></button>
+      </div>
+      <div class="vc-body" style="margin-top: 12px;">Icon leads the label. Icon-only is <code>btn-icon</code>: 44px square, named by <code>aria-label</code>, with a tooltip.</div>
+    </div>
+    <div>
+      <div class="vc-label">The ends &mdash; Lucide&rsquo;s, then ours</div>
+      <div class="icon-ends">
+        <figure><svg viewBox="0 0 24 24" aria-hidden="true" style="stroke-linecap: round; stroke-linejoin: round;"><path d="M20 6 9 17l-5-5"/></svg><figcaption>round</figcaption></figure>
+        <figure><svg viewBox="0 0 24 24" aria-hidden="true" style="stroke-linecap: square; stroke-linejoin: miter;"><path d="M20 6 9 17l-5-5"/></svg><figcaption>square</figcaption></figure>
+      </div>
+      <div class="vc-body" style="margin-top: 12px;">Drawn large to show the difference. The round default reads friendly and generic; square reads like the rest of the system.</div>
+    </div>
+  </div>
+
   <div class="section-label">// Form fields</div>
   <div class="control-grid">
     <div class="field">
@@ -1464,7 +1533,7 @@
   <div class="pattern-frame">
     <div class="frame-bar">
       <span>// patterns/landing.html &middot; daylight</span>
-      <a href="patterns/landing.html" target="_blank" rel="noopener">Open full page &rarr;</a>
+      <a href="patterns/landing.html" target="_blank" rel="noopener">Open full page <svg class="icon icon-sm" aria-hidden="true"><use href="branding/icons.svg#arrow-up-right"/></svg></a>
     </div>
     <iframe src="patterns/landing.html" title="Landing page pattern — Daylight theme" loading="lazy"></iframe>
   </div>
@@ -1492,7 +1561,7 @@
   <div class="pattern-frame">
     <div class="frame-bar">
       <span>// patterns/auth-split.html &middot; daylight</span>
-      <a href="patterns/auth-split.html" target="_blank" rel="noopener">Open full page &rarr;</a>
+      <a href="patterns/auth-split.html" target="_blank" rel="noopener">Open full page <svg class="icon icon-sm" aria-hidden="true"><use href="branding/icons.svg#arrow-up-right"/></svg></a>
     </div>
     <iframe src="patterns/auth-split.html" title="Split auth pattern — Daylight theme" loading="lazy"></iframe>
   </div>
@@ -1501,7 +1570,7 @@
   <div class="pattern-frame">
     <div class="frame-bar">
       <span>// patterns/auth-centered.html &middot; mission</span>
-      <a href="patterns/auth-centered.html" target="_blank" rel="noopener">Open full page &rarr;</a>
+      <a href="patterns/auth-centered.html" target="_blank" rel="noopener">Open full page <svg class="icon icon-sm" aria-hidden="true"><use href="branding/icons.svg#arrow-up-right"/></svg></a>
     </div>
     <iframe src="patterns/auth-centered.html" title="Centered auth pattern — Mission theme" loading="lazy" style="height: 460px;"></iframe>
   </div>
@@ -1529,7 +1598,7 @@
   <div class="pattern-frame">
     <div class="frame-bar">
       <span>// patterns/app-shell.html &middot; mission</span>
-      <a href="patterns/app-shell.html" target="_blank" rel="noopener">Open full page &rarr;</a>
+      <a href="patterns/app-shell.html" target="_blank" rel="noopener">Open full page <svg class="icon icon-sm" aria-hidden="true"><use href="branding/icons.svg#arrow-up-right"/></svg></a>
     </div>
     <iframe src="patterns/app-shell.html" title="App shell pattern — Mission theme" loading="lazy"></iframe>
   </div>
@@ -1561,7 +1630,7 @@
   <div class="pattern-frame">
     <div class="frame-bar">
       <span>// patterns/app-shell-sidebar.html &middot; mission</span>
-      <a href="patterns/app-shell-sidebar.html" target="_blank" rel="noopener">Open full page &rarr;</a>
+      <a href="patterns/app-shell-sidebar.html" target="_blank" rel="noopener">Open full page <svg class="icon icon-sm" aria-hidden="true"><use href="branding/icons.svg#arrow-up-right"/></svg></a>
     </div>
     <iframe src="patterns/app-shell-sidebar.html" title="App shell pattern — sidebar product" loading="lazy"></iframe>
   </div>
@@ -1606,7 +1675,7 @@
     <div class="pattern-frame">
       <div class="frame-bar">
         <span>// patterns/og-card.html &middot; daylight</span>
-        <a href="patterns/og-card.html" target="_blank" rel="noopener">Open the template &rarr;</a>
+        <a href="patterns/og-card.html" target="_blank" rel="noopener">Open the template <svg class="icon icon-sm" aria-hidden="true"><use href="branding/icons.svg#arrow-up-right"/></svg></a>
       </div>
       <img class="og-shot" src="/og.png" alt="This site's own link preview card: the same console panel rendered twice, dark under Mission and light under Daylight, over the shared token names." loading="lazy">
     </div>
@@ -1867,12 +1936,12 @@
       <div class="brand-meta">180 &middot; opaque &middot; square &mdash; iOS masks it</div>
     </div>
     <div class="brand-card wide" data-theme="daylight">
-      <img class="brand-wordmark" src="/branding/rising-logo-transparent.png" alt="Rising Company horizontal wordmark for light backgrounds" style="max-width: 420px;">
+      <img class="brand-wordmark" src="/branding/rising-logo-transparent.png" alt="Rising Company horizontal wordmark for light backgrounds" style="max-width: min(100%, 420px);">
       <div class="brand-name">rising-logo-transparent.png</div>
       <div class="brand-meta">1200&times;497 &middot; alpha &middot; light grounds &mdash; Daylight</div>
     </div>
     <div class="brand-card wide" data-theme="mission">
-      <img class="brand-wordmark" src="/branding/rising-logo-dark.png" alt="Rising Company horizontal wordmark for dark backgrounds" style="max-width: 420px;">
+      <img class="brand-wordmark" src="/branding/rising-logo-dark.png" alt="Rising Company horizontal wordmark for dark backgrounds" style="max-width: min(100%, 420px);">
       <div class="brand-name">rising-logo-dark.png</div>
       <div class="brand-meta">1200&times;497 &middot; alpha &middot; dark grounds &mdash; Mission</div>
     </div>

@@ -11,6 +11,33 @@ The whole layer is also published as a drop-in stylesheet:
 
 ---
 
+## Icon
+
+Lucide, with square caps and mitred joins, a 1.5px stroke that doesn't scale, and `currentColor`.
+Sprite: `branding/icons.svg` (copy it into the product; `<use>` won't cross origins). Any other
+Lucide icon, or `lucide-react`, takes the same class. Rules and the full list: `llms.txt` → "Icon".
+
+```html
+<svg class="icon" aria-hidden="true"><use href="/icons.svg#check"/></svg>
+<button class="btn btn-ghost btn-icon" aria-label="Copy link" title="Copy link">
+  <svg class="icon" aria-hidden="true"><use href="/icons.svg#copy"/></svg>
+</button>
+```
+
+```css
+.icon {
+  width: 1.25em; height: 1.25em; flex: none; vertical-align: -0.25em;   /* 20px beside 16px text */
+  fill: none; stroke: currentColor; stroke-width: 1.5px;
+  stroke-linecap: square; stroke-linejoin: miter;
+}
+.icon * { vector-effect: non-scaling-stroke; }
+.icon-sm { width: 1rem; height: 1rem; }       /* beside 14px text */
+.icon-lg { width: 1.5rem; height: 1.5rem; }   /* icon-only buttons, the nav */
+.btn-icon { width: 2.75rem; height: 2.75rem; padding: 0; gap: 0; }   /* needs aria-label */
+```
+
+---
+
 ## Card
 
 A clickable container with eyebrow tag, title, description, badge row, and arrow indicator. Use for navigation links to pages, diagrams, or sections. Features a gradient top-border that appears on hover.
@@ -31,7 +58,7 @@ This is the full anchor-card recipe: it layers `display: block` / `text-decorati
     <span class="badge">Tag 2</span>
     <span class="badge">Tag 3</span>
   </div>
-  <div class="card-arrow">&#8594;</div>
+  <div class="card-arrow"><svg class="icon icon-sm" aria-hidden="true"><use href="/icons.svg#arrow-right"/></svg></div>
 </a>
 ```
 
@@ -107,8 +134,7 @@ This is the full anchor-card recipe: it layers `display: block` / `text-decorati
   position: absolute;
   bottom: 24px;
   right: 24px;
-  font-family: var(--font-mono);
-  font-size: 0.875rem;
+  display: flex;
   color: var(--border-hover);
   transition: color 0.2s;
 }
@@ -934,9 +960,9 @@ Worked example: `patterns/landing.html` in the design-system repo.
     <h1 class="hero-title">Huddle</h1>
     <p class="lede">Find a meeting time without the back-and-forth.</p>
     <ul class="auth-points">
-      <li>One link — everyone marks their times</li>
-      <li>No calendar access required</li>
-      <li>Guests reply without an account</li>
+      <li><svg class="icon icon-sm" aria-hidden="true"><use href="/icons.svg#plus"/></svg>One link — everyone marks their times</li>
+      <li><svg class="icon icon-sm" aria-hidden="true"><use href="/icons.svg#plus"/></svg>No calendar access required</li>
+      <li><svg class="icon icon-sm" aria-hidden="true"><use href="/icons.svg#plus"/></svg>Guests reply without an account</li>
     </ul>
   </section>
 
@@ -976,7 +1002,8 @@ Worked example: `patterns/landing.html` in the design-system repo.
   font-family: var(--font-mono);
   font-size: 0.75rem; letter-spacing: 0.05em; color: var(--text-muted);
 }
-.auth-points li::before { content: \"+\"; color: var(--accent-ink); margin-right: 10px; }
+.auth-points li { display: flex; align-items: center; gap: 10px; }
+.auth-points .icon { color: var(--accent-ink); }
 
 .auth-card { max-width: 400px; width: 100%; display: flex; flex-direction: column; gap: 24px; }
 
@@ -1043,7 +1070,7 @@ The chrome behind the auth boundary: app bar on top, one page header per view, a
         <summary class="user-menu-trigger" aria-label="Account menu">
           <span class="user-initials" aria-hidden="true">BC</span>
           <span class="user-menu-email">ben@rising.company</span>
-          <span class="user-menu-chevron" aria-hidden="true"></span>
+          <svg class="icon icon-sm user-menu-chevron" aria-hidden="true"><use href="/icons.svg#chevron-down"/></svg>
         </summary>
         <div class="user-menu-panel">
           <div class="user-menu-head">
@@ -1141,11 +1168,8 @@ The chrome behind the auth boundary: app bar on top, one page header per view, a
   font-family: var(--font-mono); font-size: 0.75rem; letter-spacing: 0.05em; text-transform: uppercase;
   color: var(--accent-ink); background: var(--accent-wash); border: 1px solid var(--accent-line);
 }
-.user-menu-chevron {
-  width: 8px; height: 8px; border-right: 1px solid currentColor; border-bottom: 1px solid currentColor;
-  transform: translateY(-2px) rotate(45deg); transition: transform 0.2s;
-}
-.user-menu[open] .user-menu-chevron { transform: translateY(2px) rotate(225deg); }
+.user-menu-chevron { transition: transform 0.2s; }
+.user-menu[open] .user-menu-chevron { transform: rotate(180deg); }
 .user-menu-panel {
   position: absolute; top: calc(100% + 8px); right: 0; z-index: 70;
   min-width: 240px; padding: 6px;
