@@ -309,6 +309,23 @@ everything else is **wrap or stack, never shrink.**
   are hidden. The one sideways scroller is the app nav row, and it says so with an edge
   fade (see "App Shell").
 
+### Type follows the reader's text size
+
+**Every `font-size` ships in `rem`, never `px`.** The scale above is written in px because
+that is how a designer reads it; the CSS divides by 16 — 12px is `0.75rem`, 15px is
+`0.9375rem`, 36px is `2.25rem`. At the browser's default the page is pixel-identical. When a
+reader has asked for larger text (browser or OS text size, the iOS/macOS accessibility
+setting), every style grows with it instead of ignoring them.
+
+- Borders, radii, spacing and tracking stay in px or `em`. Text grows; the frame around it
+  doesn't have to.
+- A width that holds text grows with it: the sidebar is `min(16.25rem, 40vw)` (260px at
+  default), module tags are `1.75rem`. A fixed px width around text is a bug at 200%.
+- At large sizes things wrap, they don't scroll sideways. The landing nav wraps to a second
+  row; a full-width (`.btn-block`) button lets its label wrap.
+- Check a change at 200%: set `document.documentElement.style.fontSize = "32px"` and look
+  at the desktop and the 390px phone. `scrollWidth` must equal the viewport width.
+
 ### Two rules hold the mono scale together
 
 Both exist for 1× (non-Retina) displays, where most of this system is actually read:
@@ -498,6 +515,8 @@ fully visible.
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
   *, *::before, *::after { animation: none !important; transition: none !important; }
+  /* Transforms off, opacity kept: the press dims instead of shrinking. */
+  .btn:active:not([disabled]):not([aria-busy="true"]) { transform: none; opacity: 0.8; }
 }
 ```
 
@@ -517,6 +536,57 @@ Keyboard focus only — style via `:focus-visible`, never plain `:focus`:
 ### Disabled
 No new colors — reuse the low-emphasis ramp: text/icon `--text-label`, border
 `--border-subtle`, background unchanged. No hover transitions, `cursor: not-allowed`.
+
+### Press (required)
+The response to touch-down is the first thing a person feels, before any hover, colour or
+panel. Every button answers it: `scale(0.97)` the instant the pointer goes down (0s on the
+way in), easing back at Quick on release. Under reduced motion it dims to `opacity: 0.8`
+instead. Disabled and busy buttons don't press.
+
+```css
+.btn { transition: background 0.2s, border-color 0.2s, color 0.2s, opacity 0.2s, transform 0.2s; }
+.btn:active:not([disabled]):not([aria-busy="true"]) { transform: scale(0.97); transition-duration: 0s; }
+```
+
+A framework button built on Motion uses `whileTap={{ scale: 0.97 }}` for the same thing.
+
+### Touch Targets (required)
+A finger needs 44 × 44px. Desktop keeps its density; a touch screen gets the full target,
+keyed on the pointer rather than the viewport width (an iPad shows the desktop layout with a
+finger on it):
+
+```css
+@media (pointer: coarse) {
+  .btn, .user-menu-trigger, .user-menu-item, .app-sidebar-nav a { min-height: 44px; }
+}
+```
+
+Anything new that is tapped joins that list.
+
+### Contrast Preferences (required)
+**Increase Contrast** (`prefers-contrast: more` — macOS, iOS, Windows) is a reader's request,
+and both themes answer it through the tokens, so every component follows:
+
+| Token | Mission | Daylight |
+|---|---|---|
+| `--text-muted` / `--text-subtle` | `#b8ccc2` (11.6:1) | `#26332d` / `#2e3d36` (≥ 10.7:1) |
+| `--text-label` / `--text-dim` | `#a3bdb0` (9.8:1) | `#34443c` (9.7:1) |
+| `--accent-ink` | unchanged | `#075c3a` (7.6:1) |
+| `--border` / `--border-subtle` | `#466b58` (3.2:1) | `#7a9085` (3.2:1) / `#a7b8af` |
+| scanlines, glow, grid | off | off |
+
+Every text rung clears AAA (7:1); borders clear the 3:1 that control edges need. Select
+Mission as `:root:not([data-theme="daylight"]), [data-theme="mission"]` inside the query —
+a bare `:root` there would override Daylight's tokens.
+
+**Forced colours** (`forced-colors: active` — Windows High Contrast) hands the palette to
+the system. Drop the texture (scanlines, atmosphere, brackets), give `.btn` a `ButtonText`
+border, and use `forced-color-adjust: none` only on the marks whose meaning is their colour:
+the status dot and the sidebar's active bar (`Highlight`). Transparent borders get painted
+in this mode, so `.app-nav` links set theirs to `Canvas` and the current one to `Highlight`.
+
+Verify with DevTools → Rendering → "Emulate CSS media feature prefers-contrast / forced-colors",
+or CDP `Emulation.setEmulatedMedia`.
 
 ## Visual Effects
 
@@ -564,14 +634,16 @@ Mono, uppercase, tracked. Three variants plus danger; three sizes.
 ```css
 .btn {
   font-family: "Share Tech Mono", monospace;
-  font-size: 12px; letter-spacing: 0.1em; text-transform: uppercase;
+  font-size: 0.75rem; letter-spacing: 0.1em; text-transform: uppercase;
   padding: 13px 26px; border-radius: 4px; border: 1px solid transparent;
   display: inline-flex; align-items: center; justify-content: center; gap: 10px;
   cursor: pointer; text-decoration: none; white-space: nowrap;
-  transition: background 0.2s, border-color 0.2s, color 0.2s, opacity 0.2s;
+  transition: background 0.2s, border-color 0.2s, color 0.2s, opacity 0.2s, transform 0.2s;
 }
-.btn-sm { font-size: 12px; padding: 9px 18px; letter-spacing: 0.075em; }
-.btn-lg { font-size: 13px; padding: 17px 34px; letter-spacing: 0.15em; }
+/* Press — see "Press" under Interaction States */
+.btn:active:not([disabled]):not([aria-busy="true"]) { transform: scale(0.97); transition-duration: 0s; }
+.btn-sm { font-size: 0.75rem; padding: 9px 18px; letter-spacing: 0.075em; }
+.btn-lg { font-size: 0.8125rem; padding: 17px 34px; letter-spacing: 0.15em; }
 
 /* Solid — the loud one. One per view. */
 .btn-primary { background: var(--accent); color: var(--accent-on); border-color: var(--accent); }
@@ -592,7 +664,8 @@ Mono, uppercase, tracked. Three variants plus danger; three sizes.
   color: var(--text-label); background: transparent;
   border-color: var(--border-subtle); cursor: not-allowed;
 }
-.btn-block { display: flex; width: 100%; }
+/* The one button whose label may wrap — at large text a nowrap label pushes its card off a phone */
+.btn-block { display: flex; width: 100%; white-space: normal; text-align: center; }
 ```
 
 **Which variant:** `btn-primary` is reserved for the single most important action on a
@@ -622,11 +695,11 @@ the form (`// Sign in`), once. See "// Prefix Convention".
 ```css
 .field { display: flex; flex-direction: column; gap: 8px; }
 .field-label {
-  font-family: "Share Tech Mono", monospace; font-size: 12px;
+  font-family: "Share Tech Mono", monospace; font-size: 0.75rem;
   letter-spacing: 0.15em; text-transform: uppercase; color: var(--text-label);
 }
 .input {
-  font-family: "Rajdhani", sans-serif; font-size: 16px; font-weight: 500;
+  font-family: "Rajdhani", sans-serif; font-size: 1rem; font-weight: 500;
   color: var(--text-body); background: var(--bg-surface);
   border: 1px solid var(--border); border-radius: 4px;
   padding: 13px 14px; width: 100%; transition: border-color 0.2s, background 0.2s;
@@ -637,9 +710,9 @@ the form (`// Sign in`), once. See "// Prefix Convention".
 .input:focus-visible { outline: 1px solid var(--accent-ink); outline-offset: 2px; }
 .input[disabled] { color: var(--text-label); border-color: var(--border-subtle); cursor: not-allowed; }
 
-.field-help  { font-size: 13px; color: var(--text-muted); line-height: 1.5; }
+.field-help  { font-size: 0.8125rem; color: var(--text-muted); line-height: 1.5; }
 .field-error {
-  font-family: "Share Tech Mono", monospace; font-size: 12px;
+  font-family: "Share Tech Mono", monospace; font-size: 0.75rem;
   letter-spacing: 0.05em; color: var(--danger-ink);
 }
 .field.is-error .input { border-color: var(--danger-ink); }
@@ -752,14 +825,14 @@ one `max-width: 1080px; margin: 0 auto; padding-inline: 48px` container.
    .hero-title stays reusable in auth panels and anywhere else. */
 .hero-title {
   font-family: "Rajdhani", sans-serif; font-weight: 700;
-  font-size: clamp(36px, 7vw, 56px); letter-spacing: 2px; line-height: 1.1;
+  font-size: clamp(2.25rem, 7vw, 3.5rem); letter-spacing: 2px; line-height: 1.1;
   text-transform: uppercase; color: var(--text-heading);
 }
-.lede { font-size: 18px; line-height: 1.5; color: var(--text-muted); }
+.lede { font-size: 1.125rem; line-height: 1.5; color: var(--text-muted); }
 .hero .lede { margin: 16px auto 0; max-width: 52ch; }
 .hero-actions { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; margin-top: 32px; }
 .hero-trust {
-  font-family: "Share Tech Mono", monospace; font-size: 12px; letter-spacing: 0.15em;
+  font-family: "Share Tech Mono", monospace; font-size: 0.75rem; letter-spacing: 0.15em;
   text-transform: uppercase; color: var(--text-label); margin-top: 24px;
 }
 ```
@@ -812,7 +885,7 @@ backlink. Only appropriate when everyone signing in already knows what the produ
 .auth-points {
   list-style: none; padding: 0; margin: 32px 0 0;
   display: flex; flex-direction: column; gap: 12px;
-  font-family: "Share Tech Mono", monospace; font-size: 12px;
+  font-family: "Share Tech Mono", monospace; font-size: 0.75rem;
   letter-spacing: 0.05em; color: var(--text-subtle);
 }
 .auth-points li::before { content: "+"; color: var(--accent-ink); margin-right: 10px; }
@@ -981,15 +1054,15 @@ and a sidebar product uses it too:
 
 .app-bar {
   position: sticky; top: 0; z-index: 60;
-  display: flex; align-items: center; gap: 32px;
+  display: flex; flex-wrap: wrap; align-items: center; gap: 8px 32px; /* wraps only when the reader's text is too large to fit */
   min-height: 56px; padding-inline: 48px;
   background: var(--bg-surface); border-bottom: 1px solid var(--border);
 }
 .app-brand { display: flex; align-items: center; gap: 12px; flex-shrink: 0; color: var(--text-heading); text-decoration: none; }
 .app-brand img, .app-brand svg { width: 24px; height: 24px; border-radius: 4px; }
-.app-brand .wordmark { font-size: 18px; letter-spacing: 3px; }
+.app-brand .wordmark { font-size: 1.125rem; letter-spacing: 3px; }
 .app-byline {
-  font-family: "Share Tech Mono", monospace; font-size: 12px; letter-spacing: 0.1em;
+  font-family: "Share Tech Mono", monospace; font-size: 0.75rem; letter-spacing: 0.1em;
   text-transform: uppercase; color: var(--text-dim); text-decoration: none; white-space: nowrap;
   transition: color 0.2s;
 }
@@ -997,14 +1070,14 @@ and a sidebar product uses it too:
 .app-byline span { color: var(--text-label); transition: color 0.2s; }
 .app-byline:hover, .app-byline:hover span { color: var(--accent-ink); }
 .app-context {
-  font-family: "Share Tech Mono", monospace; font-size: 12px; letter-spacing: 0.1em;
+  font-family: "Share Tech Mono", monospace; font-size: 0.75rem; letter-spacing: 0.1em;
   text-transform: uppercase; color: var(--text-label); white-space: nowrap;
 }
 .app-context::before { content: "·"; margin-right: 12px; color: var(--text-dim); }
 
-.app-nav { display: flex; align-items: center; gap: 24px; flex: 1; min-width: 0; }
+.app-nav { display: flex; align-items: center; gap: 24px; flex: 1 1 auto; min-width: 0; } /* auto basis: too wide → wraps to its own row */
 .app-nav a {
-  font-family: "Share Tech Mono", monospace; font-size: 12px; letter-spacing: 0.1em;
+  font-family: "Share Tech Mono", monospace; font-size: 0.75rem; letter-spacing: 0.1em;
   text-transform: uppercase; color: var(--text-label); text-decoration: none; white-space: nowrap;
   padding-block: 6px; border-bottom: 1px solid transparent; transition: color 0.2s, border-color 0.2s;
 }
@@ -1025,13 +1098,13 @@ and a sidebar product uses it too:
 .user-menu-trigger:hover, .user-menu[open] > .user-menu-trigger,
 .user-menu-trigger[aria-expanded="true"] { color: var(--text-heading); }
 .user-menu-email {
-  font-family: "Share Tech Mono", monospace; font-size: 12px; letter-spacing: 0.05em;
+  font-family: "Share Tech Mono", monospace; font-size: 0.75rem; letter-spacing: 0.05em;
   max-width: 24ch; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
 }
 .user-initials {
   display: inline-flex; align-items: center; justify-content: center;
   width: 24px; height: 24px; border-radius: 4px; flex-shrink: 0;
-  font-family: "Share Tech Mono", monospace; font-size: 12px; letter-spacing: 0.05em; text-transform: uppercase;
+  font-family: "Share Tech Mono", monospace; font-size: 0.75rem; letter-spacing: 0.05em; text-transform: uppercase;
   color: var(--accent-ink); background: var(--accent-wash); border: 1px solid var(--accent-line);
 }
 .user-menu-chevron {
@@ -1052,7 +1125,7 @@ and a sidebar product uses it too:
 .user-menu-head .user-menu-email { max-width: none; color: var(--text-body); }
 .user-menu-item {
   display: flex; align-items: center; gap: 10px; width: 100%; padding: 10px; border-radius: 4px; text-align: left;
-  font-family: "Share Tech Mono", monospace; font-size: 12px; letter-spacing: 0.1em; text-transform: uppercase;
+  font-family: "Share Tech Mono", monospace; font-size: 0.75rem; letter-spacing: 0.1em; text-transform: uppercase;
   color: var(--text-label); background: none; border: 0; cursor: pointer; text-decoration: none;
   transition: background 0.2s, color 0.2s;
 }
@@ -1062,7 +1135,7 @@ and a sidebar product uses it too:
 
 .status {
   display: inline-flex; align-items: center; gap: 8px;
-  font-family: "Share Tech Mono", monospace; font-size: 12px; letter-spacing: 0.1em;
+  font-family: "Share Tech Mono", monospace; font-size: 0.75rem; letter-spacing: 0.1em;
   text-transform: uppercase; color: var(--text-label); white-space: nowrap;
 }
 .status::before {
@@ -1080,14 +1153,14 @@ and a sidebar product uses it too:
 .page-header .subtitle { margin-top: 8px; }
 .page-header-row { display: flex; align-items: flex-end; justify-content: space-between; gap: 16px 24px; flex-wrap: wrap; }
 .page-header-row .page-title { min-width: 0; overflow-wrap: anywhere; }
-@media (max-width: 768px) { .page-title { font-size: 26px; } }
+@media (max-width: 768px) { .page-title { font-size: 1.625rem; } }
 
 .app-footer {
   position: relative; z-index: 1;
   display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between;
   gap: 12px 24px; padding: 16px 48px;
   background: var(--bg-surface); border-top: 1px solid var(--border);
-  font-family: "Share Tech Mono", monospace; font-size: 12px; letter-spacing: 0.1em;
+  font-family: "Share Tech Mono", monospace; font-size: 0.75rem; letter-spacing: 0.1em;
   text-transform: uppercase; color: var(--text-dim);
 }
 .app-footer a { color: inherit; text-decoration: none; transition: color 0.2s; }
@@ -1098,12 +1171,12 @@ and a sidebar product uses it too:
 .app.has-sidebar { flex-direction: row; }
 .app.has-sidebar > .app-main { min-width: 0; }
 .app-sidebar {
-  display: flex; flex-direction: column; flex-shrink: 0; width: 260px;
+  display: flex; flex-direction: column; flex-shrink: 0; width: min(16.25rem, 40vw); /* 260px at default text size */
   position: sticky; top: 0; height: 100vh;
   background: var(--bg-surface); border-right: 1px solid var(--border);
 }
 .app-sidebar-top { padding: 40px 32px 28px; display: flex; flex-direction: column; gap: 12px; }
-.app-sidebar-top .app-brand .wordmark { font-size: 24px; letter-spacing: 2px; }
+.app-sidebar-top .app-brand .wordmark { font-size: 1.5rem; letter-spacing: 2px; }
 .app-sidebar-top .app-brand + .app-byline { margin: -4px 0 0; }
 .app-sidebar-top .app-context::before { content: none; }
 .app-sidebar-rule { height: 1px; margin: 0 24px; background: var(--border); flex-shrink: 0; }
@@ -1120,21 +1193,21 @@ and a sidebar product uses it too:
   content: ""; position: absolute; left: 0; top: 50%; transform: translateY(-50%);
   width: 2px; height: 16px; border-radius: 1px; background: var(--accent);
 }
-.app-sidebar-nav .tag { font-family: "Share Tech Mono", monospace; font-size: 12px; letter-spacing: 1px; width: 28px; flex-shrink: 0; color: var(--text-subtle); }
+.app-sidebar-nav .tag { font-family: "Share Tech Mono", monospace; font-size: 0.75rem; letter-spacing: 1px; width: 1.75rem; flex-shrink: 0; color: var(--text-subtle); }
 .app-sidebar-nav a[aria-current="page"] .tag { color: var(--accent-ink); }
-.app-sidebar-nav .label { font-family: "Rajdhani", sans-serif; font-size: 14px; font-weight: 500; letter-spacing: 1px; }
+.app-sidebar-nav .label { font-family: "Rajdhani", sans-serif; font-size: 0.875rem; font-weight: 500; letter-spacing: 1px; }
 .app-sidebar-bottom { padding: 20px 32px; display: flex; flex-direction: column; gap: 8px; }
 .app-sidebar-bottom .user-menu-email { max-width: none; color: var(--text-subtle); }
 .app-sidebar-bottom a, .app-sidebar-bottom button {
   align-self: flex-start; padding: 0; background: none; border: 0; cursor: pointer;
-  font-family: "Share Tech Mono", monospace; font-size: 12px; letter-spacing: 0.1em;
+  font-family: "Share Tech Mono", monospace; font-size: 0.75rem; letter-spacing: 0.1em;
   text-transform: uppercase; color: var(--text-label); text-decoration: none; transition: color 0.2s;
 }
 .app-sidebar-bottom a:hover, .app-sidebar-bottom button:hover { color: var(--text-heading); }
 .app-sidebar-bottom .user-menu-signout { margin: 0; border: 0; padding: 0; width: auto; }
 .app-sidebar-bottom .user-menu-signout:hover { color: var(--danger-ink); }
 .app-sidebar-bottom .app-sidebar-rule { margin: 12px 0; }
-.app-sidebar-bottom .build { font-family: "Share Tech Mono", monospace; font-size: 12px; letter-spacing: 0.05em; text-transform: uppercase; color: var(--text-dim); white-space: nowrap; }
+.app-sidebar-bottom .build { font-family: "Share Tech Mono", monospace; font-size: 0.75rem; letter-spacing: 0.05em; text-transform: uppercase; color: var(--text-dim); white-space: nowrap; }
 .app-sidebar-bottom .rising-backlink { color: var(--text-dim); }
 .app-bar-mobile, .app-footer-mobile { display: none; }
 
@@ -1231,7 +1304,7 @@ tab; the footer backlink is the *attribution* and opens in a new one. Products h
 
 ```css
 .rising-backlink {
-  font-family: "Share Tech Mono", monospace; font-size: 12px; letter-spacing: 0.2em;
+  font-family: "Share Tech Mono", monospace; font-size: 0.75rem; letter-spacing: 0.2em;
   color: var(--text-dim); text-transform: uppercase; text-decoration: none;
   transition: color 0.2s;
 }

@@ -163,64 +163,69 @@ body::before {
 /* ══════════════ TEXT STYLES ══════════════ */
 .eyebrow {
   font-family: "Share Tech Mono", monospace;
-  font-size: 12px; letter-spacing: 0.2em; text-transform: uppercase;
+  font-size: 0.75rem; letter-spacing: 0.2em; text-transform: uppercase;
   color: var(--accent-ink);
 }
 
 .section-label {
   font-family: "Share Tech Mono", monospace;
-  font-size: 12px; letter-spacing: 0.2em; text-transform: uppercase;
+  font-size: 0.75rem; letter-spacing: 0.2em; text-transform: uppercase;
   color: var(--text-label);
 }
 
 .page-title {
-  font-size: 36px; font-weight: 700; letter-spacing: 3px;
+  font-size: 2.25rem; font-weight: 700; letter-spacing: 3px;
   text-transform: uppercase; color: var(--text-heading); line-height: 1.1;
   /* A title can carry data (a venue's name); a long word breaks rather
      than widening the page. */
   min-width: 0; overflow-wrap: anywhere;
 }
 /* On a phone 36px fits barely a dozen characters; see "On phones" in llms.txt. */
-@media (max-width: 768px) { .page-title { font-size: 26px; } }
+@media (max-width: 768px) { .page-title { font-size: 1.625rem; } }
 
 .hero-title {
   font-family: "Rajdhani", sans-serif; font-weight: 700;
-  font-size: clamp(36px, 7vw, 56px); letter-spacing: 2px; line-height: 1.1;
+  font-size: clamp(2.25rem, 7vw, 3.5rem); letter-spacing: 2px; line-height: 1.1;
   text-transform: uppercase; color: var(--text-heading);
 }
 
-.sec-title { font-size: 28px; font-weight: 700; letter-spacing: 2px; color: var(--text-heading); line-height: 1.1; }
-.card-title { font-size: 20px; font-weight: 700; letter-spacing: 1px; color: var(--text-heading); }
-.lede { font-size: 18px; font-weight: 500; line-height: 1.5; color: var(--text-muted); }
-.body { font-size: 15px; font-weight: 500; line-height: 1.6; color: var(--text-muted); }
+.sec-title { font-size: 1.75rem; font-weight: 700; letter-spacing: 2px; color: var(--text-heading); line-height: 1.1; }
+.card-title { font-size: 1.25rem; font-weight: 700; letter-spacing: 1px; color: var(--text-heading); }
+.lede { font-size: 1.125rem; font-weight: 500; line-height: 1.5; color: var(--text-muted); }
+.body { font-size: 0.9375rem; font-weight: 500; line-height: 1.6; color: var(--text-muted); }
 
 .subtitle {
   font-family: "Share Tech Mono", monospace;
-  font-size: 13px; letter-spacing: 0.1em; color: var(--text-subtle);
+  font-size: 0.8125rem; letter-spacing: 0.1em; color: var(--text-subtle);
 }
 
 .stat-label {
   font-family: "Share Tech Mono", monospace;
-  font-size: 12px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-label);
+  font-size: 0.75rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-label);
 }
 
 .stat-value {
   font-family: "Share Tech Mono", monospace;
-  font-size: 17px; letter-spacing: 0.06em; color: var(--accent-ink);
+  font-size: 1.0625rem; letter-spacing: 0.06em; color: var(--accent-ink);
 }
 
 /* ══════════════ BUTTONS ══════════════ */
   .btn {
     font-family: "Share Tech Mono", monospace;
-    font-size: 12px; letter-spacing: 0.1em; text-transform: uppercase;
+    font-size: 0.75rem; letter-spacing: 0.1em; text-transform: uppercase;
     padding: 13px 26px; border-radius: 4px; border: 1px solid transparent;
     display: inline-flex; align-items: center; justify-content: center; gap: 10px;
     cursor: pointer; text-decoration: none; white-space: nowrap;
-    transition: background 0.2s, border-color 0.2s, color 0.2s, opacity 0.2s;
+    transition: background 0.2s, border-color 0.2s, color 0.2s, opacity 0.2s, transform 0.2s;
   }
-  .btn-sm { font-size: 12px; padding: 9px 18px; letter-spacing: 0.075em; }
-  .btn-lg { font-size: 13px; padding: 17px 34px; letter-spacing: 0.15em; }
-  .btn-block { display: flex; width: 100%; }
+  /* Press: the first thing a finger feels. Touch-down is instant (0s on the
+     way in); the release eases back at Quick. */
+  .btn:active:not([disabled]):not([aria-busy="true"]) { transform: scale(0.97); transition-duration: 0s; }
+  .btn-sm { font-size: 0.75rem; padding: 9px 18px; letter-spacing: 0.075em; }
+  .btn-lg { font-size: 0.8125rem; padding: 17px 34px; letter-spacing: 0.15em; }
+  /* A full-width button is the one place a label may wrap — at large text sizes
+     a nowrap label would push its card past a phone screen. */
+  .btn-block { display: flex; width: 100%; white-space: normal; text-align: center; }
 
   .btn-primary { background: var(--accent); color: var(--accent-on); border-color: var(--accent); }
   .btn-primary:hover { background: var(--accent-hover); border-color: var(--accent-hover); }
@@ -245,12 +250,12 @@ body::before {
 .field { display: flex; flex-direction: column; gap: 8px; }
 
 .field-label {
-  font-family: "Share Tech Mono", monospace; font-size: 12px;
+  font-family: "Share Tech Mono", monospace; font-size: 0.75rem;
   letter-spacing: 0.15em; text-transform: uppercase; color: var(--text-label);
 }
 
 .input {
-  font-family: "Rajdhani", sans-serif; font-size: 16px; font-weight: 500;
+  font-family: "Rajdhani", sans-serif; font-size: 1rem; font-weight: 500;
   color: var(--text-body); background: var(--bg-surface);
   border: 1px solid var(--border); border-radius: 4px;
   padding: 13px 14px; width: 100%;
@@ -262,10 +267,10 @@ body::before {
 .input:focus-visible { outline: 1px solid var(--accent-ink); outline-offset: 2px; }
 .input[disabled] { color: var(--text-label); border-color: var(--border-subtle); cursor: not-allowed; }
 
-.field-help { font-size: 14px; font-weight: 500; color: var(--text-muted); line-height: 1.5; }
+.field-help { font-size: 0.875rem; font-weight: 500; color: var(--text-muted); line-height: 1.5; }
 
 .field-error {
-  font-family: "Share Tech Mono", monospace; font-size: 12px;
+  font-family: "Share Tech Mono", monospace; font-size: 0.75rem;
   letter-spacing: 0.05em; color: var(--danger-ink);
 }
 .field.is-error .input { border-color: var(--danger-ink); }
@@ -298,7 +303,7 @@ a.card:hover::before, .card.is-interactive:hover::before { opacity: 1; }
 
 .card-tag {
   font-family: "Share Tech Mono", monospace;
-  font-size: 12px; letter-spacing: 0.15em; text-transform: uppercase;
+  font-size: 0.75rem; letter-spacing: 0.15em; text-transform: uppercase;
   color: var(--accent-ink);
 }
 
@@ -306,7 +311,7 @@ a.card:hover::before, .card.is-interactive:hover::before { opacity: 1; }
 .badge {
   display: inline-block;
   font-family: "Share Tech Mono", monospace;
-  font-size: 12px; letter-spacing: 0.05em;
+  font-size: 0.75rem; letter-spacing: 0.05em;
   background: var(--bg-inset); color: var(--text-label);
   border: 1px solid var(--border-subtle); border-radius: 3px;
   padding: 4px 8px;
@@ -331,15 +336,15 @@ a.card:hover::before, .card.is-interactive:hover::before { opacity: 1; }
 /* ══════════════ NAV ══════════════ */
 .nav {
   position: sticky; top: 0; z-index: 60;
-  height: 64px; display: flex; align-items: center;
+  min-height: 64px; display: flex; align-items: center;
   background: var(--bg-base);
   border-bottom: 1px solid var(--border);
 }
 
-.nav-inner { display: flex; align-items: center; justify-content: space-between; gap: 24px; width: 100%; }
+.nav-inner { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 8px 24px; width: 100%; }
 
 .wordmark {
-  font-size: 20px; font-weight: 700; letter-spacing: 3px;
+  font-size: 1.25rem; font-weight: 700; letter-spacing: 3px;
   text-transform: uppercase; color: var(--text-heading);
   text-decoration: none;
 }
@@ -354,8 +359,8 @@ a.card:hover::before, .card.is-interactive:hover::before { opacity: 1; }
 
 .nav-links a {
   font-family: "Share Tech Mono", monospace;
-  font-size: 12px; letter-spacing: 0.1em; text-transform: uppercase;
-  color: var(--text-label); text-decoration: none; transition: color 0.2s;
+  font-size: 0.75rem; letter-spacing: 0.1em; text-transform: uppercase;
+  color: var(--text-label); text-decoration: none; white-space: nowrap; transition: color 0.2s;
 }
 .nav-links a:hover { color: var(--accent-ink); }
 
@@ -382,7 +387,7 @@ a.card:hover::before, .card.is-interactive:hover::before { opacity: 1; }
 /* ── App bar ── */
 .app-bar {
   position: sticky; top: 0; z-index: 60;
-  display: flex; align-items: center; gap: 32px;
+  display: flex; flex-wrap: wrap; align-items: center; gap: 8px 32px; /* wraps only when the reader's text is too large to fit */
   min-height: 56px; padding-inline: 48px;
   background: var(--bg-surface);
   border-bottom: 1px solid var(--border);
@@ -398,14 +403,14 @@ a.card:hover::before, .card.is-interactive:hover::before { opacity: 1; }
   color: var(--text-heading); text-decoration: none;
 }
 .app-brand img, .app-brand svg { width: 24px; height: 24px; border-radius: 4px; flex-shrink: 0; }
-.app-brand .wordmark { font-size: 18px; letter-spacing: 3px; }
+.app-brand .wordmark { font-size: 1.125rem; letter-spacing: 3px; }
 
 /* Byline: the way home. "by rising.company" after the wordmark, in the
    label voice, and it is the link — same tab, this is navigation. The
    negative margin pulls it from the bar's 32px gap to the brand's 12px. */
 .app-byline {
   font-family: "Share Tech Mono", monospace;
-  font-size: 12px; letter-spacing: 0.1em; text-transform: uppercase;
+  font-size: 0.75rem; letter-spacing: 0.1em; text-transform: uppercase;
   color: var(--text-dim); text-decoration: none; white-space: nowrap;
   transition: color 0.2s;
 }
@@ -415,18 +420,18 @@ a.card:hover::before, .card.is-interactive:hover::before { opacity: 1; }
 
 .app-context {
   font-family: "Share Tech Mono", monospace;
-  font-size: 12px; letter-spacing: 0.1em; text-transform: uppercase;
+  font-size: 0.75rem; letter-spacing: 0.1em; text-transform: uppercase;
   color: var(--text-label); white-space: nowrap;
 }
 .app-context::before { content: "·"; margin-right: 12px; color: var(--text-dim); }
 
 /* Primary navigation: mono links, active one carries a 1px accent rule
    sitting on the bar's bottom border. */
-.app-nav { display: flex; align-items: center; gap: 24px; flex: 1; min-width: 0; }
+.app-nav { display: flex; align-items: center; gap: 24px; flex: 1 1 auto; min-width: 0; } /* auto basis: too wide → wraps to its own row */
 
 .app-nav a {
   font-family: "Share Tech Mono", monospace;
-  font-size: 12px; letter-spacing: 0.1em; text-transform: uppercase;
+  font-size: 0.75rem; letter-spacing: 0.1em; text-transform: uppercase;
   color: var(--text-label); text-decoration: none; white-space: nowrap;
   padding-block: 6px; border-bottom: 1px solid transparent;
   transition: color 0.2s, border-color 0.2s;
@@ -456,7 +461,7 @@ a.card:hover::before, .card.is-interactive:hover::before { opacity: 1; }
 
 .user-menu-email {
   font-family: "Share Tech Mono", monospace;
-  font-size: 12px; letter-spacing: 0.05em;
+  font-size: 0.75rem; letter-spacing: 0.05em;
   max-width: 24ch; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
 }
 
@@ -464,7 +469,7 @@ a.card:hover::before, .card.is-interactive:hover::before { opacity: 1; }
 .user-initials {
   display: inline-flex; align-items: center; justify-content: center;
   width: 24px; height: 24px; border-radius: 4px; flex-shrink: 0;
-  font-family: "Share Tech Mono", monospace; font-size: 12px; letter-spacing: 0.05em;
+  font-family: "Share Tech Mono", monospace; font-size: 0.75rem; letter-spacing: 0.05em;
   text-transform: uppercase; color: var(--accent-ink);
   background: var(--accent-wash); border: 1px solid var(--accent-line);
 }
@@ -489,14 +494,14 @@ a.card:hover::before, .card.is-interactive:hover::before { opacity: 1; }
   padding: 8px 10px 10px; margin-bottom: 6px;
   border-bottom: 1px solid var(--border);
 }
-.user-menu-head .section-label { font-size: 12px; letter-spacing: 0.15em; margin-bottom: 4px; }
+.user-menu-head .section-label { font-size: 0.75rem; letter-spacing: 0.15em; margin-bottom: 4px; }
 .user-menu-head .user-menu-email { max-width: none; color: var(--text-body); }
 
 .user-menu-item {
   display: flex; align-items: center; gap: 10px; width: 100%;
   padding: 10px; border-radius: 4px; text-align: left;
   font-family: "Share Tech Mono", monospace;
-  font-size: 12px; letter-spacing: 0.1em; text-transform: uppercase;
+  font-size: 0.75rem; letter-spacing: 0.1em; text-transform: uppercase;
   color: var(--text-label); background: none; border: 0; cursor: pointer;
   text-decoration: none; transition: background 0.2s, color 0.2s;
 }
@@ -509,7 +514,7 @@ a.card:hover::before, .card.is-interactive:hover::before { opacity: 1; }
 /* Plain links in the session cluster (help, docs) share the nav-link voice. */
 .app-session > a {
   font-family: "Share Tech Mono", monospace;
-  font-size: 12px; letter-spacing: 0.1em; text-transform: uppercase;
+  font-size: 0.75rem; letter-spacing: 0.1em; text-transform: uppercase;
   color: var(--text-label); text-decoration: none; transition: color 0.2s;
 }
 .app-session > a:hover { color: var(--accent-ink); }
@@ -519,7 +524,7 @@ a.card:hover::before, .card.is-interactive:hover::before { opacity: 1; }
 .status {
   display: inline-flex; align-items: center; gap: 8px;
   font-family: "Share Tech Mono", monospace;
-  font-size: 12px; letter-spacing: 0.1em; text-transform: uppercase;
+  font-size: 0.75rem; letter-spacing: 0.1em; text-transform: uppercase;
   color: var(--text-label); white-space: nowrap;
 }
 .status::before {
@@ -562,7 +567,7 @@ a.card:hover::before, .card.is-interactive:hover::before { opacity: 1; }
   background: var(--bg-surface);
   border-top: 1px solid var(--border);
   font-family: "Share Tech Mono", monospace;
-  font-size: 12px; letter-spacing: 0.1em; text-transform: uppercase;
+  font-size: 0.75rem; letter-spacing: 0.1em; text-transform: uppercase;
   color: var(--text-dim);
 }
 .app-footer a { color: inherit; text-decoration: none; transition: color 0.2s; }
@@ -591,11 +596,12 @@ a.card:hover::before, .card.is-interactive:hover::before { opacity: 1; }
 
 .app-sidebar {
   display: flex; flex-direction: column; flex-shrink: 0;
-  width: 260px; position: sticky; top: 0; height: 100vh;
+  /* 260px at the default text size; grows with the reader's text, never past 40% of the screen. */
+  width: min(16.25rem, 40vw); position: sticky; top: 0; height: 100vh;
   background: var(--bg-surface); border-right: 1px solid var(--border);
 }
 .app-sidebar-top { padding: 40px 32px 28px; display: flex; flex-direction: column; gap: 12px; }
-.app-sidebar-top .app-brand .wordmark { font-size: 24px; letter-spacing: 2px; }
+.app-sidebar-top .app-brand .wordmark { font-size: 1.5rem; letter-spacing: 2px; }
 .app-sidebar-top .app-brand + .app-byline { margin: -4px 0 0; }
 .app-sidebar-top .app-context::before { content: none; }
 .app-sidebar-top .app-context { margin-right: 0; }
@@ -617,12 +623,12 @@ a.card:hover::before, .card.is-interactive:hover::before { opacity: 1; }
   width: 2px; height: 16px; border-radius: 1px; background: var(--accent);
 }
 .app-sidebar-nav .tag {
-  font-family: "Share Tech Mono", monospace; font-size: 12px; letter-spacing: 1px;
-  width: 28px; flex-shrink: 0; color: var(--text-subtle); transition: color 0.2s;
+  font-family: "Share Tech Mono", monospace; font-size: 0.75rem; letter-spacing: 1px;
+  width: 1.75rem; flex-shrink: 0; color: var(--text-subtle); transition: color 0.2s;
 }
 .app-sidebar-nav a:hover .tag { color: var(--text-muted); }
 .app-sidebar-nav a[aria-current="page"] .tag { color: var(--accent-ink); }
-.app-sidebar-nav .label { font-family: "Rajdhani", sans-serif; font-size: 14px; font-weight: 500; letter-spacing: 1px; }
+.app-sidebar-nav .label { font-family: "Rajdhani", sans-serif; font-size: 0.875rem; font-weight: 500; letter-spacing: 1px; }
 
 /* Bottom: session, then a rule, then build + backlink. Sign out last. */
 .app-sidebar-bottom { padding: 20px 32px; display: flex; flex-direction: column; gap: 8px; }
@@ -630,14 +636,14 @@ a.card:hover::before, .card.is-interactive:hover::before { opacity: 1; }
 .app-sidebar-bottom .user-menu-email { max-width: none; color: var(--text-subtle); }
 .app-sidebar-bottom a, .app-sidebar-bottom button {
   align-self: flex-start; padding: 0; background: none; border: 0; cursor: pointer;
-  font-family: "Share Tech Mono", monospace; font-size: 12px; letter-spacing: 0.1em;
+  font-family: "Share Tech Mono", monospace; font-size: 0.75rem; letter-spacing: 0.1em;
   text-transform: uppercase; color: var(--text-label); text-decoration: none; transition: color 0.2s;
 }
 .app-sidebar-bottom a:hover, .app-sidebar-bottom button:hover { color: var(--text-heading); }
 .app-sidebar-bottom .user-menu-signout { margin: 0; border: 0; padding: 0; width: auto; }
 .app-sidebar-bottom .user-menu-signout:hover { color: var(--danger-ink); }
 .app-sidebar-bottom .app-sidebar-rule { margin: 12px 0; }
-.app-sidebar-bottom .build { font-family: "Share Tech Mono", monospace; font-size: 12px; letter-spacing: 0.05em; text-transform: uppercase; color: var(--text-dim); white-space: nowrap; }
+.app-sidebar-bottom .build { font-family: "Share Tech Mono", monospace; font-size: 0.75rem; letter-spacing: 0.05em; text-transform: uppercase; color: var(--text-dim); white-space: nowrap; }
 .app-sidebar-bottom .rising-backlink { color: var(--text-dim); }
 .app-sidebar-bottom .rising-backlink:hover { color: var(--accent-ink); }
 
@@ -692,7 +698,7 @@ a.card:hover::before, .card.is-interactive:hover::before { opacity: 1; }
 
 .hero-trust {
   font-family: "Share Tech Mono", monospace;
-  font-size: 12px; letter-spacing: 0.15em; text-transform: uppercase;
+  font-size: 0.75rem; letter-spacing: 0.15em; text-transform: uppercase;
   color: var(--text-label); margin-top: 24px;
 }
 
@@ -700,7 +706,7 @@ a.card:hover::before, .card.is-interactive:hover::before { opacity: 1; }
 
 .step-num {
   font-family: "Share Tech Mono", monospace;
-  font-size: 13px; letter-spacing: 0.1em; color: var(--accent-ink);
+  font-size: 0.8125rem; letter-spacing: 0.1em; color: var(--accent-ink);
   padding-bottom: 12px; margin-bottom: 12px;
   border-bottom: 1px solid var(--border);
 }
@@ -717,7 +723,7 @@ a.card:hover::before, .card.is-interactive:hover::before { opacity: 1; }
 .auth-points {
   list-style: none; padding: 0; margin: 32px 0 0;
   display: flex; flex-direction: column; gap: 12px;
-  font-family: "Share Tech Mono", monospace; font-size: 12px;
+  font-family: "Share Tech Mono", monospace; font-size: 0.75rem;
   letter-spacing: 0.05em; color: var(--text-subtle);
 }
 .auth-points li::before { content: "+"; color: var(--accent-ink); margin-right: 10px; }
@@ -737,7 +743,7 @@ a.card:hover::before, .card.is-interactive:hover::before { opacity: 1; }
 /* ══════════════ FOOTER ══════════════ */
 .site-footer {
   font-family: "Share Tech Mono", monospace;
-  font-size: 12px; letter-spacing: 0.1em; color: var(--text-dim);
+  font-size: 0.75rem; letter-spacing: 0.1em; color: var(--text-dim);
   border-top: 1px solid var(--border);
   padding-block: 24px;
 }
@@ -747,13 +753,66 @@ a.card:hover::before, .card.is-interactive:hover::before { opacity: 1; }
 
 .rising-backlink {
   font-family: "Share Tech Mono", monospace;
-  font-size: 12px; letter-spacing: 0.2em; text-transform: uppercase;
+  font-size: 0.75rem; letter-spacing: 0.2em; text-transform: uppercase;
   color: var(--text-dim); text-decoration: none; transition: color 0.2s;
 }
 .rising-backlink:hover { color: var(--accent-ink); }
+
+/* ══════════════ TOUCH ══════════════ */
+/* A finger needs 44px. Desktop keeps its density; a touch screen gets the
+   full target, whatever the viewport width (an iPad shows the sidebar). */
+@media (pointer: coarse) {
+  .btn, .user-menu-trigger, .user-menu-item, .app-sidebar-nav a { min-height: 44px; }
+}
+
+/* ══════════════ CONTRAST ══════════════ */
+/* Increase Contrast (macOS / iOS / Windows): the low rungs climb toward body,
+   borders firm up, and the HUD texture goes. Same tokens, so every component
+   follows. Mission is selected without :root so it can't override Daylight. */
+@media (prefers-contrast: more) {
+  :root:not([data-theme="daylight"]), [data-theme="mission"] {
+    --text-muted: #b8ccc2;
+    --text-subtle: #b8ccc2;
+    --text-label: #a3bdb0;
+    --text-dim: #a3bdb0;
+    --border: #466b58;
+    --border-subtle: #466b58;
+    --border-hover: #5f8f76;
+    --chrome-scanline: transparent;
+    --chrome-glow: transparent;
+    --chrome-grid-line: transparent;
+  }
+  [data-theme="daylight"] {
+    --text-muted: #26332d;
+    --text-subtle: #2e3d36;
+    --text-label: #34443c;
+    --text-dim: #34443c;
+    --accent-ink: #075c3a;
+    --border: #7a9085;
+    --border-subtle: #a7b8af;
+    --border-hover: #5f7a6c;
+    --chrome-glow: transparent;
+    --chrome-grid-line: transparent;
+  }
+}
+
+/* Forced colours (Windows High Contrast): the system owns the palette. Drop
+   the texture, give every button a visible edge, and keep the two marks that
+   carry meaning through colour alone — the status dot and the active bar. */
+@media (forced-colors: active) {
+  body::before, .atmosphere, .corner { display: none; }
+  .btn { border-color: ButtonText; }
+  .status::before { forced-color-adjust: none; }
+  .app-sidebar-nav a[aria-current="page"]::before { forced-color-adjust: none; background: Highlight; }
+  /* A transparent border is painted in forced colours; only the current link keeps its rule. */
+  .app-nav a { border-bottom-color: Canvas; }
+  .app-nav a[aria-current="page"] { border-bottom-color: Highlight; }
+}
 
 /* ══════════════ MOTION ══════════════ */
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
   *, *::before, *::after { animation: none !important; transition: none !important; }
+  /* Transforms off, opacity kept: the press dims instead of shrinking. */
+  .btn:active:not([disabled]):not([aria-busy="true"]) { transform: none; opacity: 0.8; }
 }
