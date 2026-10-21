@@ -1,0 +1,199 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Missing Components Plan</title>
+<style>
+  :root {
+    --bg: #f6f8f7; --surface: #ffffff; --inset: #e8f5ee; --border: #dde5e0;
+    --heading: #0b1a14; --body: #26332d; --muted: #43564c; --dim: #52655b;
+    --ink: #0b7a4e; --warn: #8a5a00;
+    color-scheme: light;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #0a0c10; --surface: #0d1117; --inset: #0a1410; --border: #1a2a20;
+      --heading: #e8f4ff; --body: #c8d8e8; --muted: #84a89a; --dim: #6e8f80;
+      --ink: #3af0a0; --warn: #f5b83d;
+      color-scheme: dark;
+    }
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--body); font: 16px/1.6 system-ui, -apple-system, "Segoe UI", sans-serif; }
+  main { max-width: 860px; margin: 0 auto; padding: 48px 24px 96px; }
+  h1, h2, h3 { color: var(--heading); line-height: 1.2; }
+  h1 { font-size: 2.25rem; margin: 8px 0 12px; }
+  h2 { font-size: 1.75rem; margin: 56px 0 12px; padding-top: 24px; border-top: 1px solid var(--border); }
+  h3 { font-size: 1.25rem; margin: 32px 0 8px; }
+  .eyebrow, .meta { font: 12px/1.4 ui-monospace, "SF Mono", Menlo, monospace; letter-spacing: 0.15em; text-transform: uppercase; color: var(--ink); }
+  .meta { color: var(--dim); letter-spacing: 0.08em; }
+  .lede { font-size: 1.25rem; color: var(--muted); }
+  code { font: 0.875em ui-monospace, "SF Mono", Menlo, monospace; background: var(--inset); padding: 1px 5px; border-radius: 3px; }
+  pre { background: var(--surface); border: 1px solid var(--border); border-radius: 6px; padding: 16px; overflow-x: auto; font: 13px/1.5 ui-monospace, "SF Mono", Menlo, monospace; }
+  pre code { background: none; padding: 0; }
+  table { width: 100%; border-collapse: collapse; margin: 16px 0; font-size: 0.875rem; background: var(--surface); border: 1px solid var(--border); border-radius: 6px; overflow: hidden; }
+  th { text-align: left; font: 12px ui-monospace, Menlo, monospace; letter-spacing: 0.1em; text-transform: uppercase; color: var(--dim); background: var(--inset); }
+  th, td { padding: 10px 12px; border-bottom: 1px solid var(--border); vertical-align: top; }
+  tr:last-child td { border-bottom: none; }
+  .callout { border-left: 3px solid var(--ink); background: var(--surface); padding: 12px 16px; border-radius: 0 6px 6px 0; margin: 16px 0; }
+  .callout.q { border-left-color: var(--warn); }
+  .mermaid { background: var(--surface); border: 1px solid var(--border); border-radius: 6px; padding: 16px; text-align: center; }
+  ul { padding-left: 1.25em; }
+  li { margin: 4px 0; }
+</style>
+</head>
+<body>
+<main>
+  <div class="eyebrow">// Design doc · rising design system</div>
+  <h1>The missing building blocks</h1>
+  <p class="meta">2026-10-21 · status: accepted · item 4 of the design review</p>
+  <p class="lede">The system specifies cards, lists, buttons, fields and the shells, but not the pieces every
+  product reaches for next. Each product invents its own icons, dialogs, toasts, tables and toggles, and they drift apart.
+  This doc proposes all seven, in the order they unblock each other, so each can ship as one small PR.</p>
+
+  <div class="callout"><strong>Decided</strong>, details at the end:
+  (1) the icon set is Lucide with squared ends, (2) the system stays CSS and markup only. No React package.
+  Everything else follows the rules the system already has.</div>
+
+  <h2>Order of work</h2>
+  <p>Icons come first because four of the others need one: a close button, a check, a toast's state, and a sort arrow.
+  The form controls come next because they are small and self-contained. The two overlay components come last, because they
+  depend on the focus and motion rules being settled.</p>
+  <pre class="mermaid">
+flowchart LR
+  I[1 · Icons] --> C[2 · Checkbox & radio]
+  I --> T[3 · Switch]
+  C --> S[4 · Segmented control]
+  I --> TB[5 · Table]
+  I --> TO[6 · Toast]
+  I --> D[7 · Dialog & sheet]
+  TO -.shares the overlay layer.-> D
+  </pre>
+
+  <h2>Rules every component inherits</h2>
+  <ul>
+    <li><strong>Faces:</strong> labels and options use the text face (IBM Plex Sans). Readouts such as column headers and counts use mono. Titles use Rajdhani.</li>
+    <li><strong>Sizes:</strong> only the seven <code>--type-*</code> steps. A control is never smaller than 14px.</li>
+    <li><strong>Targets:</strong> 44px minimum on coarse pointers, using the same <code>@media (pointer: coarse)</code> rule buttons already have.</li>
+    <li><strong>Colour:</strong> tokens only. Mint appears as a fill (<code>--accent</code>) for "on" or "selected", and as <code>--accent-ink</code> for focus and text.</li>
+    <li><strong>States:</strong> rest, hover, press (instant), focus-visible (the existing 1px <code>--accent-ink</code> ring), disabled, and an error state where one applies.</li>
+    <li><strong>Motion:</strong> Quick for colour, Base spring for anything that moves, Slow for a modal and its scrim. Reduced motion keeps the opacity change and drops the movement.</li>
+    <li><strong>Accessibility:</strong> native elements first (<code>&lt;dialog&gt;</code>, <code>&lt;input type=checkbox&gt;</code>, <code>&lt;table&gt;</code>), so focus, keyboard and screen readers work without extra code.</li>
+    <li><strong>Themes and contrast:</strong> each component is checked in Mission, Daylight, <code>auto</code>, Increase Contrast and forced colours.</li>
+  </ul>
+
+  <h2>1 · Icons</h2>
+  <p><strong>Problem:</strong> the user-menu chevron is drawn with CSS borders, the auth points use a typed <code>+</code>,
+  and the back link is a typed <code>←</code>. Nothing lines up with the text beside it, and products pick whatever is nearby.</p>
+  <p><strong>Proposal:</strong> adopt <strong>Lucide</strong> (ISC licence, about 1,500 icons, with matching npm packages for React and plain SVG). Restyle it to the brand:</p>
+  <ul>
+    <li><strong>Squared stroke ends.</strong> Use <code>stroke-linecap: square; stroke-linejoin: miter</code>. Lucide's default round ends read as friendly and generic; square ends match Rajdhani's corners and the HUD brackets. This is the one change that makes the set ours.</li>
+    <li><strong>Stroke 1.5px</strong> at every size, set with <code>absoluteStrokeWidth</code>, so a 16px icon isn't thinner than a 24px one.</li>
+    <li><strong>Three sizes</strong> paired with type: 16px beside 14px text, 20px beside 16px text, 24px for icon-only buttons and the nav.</li>
+    <li><code>currentColor</code> only. An icon takes the colour of the text it sits with, and never carries meaning by colour alone.</li>
+  </ul>
+<pre><code>.icon { width: 1.25em; height: 1.25em; flex: none; vertical-align: -0.25em;
+        stroke: currentColor; stroke-width: 1.5; fill: none;
+        stroke-linecap: square; stroke-linejoin: miter; }
+.icon-sm { width: 16px; height: 16px; }   .icon-lg { width: 24px; height: 24px; }
+.btn-icon { width: 44px; height: 44px; padding: 0; }   /* icon-only: needs aria-label */</code></pre>
+  <ul>
+    <li><strong>Delivery:</strong> products use <code>lucide-react</code> plus the <code>.icon</code> class. Static pages use a small <code>branding/icons.svg</code> sprite with only the icons the system uses, referenced with <code>&lt;use href&gt;</code>.</li>
+    <li><strong>Accessibility:</strong> a decorative icon gets <code>aria-hidden="true"</code>. An icon-only button needs an <code>aria-label</code> and a tooltip.</li>
+    <li><strong>First users:</strong> the user-menu chevron, the back link, the <code>+</code> points, the card arrow, and the status of a toast.</li>
+  </ul>
+
+  <h2>2 · Checkbox &amp; radio</h2>
+  <p>Use native inputs, styled with <code>accent-color</code> rather than redrawn. They stay accessible, work in forced colours, and need no script.</p>
+<pre><code>.check { display: flex; align-items: center; gap: 12px; min-height: 44px; font-size: var(--type-body); color: var(--text-body); }
+.check input { width: 20px; height: 20px; margin: 0; accent-color: var(--accent-ink); }</code></pre>
+  <ul>
+    <li>The label is a sentence in the text face, and the whole row is clickable through <code>&lt;label&gt;</code>.</li>
+    <li>A group sits in a <code>&lt;fieldset&gt;</code> whose <code>&lt;legend&gt;</code> uses <code>.field-label</code>. Help and error text follow the field rules.</li>
+    <li><strong>Radio or checkbox:</strong> radios for one choice among 2–5. Beyond five, use a select. A checkbox is a choice that takes effect when the form is submitted.</li>
+  </ul>
+
+  <h2>3 · Switch</h2>
+  <p>A switch is a setting that <strong>takes effect immediately</strong>. If nothing happens until Save, use a checkbox instead.</p>
+<pre><code>&lt;button class="switch" role="switch" aria-checked="false"&gt;&lt;span class="switch-thumb"&gt;&lt;/span&gt;&lt;/button&gt;
+
+.switch { width: 40px; height: 24px; border-radius: 12px; background: var(--bg-inset); border: 1px solid var(--border-hover); }
+.switch[aria-checked="true"] { background: var(--accent); border-color: var(--accent); }
+.switch-thumb { width: 18px; height: 18px; border-radius: 50%; background: var(--text-heading); /* Base spring on translate */ }
+.switch[aria-checked="true"] .switch-thumb { background: var(--accent-on); transform: translateX(16px); }</code></pre>
+  <ul>
+    <li>The 40×24 visual sits inside a 44px row, and the label to its left is clickable too.</li>
+    <li>"On" is shown by the thumb's position as well as the fill, so it doesn't rely on colour alone. In forced colours the thumb keeps <code>ButtonText</code>.</li>
+  </ul>
+
+  <h2>4 · Segmented control</h2>
+  <p>A segmented control switches between 2–4 views of the <strong>same content</strong>, such as Day / Week / Month or the showcase's Mission / Daylight / Auto.
+  It is not navigation: if the URL should change, use the nav or tabs.</p>
+  <ul>
+    <li>Markup is a radio group (<code>role="radiogroup"</code> with native radios, or buttons with <code>aria-pressed</code>), and arrow keys move the selection.</li>
+    <li>Labels are the text face at 14px/500 in <code>--text-muted</code>. The selected segment is <code>--accent-wash</code> with <code>--accent-ink</code> text. The segments sit in one 1px <code>--border</code> frame with hairline dividers.</li>
+    <li>The showcase theme switch becomes the reference build.</li>
+  </ul>
+
+  <h2>5 · Table</h2>
+  <p>A table is for <strong>comparing values across rows</strong>. If each row is a thing you open, use <code>.list</code> (from PR #6).</p>
+  <ul>
+    <li><strong>Header:</strong> mono 12px uppercase <code>--text-dim</code> on <code>--bg-inset</code>, sticky inside its scroll container. A sortable header is a button with a 16px icon and <code>aria-sort</code>.</li>
+    <li><strong>Cells:</strong> 14px text face. Numbers are right-aligned with <code>font-variant-numeric: tabular-nums</code>, which Plex supports, so columns line up. IDs and hashes are mono.</li>
+    <li><strong>Rows:</strong> 44px minimum, hairline <code>--border-subtle</code> between rows, no zebra stripes. Hover uses <code>--bg-surface-hover</code> only when the row does something.</li>
+    <li><strong>Phones:</strong> the table scrolls sideways inside its own frame, with the 24px edge fade from the phone nav. The page itself never scrolls sideways. If a phone user needs only two columns, the product shows a list instead.</li>
+    <li><strong>Empty and loading:</strong> the existing empty state goes inside the frame. While loading, skeleton rows breathe on opacity, the only other loop the motion rules allow.</li>
+  </ul>
+
+  <h2>6 · Toast</h2>
+  <p>A toast confirms something the person just did, and offers to undo it. It never carries anything they must act on: that belongs in the page, or in a dialog.</p>
+  <ul>
+    <li><strong>Position:</strong> bottom-right on desktop and bottom-centre on phones, above the footer. One toast at a time; a new one replaces the old one.</li>
+    <li><strong>Anatomy:</strong> a status icon, one sentence in the text face at 14px, and an optional single action button ("Undo") in <code>.btn-ghost .btn-sm</code>. It sits on a surface with a 1px border. No title.</li>
+    <li><strong>Timing:</strong> success and info stay 5s. The timer pauses while the pointer is over the toast or it has focus. An error stays until dismissed.</li>
+    <li><strong>Accessibility:</strong> success and info use <code>role="status"</code> (polite); errors use <code>role="alert"</code>. Focus never moves to a toast.</li>
+    <li><strong>Motion:</strong> the toast enters with the Base spring, rising 8px, and exits at 0.6× fade only. Reduced motion fades only.</li>
+  </ul>
+
+  <h2>7 · Dialog &amp; sheet</h2>
+  <p>A dialog asks one question that blocks the task, such as "Delete this huddle?" or a short form. A long flow gets its own page instead.</p>
+  <pre class="mermaid">
+stateDiagram-v2
+  [*] --> Closed
+  Closed --> Open: trigger · showModal()
+  Open --> Closed: Escape · scrim click · Cancel
+  Open --> Working: primary action
+  Working --> Closed: success → toast
+  Working --> Open: error shown inline
+  </pre>
+  <ul>
+    <li><strong>Built on native <code>&lt;dialog&gt;</code> with <code>showModal()</code>.</strong> The browser handles the focus trap, Escape and the inert background. Focus goes to the first field, or to Cancel for a destructive dialog. On close it returns to the trigger.</li>
+    <li><strong>Anatomy:</strong> a <code>.card-title</code> question, one or two sentences of body, then actions on the right with the primary last. A destructive dialog uses <code>btn-danger</code>, and its button names the action ("Delete huddle"), never just "OK". 480px maximum width on a surface with radius 6. The close button is an icon with an <code>aria-label</code>.</li>
+    <li><strong>Scrim:</strong> <code>::backdrop</code> in <code>color-mix(in srgb, var(--bg-base) 70%, transparent)</code>, fading at Quick.</li>
+    <li><strong>Sheet (≤ 640px):</strong> the same markup becomes a bottom sheet: full width, top corners radius 12, a 44px grab area, and the safe-area inset at the bottom. It slides up with the Slow spring. Desktop and phone share one component.</li>
+    <li><strong>Busy state:</strong> the primary button shows the existing <code>aria-busy</code> state. An error appears inside the dialog, never as a toast behind it.</li>
+  </ul>
+
+  <h2>How each one ships</h2>
+  <table>
+    <thead><tr><th>Step</th><th>In the PR</th></tr></thead>
+    <tbody>
+      <tr><td>Red</td><td>A browser check for the component's rules (face, size, 44px target, token colours, ARIA), failing on <code>main</code>.</td></tr>
+      <tr><td>Green</td><td>The <code>rising.css</code> rules, a section in <code>llms.txt</code> and <code>components.md</code>, a row in the skill, and a demo on the showcase.</td></tr>
+      <tr><td>Verify</td><td>Mission, Daylight, <code>auto</code>, Increase Contrast, forced colours, 390px, reduced motion, and keyboard-only.</td></tr>
+      <tr><td>Story</td><td>Before/after and a GIF of the interaction (ADR-0015).</td></tr>
+    </tbody>
+  </table>
+
+  <h2>Decisions</h2>
+  <div class="callout">
+    <p><strong>1. Icon set: Lucide, with squared ends.</strong> It's the largest well-maintained set, and the squared ends give it our shape.
+    Phosphor, Tabler and a custom set were considered and set aside.</p>
+    <p><strong>2. CSS and markup only.</strong> The system ships classes, tokens and markup recipes in <code>llms.txt</code>; each product wires behaviour in its own framework.
+    There is no shared React package. A product on React uses <code>lucide-react</code> itself, and the <code>.icon</code> class squares the ends, because CSS properties override SVG presentation attributes.</p>
+  </div>
+</main>
+<script type="module">import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.esm.min.mjs'; mermaid.initialize({ startOnLoad: true, theme: matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'default' });</script>
+</body>
+</html>
