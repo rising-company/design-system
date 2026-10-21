@@ -47,13 +47,13 @@
 <main>
   <div class="eyebrow">// Design doc · rising design system</div>
   <h1>The missing building blocks</h1>
-  <p class="meta">2026-10-21 · status: proposed · item 4 of the design review</p>
+  <p class="meta">2026-10-21 · status: accepted · item 4 of the design review</p>
   <p class="lede">The system specifies cards, lists, buttons, fields and the shells, but not the pieces every
   product reaches for next. Each product invents its own icons, dialogs, toasts, tables and toggles, and they drift apart.
   This doc proposes all seven, in the order they unblock each other, so each can ship as one small PR.</p>
 
-  <div class="callout q"><strong>Decisions for you</strong>, also listed at the end:
-  (1) which icon set to use, (2) whether the system ships CSS and markup only, as it does today, or React components too.
+  <div class="callout"><strong>Decided</strong>, details at the end:
+  (1) the icon set is Lucide with squared ends, (2) the system stays CSS and markup only. No React package.
   Everything else follows the rules the system already has.</div>
 
   <h2>Order of work</h2>
@@ -186,12 +186,12 @@ stateDiagram-v2
     </tbody>
   </table>
 
-  <h2>Decisions for you</h2>
-  <div class="callout q">
-    <p><strong>1. Icon set.</strong> I recommend <strong>Lucide with squared ends</strong>: it's the largest well-maintained set, it already ships for React, and the squared ends give it our shape.
-    Alternatives: <em>Phosphor</em> (six weights, more character, heavier to ship), <em>Tabler</em> (similar to Lucide, slightly more technical), or a <em>custom set</em> (the most distinctive, but slow, and someone has to maintain it).</p>
-    <p><strong>2. CSS or components.</strong> I recommend <strong>keeping the system CSS and markup only</strong>, as it is today. Each product wires the behaviour in its own framework, guided by a recipe in <code>llms.txt</code>.
-    The alternative is a shared React package. It would stop products drifting apart, but it's a new thing to version and publish, and ADR-0005 currently assumes Tailwind and these tokens rather than a component library.</p>
+  <h2>Decisions</h2>
+  <div class="callout">
+    <p><strong>1. Icon set: Lucide, with squared ends.</strong> It's the largest well-maintained set, and the squared ends give it our shape.
+    Phosphor, Tabler and a custom set were considered and set aside.</p>
+    <p><strong>2. CSS and markup only.</strong> The system ships classes, tokens and markup recipes in <code>llms.txt</code>; each product wires behaviour in its own framework.
+    There is no shared React package. A product on React uses <code>lucide-react</code> itself, and the <code>.icon</code> class squares the ends, because CSS properties override SVG presentation attributes.</p>
   </div>
 </main>
 <script type="module">import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.esm.min.mjs'; mermaid.initialize({ startOnLoad: true, theme: matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'default' });</script>
