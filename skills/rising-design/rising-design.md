@@ -21,7 +21,7 @@ Drop-in stylesheet: https://design-system.rising.company/rising.css
 
 ## Step 1: Pick the theme
 
-**Do this before writing any UI.** It is a product decision, not a viewer preference.
+**Do this before writing any UI.** The default theme is a product decision; the product may then opt in to `auto` and let the reader's OS setting decide.
 
 | Use it for | Theme |
 |---|---|
@@ -33,7 +33,8 @@ Rules:
 - **If a stranger sees it first, it's Daylight.** A cold visitor should not be met with a black screen and a bare input. Sign-in is the *end* of a landing page, not a substitute for one.
 - If the user is logged in and doing operator work, it's Mission.
 - A product may ship both — Daylight for the public surface, Mission for the app behind the login. **Switch at the auth boundary, not per-page.**
-- A Daylight product may offer Mission as opt-in dark mode. A Mission product must not silently flip to Daylight.
+- **The reader's appearance setting may decide, if the product opts in:** `data-theme="auto"` on `<html>` follows the OS — Mission unless it asks for light, then Daylight. Pure CSS, no flash. A product that hasn't opted in keeps its theme.
+- **Never override the person's choice.** A theme control has three states — System (`auto`), Mission, Daylight — is remembered per person and rendered on the server. Nothing switches theme on its own.
 
 Apply with `data-theme` on the root element; `mission` is the default when absent:
 

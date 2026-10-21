@@ -4,7 +4,7 @@
 
    Drop-in token + component layer. Two themes, one set of variable
    names: set data-theme="mission" (dark, default) or "daylight"
-   (light) on <html>.
+   (light) on <html> — or "auto" to follow the reader's OS setting.
 
    Requires the fonts:
    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=Share+Tech+Mono&family=Rajdhani:wght@500;700&display=swap">
@@ -13,6 +13,7 @@
 /* ══════════════ THEME TOKENS ══════════════ */
   /* Mission — dark, mission-control HUD. Operator-facing surfaces. Default. */
   :root, [data-theme="mission"] {
+    color-scheme: dark;
     --bg-base: #0a0c10;
     --bg-surface: #0d1117;
     --bg-surface-hover: #0f1520;
@@ -58,6 +59,7 @@
 
   /* Daylight — light, same system. User-facing and public surfaces. */
   [data-theme="daylight"] {
+    color-scheme: light;
     --bg-base: #f6f8f7;
     --bg-surface: #ffffff;
     --bg-surface-hover: #eef3f0;
@@ -99,6 +101,56 @@
     --chrome-bracket-display: none;
     --chrome-glow: rgba(11, 122, 78, 0.04);
     --chrome-grid-line: rgba(11, 26, 20, 0.035);
+  }
+
+  /* Auto — the reader's appearance setting decides. Opt-in, on <html> only:
+     Mission unless the OS asks for light, then Daylight. Mirrors the Daylight
+     block above token for token; change both together. */
+  @media (prefers-color-scheme: light) {
+    :root[data-theme="auto"] {
+      color-scheme: light;
+      --bg-base: #f6f8f7;
+      --bg-surface: #ffffff;
+      --bg-surface-hover: #eef3f0;
+      --bg-inset: #e8f5ee;
+
+      --border: #dde5e0;
+      --border-hover: #9dc4b0;
+      --border-subtle: #e6ede9;
+      --border-grid: #e9efeb;
+
+      --text-heading: #0b1a14;
+      --text-body: #26332d;
+      --text-muted: #43564c;
+      --text-dim: #52655b;
+
+      --accent: #3af0a0;
+      --accent-hover: #22dc8c;
+      --accent-ink: #0b7a4e;
+      --accent-on: #08150f;
+      --accent-wash: #0b7a4e12;
+      --accent-line: #0b7a4e45;
+      --accent-bracket: #0b7a4e30;
+
+      --accent-2: #2a7adf;
+      --accent-2-ink: #1f5fbf;
+      --danger: #ff4a24;
+      --danger-ink: #c02a10;
+      --danger-wash: #c02a1012;
+      --danger-line: #c02a1045;
+      --warning: #f5b83d;
+      --warning-ink: #8a5a00;
+      --warning-wash: #8a5a0012;
+      --warning-line: #8a5a0045;
+
+      --gradient: linear-gradient(90deg, #0b7a4e, #1f5fbf);
+      --card-shadow: 0 1px 2px rgba(11, 26, 20, 0.04);
+
+      --chrome-scanline: transparent;
+      --chrome-bracket-display: none;
+      --chrome-glow: rgba(11, 122, 78, 0.04);
+      --chrome-grid-line: rgba(11, 26, 20, 0.035);
+    }
   }
 
   /* Four text grays, not six. The two retired names stay as aliases so a
@@ -571,6 +623,9 @@ a.list-row:active { background: var(--bg-inset); transition-duration: 0s; }
   border-radius: 6px; box-shadow: 0 12px 32px rgba(0, 0, 0, 0.28);
 }
 [data-theme="daylight"] .user-menu-panel { box-shadow: 0 12px 32px rgba(11, 26, 20, 0.12); }
+@media (prefers-color-scheme: light) {
+  :root[data-theme="auto"] .user-menu-panel { box-shadow: 0 12px 32px rgba(11, 26, 20, 0.12); }
+}
 
 .user-menu-head {
   padding: 8px 10px 10px; margin-bottom: 6px;
@@ -880,6 +935,19 @@ a.list-row:active { background: var(--bg-inset); transition-duration: 0s; }
     --border-hover: #5f7a6c;
     --chrome-glow: transparent;
     --chrome-grid-line: transparent;
+  }
+  /* Auto in light: the Daylight values above, mirrored. */
+  @media (prefers-color-scheme: light) {
+    :root[data-theme="auto"] {
+      --text-muted: #26332d;
+      --text-dim: #34443c;
+      --accent-ink: #075c3a;
+      --border: #7a9085;
+      --border-subtle: #a7b8af;
+      --border-hover: #5f7a6c;
+      --chrome-glow: transparent;
+      --chrome-grid-line: transparent;
+    }
   }
 }
 

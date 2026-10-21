@@ -21,7 +21,7 @@ Live: <https://design-system.rising.company>
 
 ## Picking a theme
 
-It's a product decision, not a viewer preference.
+The default is a product decision; a product may then opt in to letting the reader's appearance setting decide.
 
 | Use it for | Theme |
 |---|---|
@@ -31,6 +31,8 @@ It's a product decision, not a viewer preference.
 **If a stranger sees it first, it's Daylight.** A cold visitor should not be met with a black screen and a bare input — sign-in is the *end* of a landing page, not a substitute for one.
 
 A product may ship both: Daylight for its public surface, Mission for the app behind the login. Switch at the auth boundary, not per-page.
+
+A product may also opt in to `data-theme="auto"`, which follows the reader's OS appearance: Mission unless it asks for light, then Daylight. It's pure CSS, so there's no flash. Nothing switches theme on its own.
 
 ## Using the system in another product
 
