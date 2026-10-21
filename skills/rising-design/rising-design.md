@@ -44,13 +44,16 @@ Apply with `data-theme` on the root element; `mission` is the default when absen
 ## Fonts
 
 ```
-Import: https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Rajdhani:wght@300;500;700&display=swap
+Import: https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Share+Tech+Mono&family=Rajdhani:wght@500;700&display=swap
 ```
 
-- **Display/Content:** "Rajdhani", sans-serif — weights 300, 500, 700
-- **System/Technical:** "Share Tech Mono", monospace
+Three faces, one job each:
 
-**Font roles:** Share Tech Mono for HUD readouts (labels, stats, badges, eyebrows, buttons, footers, metadata). Rajdhani for human content (titles, descriptions, body). Unchanged across themes.
+- **`--font-display` — Rajdhani 700:** titles (hero, page, section, card) and the wordmark.
+- **`--font-text` — Inter 400 / 500 / 600:** everything a person reads or presses — body, lede, help, errors, inputs, **buttons, nav links, menu items, field labels**.
+- **`--font-mono` — Share Tech Mono:** readouts — eyebrows, section labels, stats, badges, tags, status, IDs, build stamps, footers.
+
+**The test is what the words are for:** read as a sentence or pressed → Inter; reports system state → mono; names the page → Rajdhani. `body` is Inter, so a bare `<h1>` needs `.page-title` (or `--font-display`) to be Rajdhani. Unchanged across themes.
 
 ## Tokens
 
@@ -68,10 +71,8 @@ Reference the variable, never the literal hex. Both themes define the identical 
 | `--border-grid` | `#111820` | `#e9efeb` | background structure |
 | `--text-heading` | `#e8f4ff` | `#0b1a14` | page & card titles |
 | `--text-body` | `#c8d8e8` | `#26332d` | primary body text |
-| `--text-muted` | `#84a89a` | `#43564c` | descriptions |
-| `--text-subtle` | `#7d9b8c` | `#4a5d54` | subtitles · mono metadata |
-| `--text-label` | `#6e8f80` | `#52655b` | section labels · placeholders |
-| `--text-dim` | `#61856d` | `#61746b` | footer chrome · backlink |
+| `--text-muted` | `#84a89a` | `#43564c` | descriptions · subtitles · nav links |
+| `--text-dim` | `#6e8f80` | `#52655b` | labels · placeholders · footer chrome |
 | `--accent` | `#3af0a0` | `#3af0a0` | brand **fill** (button/badge background) |
 | `--accent-hover` | `#6ff7be` | `#22dc8c` | `--accent` under hover |
 | `--accent-ink` | `#3af0a0` | `#0b7a4e` | accent as **text · icon · border** |
@@ -90,7 +91,7 @@ Reference the variable, never the literal hex. Both themes define the identical 
 **Two traps:**
 
 - **`--accent` is a fill, not an ink.** Mint `#3af0a0` is 1.4:1 on white. In Daylight use it as a *background* with `--accent-on` text. For accent text, icons and 1px borders use `--accent-ink`.
-- **The bottom of the ramp still has to clear AA.** `--text-subtle` / `--text-label` / `--text-dim` sit at 5.5–6.6:1, `--text-dim` included, because nearly everything on those rungs is 12px Share Tech Mono — hairline stems that go grey on a 1× display, where contrast is the only thing buying them back. `--text-dim` is the lowest rung, not a licence to go under 4.5:1; keep it to footer chrome and the backlink, and never a form placeholder — use `--text-label`.
+- **Four grays: heading, body, muted, dim.** `--text-subtle` and `--text-label` are retired — they still resolve, as aliases for `--text-muted` and `--text-dim`, so old code renders, but new code never names them. The lowest rung, `--text-dim`, sits at 5.5:1 because nearly everything on it is 12px Share Tech Mono — hairline stems that go grey on a 1× display, where contrast is the only thing buying them back.
 
 **State recipe** — any accent derives the same way, no extra tokens: background wash @8% · border @31% · text/icon at full ink strength.
 
@@ -106,33 +107,39 @@ Reference the variable, never the literal hex. Both themes define the identical 
 Drive these from tokens so the same rule is inert in the other theme:
 `--chrome-scanline`, `--chrome-bracket-display`, `--chrome-glow`, `--chrome-grid-line`.
 
-**Do not port scanlines or brackets into Daylight.** The brand carries there through the mono labels, the `//` prefix, the mint and the spacing — not through darkness.
+**Do not port scanlines or brackets into Daylight.** The brand carries there through the Rajdhani titles, the mono labels, the `//` prefix, the mint and the spacing — not through darkness.
 
 ## Text Styles
 
+**Seven sizes, nothing between them:** `--type-label` 12 · `--type-small` 14 · `--type-body` 16 · `--type-lead` 20 · `--type-section` 28 · `--type-page` 36 · `--type-hero` 56. Steps closer than that (15 / 16 / 17 / 18) read as mistakes, not levels.
+
 | Style | Family | Size | Weight | LS | Transform | Color |
 |---|---|---|---|---|---|---|
-| Eyebrow | Mono | 12px | — | 0.2em | upper | `--accent-ink` |
 | Hero Title | Rajdhani | clamp(36–56px) | 700 | 2px | upper | `--text-heading` |
-| Page Title | Rajdhani | 36px (26px < 768px) | 700 | 3px | upper | `--text-heading` |
+| Page Title | Rajdhani | 36px (28px < 768px) | 700 | 3px | upper | `--text-heading` |
 | Section Heading | Rajdhani | 28px | 700 | 2px | — | `--text-heading` |
 | Card Title | Rajdhani | 20px | 700 | 1px | — | `--text-heading` |
-| Lede | Rajdhani | 18px | 500 | — | — | `--text-muted` |
-| Body | Rajdhani | 15px | 500 | — | — | `--text-muted` |
-| Stat Value | Mono | 17px | — | 0.06em | — | `--accent-ink` |
-| Subtitle | Mono | 13px | — | 0.1em | — | `--text-subtle` |
-| Section Label | Mono | 12px | — | 0.2em | upper | `--text-label` |
-| Button | Mono | 12px | — | 0.1em | upper | per variant |
-| Badge | Mono | 12px | — | 0.05em | — | `--text-label` |
+| Lede | Inter | 20px | 400 | — | — | `--text-muted` |
+| Body | Inter | 16px | 400 | — | — | `--text-muted` |
+| Button | Inter | 16px (14px sm) | 600 | — | sentence | per variant |
+| Nav link · menu item · field label | Inter | 14px | 500 | — | sentence | `--text-muted` / `--text-body` |
+| Help · error | Inter | 14px | 400 / 500 | — | — | `--text-muted` / `--danger-ink` |
+| Stat Value | Mono | 20px | — | 0.06em | — | `--accent-ink` |
+| Subtitle | Mono | 14px | — | 0.1em | — | `--text-muted` |
+| Eyebrow | Mono | 12px | — | 0.2em | upper | `--accent-ink` |
+| Section Label | Mono | 12px | — | 0.2em | upper | `--text-dim` |
+| Badge | Mono | 12px | — | 0.05em | — | `--text-dim` |
 | Footer | Mono | 12px | — | 0.1em | — | `--text-dim` |
 
-Line-height: headings `1.1` · lede `1.5` · body `1.6` · mono metadata `1.5–1.9`.
+**A control is never the smallest type on the page.** Buttons are 16px, like the body they act on; hierarchy comes from size and weight, not caps and tracking.
 
-**Every `font-size` ships in `rem`** (px ÷ 16 — 12px is `0.75rem`). Identical at the
+Line-height: headings `1.1` · button `1.25` · lede `1.5` · body `1.6` · mono metadata `1.5–1.9`.
+
+**Every `font-size` ships in `rem`** (px ÷ 16 — 12px is `0.75rem`), through the `--type-*` tokens. Identical at the
 default; it grows when the reader has asked for larger text. Widths that hold text grow too
 (sidebar `min(16.25rem, 40vw)`), and at 200% things wrap rather than scroll sideways.
 
-**Two rules hold this scale together, and both exist for 1× displays:**
+**Three rules hold the small sizes together, all for 1× displays:**
 
 - **12px is the floor for Share Tech Mono — nothing smaller, ever.** Its stems are about
   7% of the em, so below 12px they sample to under one device pixel on a non-Retina
@@ -142,10 +149,11 @@ default; it grows when the reader has asked for larger text. Widths that hold te
   as disconnected letters at 10px; `em` keeps the ratio fixed whatever the size. The
   widest rung is `0.2em` — resist going past it, because past roughly a quarter of an em
   the eye stops seeing words and starts seeing characters.
+- **14px is the floor for Inter; reading text is 16px at 400.** Rajdhani never sets a paragraph.
 
 **On phones (≤ 768px): wrap or stack, never shrink.** The page title is the one style that
-changes: 26px, because 36px uppercase fits barely a dozen characters on a 390px phone. The
-floors hold (body 15px, mono 12px, inputs 16px). A title that carries data gets
+changes: it steps down one rung to 28px, because 36px uppercase fits barely a dozen
+characters on a 390px phone. The floors hold (body 16px, mono 12px, inputs 16px). A title that carries data gets
 `min-width: 0; overflow-wrap: anywhere`. Actions beside a title wrap beneath it, toolbars
 wrap, and column-style list rows stack (label with meta beneath, amount right, no header
 row). Nothing scrolls the page sideways except the app nav row.
@@ -239,7 +247,7 @@ animate(".card", { opacity: [0, 1], y: [8, 0] }, { type: "spring", visualDuratio
 ::selection { background: var(--accent); color: var(--accent-on); }
 ```
 
-**Disabled** — no new colors; reuse the low-emphasis ramp: text/icon `--text-label`, border `--border-subtle`, background unchanged. `cursor: not-allowed`.
+**Disabled** — no new colors; reuse the low-emphasis ramp: text/icon `--text-dim`, border `--border-subtle`, background unchanged. `cursor: not-allowed`.
 
 **Press (required)** — every button answers touch-down: `scale(0.97)` instantly, easing back at Quick on release (`whileTap={{ scale: 0.97 }}` in Motion); under reduced motion it dims to `opacity: 0.8`.
 
@@ -249,7 +257,7 @@ animate(".card", { opacity: [0, 1], y: [8, 0] }, { type: "spring", visualDuratio
 
 ## Buttons
 
-`btn` + one of `btn-primary` / `btn-secondary` / `btn-ghost` / `btn-danger`; sizes `btn-sm` / `btn-lg`; `btn-block` for full width.
+`btn` + one of `btn-primary` / `btn-secondary` / `btn-ghost` / `btn-danger`; sizes `btn-sm` (34px, 14px type) / default (44px, 16px) / `btn-lg` (52px, 16px); `btn-block` for full width. Inter 600, **sentence case written in the markup** — no `text-transform`.
 
 - **`btn-primary`** (solid `--accent`) — the single loudest action on a view. A landing hero CTA, a form submit. One per screen.
 - **`btn-secondary`** (`--accent-wash` + `--accent-line`) — the HUD default for in-app actions. A solid mint slab repeated is too loud inside Mission chrome.
@@ -262,7 +270,8 @@ animate(".card", { opacity: [0, 1], y: [8, 0] }, { type: "spring", visualDuratio
 
 - Field labels have no `//` — fields are items in a set; the prefix goes on the form's opening label (`// Sign in`), once.
 - **Inputs use 16px text.** Anything smaller triggers zoom-on-focus in mobile Safari.
-- Placeholders use `--text-label`, never `--text-dim`.
+- Field labels are Inter 14px / 500 in `--text-body` — they name what to type, for a stranger. Errors are Inter 14px / 500 in `--danger-ink`.
+- Placeholders use `--text-dim`, and never stand in for the label.
 - Help and error copy are plain English sentences, not terse operator fragments.
 
 ## Page Patterns
@@ -294,7 +303,7 @@ Copy rules: say what the product does *before* asking for an address; name the m
 
 The chrome behind the auth boundary — the same three pieces in every signed-in Rising product:
 
-1. **App bar** — 56px, sticky, `--bg-surface`, bottom border, full-bleed with the 48px gutter. Slots left→right: **brand** (favicon mark + product name as an 18px `.wordmark`, → product home), **byline** (`.app-byline` `by rising.company`, always — the link home, same tab; brand is never the way home), optional `· CONTEXT` for a real tenant/environment, **nav** (3–5 mono links, current one `aria-current="page"` → `--text-heading` + 1px `--accent-ink` rule), **session** (right: `.status` dot + label, then the user menu — trigger = 24px initials chip + email + chevron; panel = `// Signed in as` + email, account items, **Sign out** last, ruled off, `--danger-ink` on hover). Status stays outside the menu; the exit is always "Sign out". No `// Rising` eyebrow, no CTA button.
+1. **App bar** — 56px, sticky, `--bg-surface`, bottom border, full-bleed with the 48px gutter. Slots left→right: **brand** (favicon mark + product name as a 20px `.wordmark`, → product home), **byline** (`.app-byline` `by rising.company`, always — the link home, same tab; brand is never the way home), optional `· CONTEXT` for a real tenant/environment, **nav** (3–5 Inter 14px links in sentence case, current one `aria-current="page"` → `--text-heading` + 1px `--accent-ink` rule), **session** (right: `.status` dot + label, then the user menu — trigger = 24px initials chip + email + chevron; panel = `// Signed in as` + email, account items, **Sign out** last, ruled off, `--danger-ink` on hover). Status stays outside the menu; the exit is always "Sign out". No `// Rising` eyebrow, no CTA button.
 2. **Page header** — one per view, inside `.app-main`: eyebrow → `.page-title` (+ actions right, same baseline) → `.subtitle`; 24px below, 32px margin, bottom border. Session controls never go here.
 3. **App footer** — `--bg-surface`, top border, `padding: 16px 48px`, mono `--text-dim` uppercase. Left `// PRODUCT · BUILD <date> · <sha>`; right ≤ 3 links + the rising.company backlink last. Pinned to the bottom by `.app { display:flex; flex-direction:column; min-height:100vh }`.
 
