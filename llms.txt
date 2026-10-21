@@ -233,7 +233,7 @@ Reference the variables above rather than literal hex. Raw values, per theme:
 |---|---|---|---|
 | `--border` | `#1a2a20` | `#dde5e0` | card borders, dividers |
 | `--border-hover` | `#2a4a38` | `#9dc4b0` | card hover borders |
-| `--border-subtle` | `#1a3020` | `#e6ede9` | badge borders, faint separators |
+| `--border-subtle` | `#1a3020` | `#e6ede9` | faint separators, list row rules |
 | `--border-grid` | `#111820` | `#e9efeb` | background structural lines |
 
 ### Text
@@ -640,11 +640,14 @@ or CDP `Emulation.setEmulatedMedia`.
 ## Visual Effects
 
 ### Scanlines (Mission only)
-Fixed overlay, `pointer-events: none`, `z-index: 100`. Driven by the theme token, so the
-same rule is inert in Daylight:
+Fixed layer **behind** the content (`z-index: -1`), `pointer-events: none`. Texture sits
+under the words, never over them: any surface — card, list, input, the app bar — covers
+it, so it reads as the room, not as a film over the text. Driven by the theme token, so
+the same rule is inert in Daylight. Paint the page ground on `body` only (not `html`, not a
+full-height wrapper) — anything opaque between the canvas and the content covers the lines:
 ```css
 body::before {
-  content: ""; position: fixed; inset: 0; pointer-events: none; z-index: 100;
+  content: ""; position: fixed; inset: 0; pointer-events: none; z-index: -1;
   background: repeating-linear-gradient(
     to bottom,
     transparent 0px, transparent 3px,
@@ -779,12 +782,19 @@ Structure: tag (category · subcategory, no `//`) → title → description → 
 - Container: `background: var(--bg-surface)`, `border: 1px solid var(--border)`, radius 6px, padding 24px
 - Hover: `background: var(--bg-surface-hover)`, `border-color: var(--border-hover)`, gradient top-bar opacity 1
 - Gradient bar: absolute, top 0, left 0, right 0, height 2px, `background: var(--gradient)`
+- Tag: Share Tech Mono, 12px, letter-spacing 0.15em, uppercase, `var(--text-dim)` — a gray
+  readout, so the title is the first thing the eye lands on
 - Arrow indicator: absolute, bottom 24px, right 24px, mono, `var(--border-hover)` → `var(--accent-ink)` on hover
 - Elevation: `box-shadow: var(--card-shadow)` — a hairline in Daylight, `none` in Mission
 
+A card's framing is one border and a hover bar; everything inside it is content. Mint on a
+card is the hover bar and the arrow — never the tag, never a badge outline. When the items
+share one shape and are scanned top to bottom, use a **List**, not a grid of cards.
+
 ### Badge
 - Font: Share Tech Mono, 12px, letter-spacing 0.05em
-- `background: var(--bg-inset)`, `border: 1px solid var(--border-subtle)`, radius 3px, padding 3px 7px
+- `background: var(--bg-inset)`, no border, radius 3px, padding 4px 8px — the inset fill
+  is enough to group the word; a border would add a frame inside the card's frame
 - Color: `var(--text-dim)`
 
 ### Stats Panel
@@ -792,6 +802,34 @@ Vertical stack of stat rows:
 - Label: Share Tech Mono, 12px, letter-spacing 0.1em, uppercase, `var(--text-dim)`
 - Value: Share Tech Mono, 20px, letter-spacing 0.06em, `var(--accent-ink)` — bigger than
   the body around it; in a stats panel the number is the point
+- Proof strip: add `.stat-lg` — 28px, line-height 1.1, letter-spacing 0.04em. A row of
+  headline figures outranks the lede; a panel of readouts doesn't need to
+
+### List
+Rows of like things — a person's huddles, invoices, runs. One surface, a hairline between
+rows, the whole row is the link. Reach for it over a card grid whenever the items share a
+shape and the person scans them top to bottom: a list fills the width at any count, where
+three cards leave a hole the fourth would have filled.
+```html
+<ul class="list" aria-label="Open huddles">
+  <li>
+    <a class="list-row" href="/h/q4">
+      <div class="list-main">
+        <div class="list-title">Q4 planning offsite</div>
+        <p class="list-desc">Three days proposed. Two people still to answer.</p>
+      </div>
+      <div class="list-meta"><span class="is-live">Open</span><span>5 replies</span><span>Oct 6–8</span></div>
+    </a>
+  </li>
+</ul>
+```
+- Container: `--bg-surface`, `1px solid var(--border)`, radius 6px, `--card-shadow`; rows
+  separated by `1px solid var(--border-subtle)`
+- Row: flex, 24px gap, padding 16px 24px, min-height 44px; hover `--bg-surface-hover`;
+  press `--bg-inset` at once (a fill, so it holds under reduced motion)
+- Title: IBM Plex Sans 16px / 600, `--text-heading`. Description: 14px, `--text-muted`
+- Meta: mono 12px uppercase, 0.1em, `--text-dim`, right-aligned; the live state first, in
+  `--accent-ink` (`.is-live`). Below 640px the meta drops under the title, left-aligned
 
 ### Tooltip
 - `background: color-mix(in srgb, var(--bg-base) 92%, transparent)`, `border: 1px solid var(--accent-line)`, radius 4px, padding 8px 12px
@@ -845,10 +883,14 @@ A user-facing product needs a landing page before it needs a login box. Required
    `background: var(--bg-base)`. Below 640px the byline and the links hide; the wordmark
    (and the CTA, if any) is the whole phone nav. Don't repeat the backlink among the links —
    the byline is the header's; the footer keeps its own.
-2. **Hero** — eyebrow (`// Rising Company`) → hero title → lede (one sentence, ≤ 90 chars) →
+2. **Hero** — eyebrow naming what the product is for (`// Group scheduling`) → hero title → lede (one sentence, ≤ 90 chars) →
    action row (`btn-primary btn-lg` + `btn-ghost btn-lg`) → mono trust line
-   (`NO PASSWORD · NO CALENDAR ACCESS · FREE`). Max-width 720px for centered heroes.
-3. **Proof strip** — one row of mono stats or a single-line quote. Optional.
+   (`NO PASSWORD · NO CALENDAR ACCESS · FREE`). Max-width 720px for centered heroes. The
+   eyebrow is the product's job, not the parent brand: the nav byline already says whose
+   it is, and the hero's first words are the visitor's first chance to learn what it does.
+3. **Proof strip** — one row of `.stat-value.stat-lg` figures over `.stat-label`s, or a
+   single-line quote. Optional. The figures are 28px — larger than the lede — because in a
+   proof strip the number is the claim.
 4. **How it works** — 3 numbered steps. Reuse the `01 / 02 / 03` mono numerals from the
    section-head pattern; each step is a title + one line of body.
 5. **Feature grid** — 3 cards, `minmax(280px, 1fr)`.
@@ -861,7 +903,7 @@ one `max-width: 1080px; margin: 0 auto; padding-inline: 48px` container.
 
 ```html
 <section class="hero">
-  <div class="eyebrow">// Rising Company</div>
+  <div class="eyebrow">// Group scheduling</div>
   <h1 class="hero-title">Huddle</h1>
   <p class="lede">Find a meeting time without the back-and-forth. Share one link.</p>
   <div class="hero-actions">
@@ -899,6 +941,11 @@ visitor nothing to decide with. Two sanctioned layouts:
 **Split (default for user-facing products)** — 50/50 above 900px, stacked below. Left: the
 pitch (eyebrow, product name, one-line lede, 3 mono checkpoints marked `+`). Right: a surface card
 holding the form. The pitch panel may use `background: var(--bg-inset)` to separate it.
+**Pitch and form meet at the seam:** the pitch's content sits against the right edge of its
+column and the card against the left edge of its own, 96px apart across the divider, so
+the eye reads one composition rather than a pitch adrift in an empty field. Inside the card,
+everything after the `// Sign in` label is a sentence — helper text and "Got a link? Just
+open it" are the text face, not mono caps.
 
 **Centered (staff / operator sign-in)** — a single `max-width: 400px` surface card:
 eyebrow → product name → one-line purpose → field → `btn-primary btn-block` → helper text →
@@ -907,7 +954,7 @@ backlink. Only appropriate when everyone signing in already knows what the produ
 ```html
 <main class="auth">
   <section class="auth-pitch">
-    <div class="eyebrow">// Rising Company</div>
+    <div class="eyebrow">// Group scheduling</div>
     <h1 class="hero-title">Huddle</h1>
     <p class="lede">Find a meeting time without the back-and-forth.</p>
     <ul class="auth-points">
@@ -936,6 +983,10 @@ backlink. Only appropriate when everyone signing in already knows what the produ
 .auth { display: grid; grid-template-columns: 1fr 1fr; min-height: 100vh; }
 .auth-pitch, .auth-panel { display: flex; flex-direction: column; justify-content: center; padding: 48px; }
 .auth-pitch { background: var(--bg-inset); border-right: 1px solid var(--border-subtle); }
+/* Meet at the seam: each column pushes its content toward the middle. */
+.auth-pitch { align-items: flex-end; }
+.auth-pitch > * { width: 100%; max-width: 420px; }
+.auth-panel { align-items: flex-start; }
 .auth-points {
   list-style: none; padding: 0; margin: 32px 0 0;
   display: flex; flex-direction: column; gap: 12px;
@@ -948,7 +999,7 @@ backlink. Only appropriate when everyone signing in already knows what the produ
   /* min-height: 0 releases the 100vh floor once stacked, or the two panels
      add up to two full screens. align-items centers the card in the panel. */
   .auth { grid-template-columns: 1fr; min-height: 0; }
-  .auth-pitch { border-right: none; border-bottom: 1px solid var(--border-subtle); padding: 64px 24px 48px; }
+  .auth-pitch { border-right: none; border-bottom: 1px solid var(--border-subtle); padding: 64px 24px 48px; align-items: stretch; }
   .auth-panel { padding: 48px 24px 64px; align-items: center; }
 }
 ```
@@ -1480,7 +1531,7 @@ Identical in both themes. Daylight is lighter in *value*, not in tone.
 region, once.**
 
 Use it on the first line of a region when that line frames what sits under it:
-- the eyebrow over a page or hero title — `// Rising Company`, `// Huddles`
+- the eyebrow over a page or hero title — `// Group scheduling`, `// Huddles`
 - the label that opens a group — `// Sign in` over a form, `// Materials` over a legend,
   `// Signed in as` at the head of a menu, `// No huddles yet` on an empty state
 - the footer ident — `// Huddle · build 2026-09-18 · 0a7d685`

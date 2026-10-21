@@ -67,7 +67,7 @@ Reference the variable, never the literal hex. Both themes define the identical 
 | `--bg-inset` | `#0a1410` | `#e8f5ee` | badges · recessed areas |
 | `--border` | `#1a2a20` | `#dde5e0` | card borders · dividers |
 | `--border-hover` | `#2a4a38` | `#9dc4b0` | card hover border |
-| `--border-subtle` | `#1a3020` | `#e6ede9` | badge borders · faint rules |
+| `--border-subtle` | `#1a3020` | `#e6ede9` | faint rules · list row rules |
 | `--border-grid` | `#111820` | `#e9efeb` | background structure |
 | `--text-heading` | `#e8f4ff` | `#0b1a14` | page & card titles |
 | `--text-body` | `#c8d8e8` | `#26332d` | primary body text |
@@ -107,6 +107,8 @@ Reference the variable, never the literal hex. Both themes define the identical 
 Drive these from tokens so the same rule is inert in the other theme:
 `--chrome-scanline`, `--chrome-bracket-display`, `--chrome-glow`, `--chrome-grid-line`.
 
+**Texture sits behind the words.** Scanlines are `z-index: -1`, under every surface; nothing decorative paints over text.
+
 **Do not port scanlines or brackets into Daylight.** The brand carries there through the Rajdhani titles, the mono labels, the `//` prefix, the mint and the spacing — not through darkness.
 
 ## Text Styles
@@ -124,7 +126,7 @@ Drive these from tokens so the same rule is inert in the other theme:
 | Button | IBM Plex Sans | 16px (14px sm) | 600 | — | sentence | per variant |
 | Nav link · menu item · field label | IBM Plex Sans | 14px | 500 | — | sentence | `--text-muted` / `--text-body` |
 | Help · error | IBM Plex Sans | 14px | 400 / 500 | — | — | `--text-muted` / `--danger-ink` |
-| Stat Value | Mono | 20px | — | 0.06em | — | `--accent-ink` |
+| Stat Value | Mono | 20px (28px `.stat-lg` in a proof strip) | — | 0.06em | — | `--accent-ink` |
 | Subtitle | Mono | 14px | — | 0.1em | — | `--text-muted` |
 | Eyebrow | Mono | 12px | — | 0.2em | upper | `--accent-ink` |
 | Section Label | Mono | 12px | — | 0.2em | upper | `--text-dim` |
@@ -281,8 +283,8 @@ animate(".card", { opacity: [0, 1], y: [8, 0] }, { type: "spring", visualDuratio
 A user-facing product needs a landing page before it needs a login box. Required order:
 
 1. **Nav** — `.nav-brand` left (wordmark + the `.app-byline` `by rising.company`, the way home here too); links + one `btn-sm` CTA right. 64px, sticky, bottom border. Below 640px byline and links hide; no backlink among the links (the footer keeps its own).
-2. **Hero** — eyebrow → hero title → lede (one sentence, ≤ 90 chars) → action row (`btn-primary btn-lg` + `btn-ghost btn-lg`) → mono trust line. Max-width 720px centered.
-3. **Proof strip** — one row of mono stats, or a single-line quote. Optional.
+2. **Hero** — eyebrow naming the product's job (`// Group scheduling`, not the parent brand — the byline says whose it is) → hero title → lede (one sentence, ≤ 90 chars) → action row (`btn-primary btn-lg` + `btn-ghost btn-lg`) → mono trust line. Max-width 720px centered.
+3. **Proof strip** — one row of `.stat-value.stat-lg` figures (28px, larger than the lede: the number is the claim), or a single-line quote. Optional.
 4. **How it works** — 3 numbered steps, reusing the `01 / 02 / 03` mono numerals.
 5. **Feature grid** — 3 cards, `minmax(280px, 1fr)`.
 6. **CTA band** — `--bg-inset`, full-bleed, section heading + one `btn-primary btn-lg`.
@@ -294,7 +296,7 @@ A user-facing product needs a landing page before it needs a login box. Required
 
 **A bare centered form on an empty field is not an auth screen** — it gives a first-time visitor nothing to decide with.
 
-- **Split** (default for user-facing products) — 50/50 above 900px, stacked below. Left: the pitch (eyebrow, product name, one-line lede, 3 mono checkpoints) on `--bg-inset`. Right: a surface card holding the form.
+- **Split** (default for user-facing products) — 50/50 above 900px, stacked below. Left: the pitch (eyebrow, product name, one-line lede, 3 mono checkpoints) on `--bg-inset`. Right: a surface card holding the form. **Pitch and form meet at the seam** — pitch content pushed right, card pushed left — so they read as one composition. Inside the card, sentences (helper text, "Got a link? Just open it") are the text face.
 - **Centered** (staff/operator sign-in) — a single `max-width: 400px` surface card. Only when everyone signing in already knows what the product is.
 
 Copy rules: say what the product does *before* asking for an address; name the mechanism ("we'll email you a link — no password"); never let the button be the only text on screen.
@@ -305,6 +307,7 @@ The chrome behind the auth boundary — the same three pieces in every signed-in
 
 1. **App bar** — 56px, sticky, `--bg-surface`, bottom border, full-bleed with the 48px gutter. Slots left→right: **brand** (favicon mark + product name as a 20px `.wordmark`, → product home), **byline** (`.app-byline` `by rising.company`, always — the link home, same tab; brand is never the way home), optional `· CONTEXT` for a real tenant/environment, **nav** (3–5 IBM Plex Sans 14px links in sentence case, current one `aria-current="page"` → `--text-heading` + 1px `--accent-ink` rule), **session** (right: `.status` dot + label, then the user menu — trigger = 24px initials chip + email + chevron; panel = `// Signed in as` + email, account items, **Sign out** last, ruled off, `--danger-ink` on hover). Status stays outside the menu; the exit is always "Sign out". No `// Rising` eyebrow, no CTA button.
 2. **Page header** — one per view, inside `.app-main`: eyebrow → `.page-title` (+ actions right, same baseline) → `.subtitle`; 24px below, 32px margin, bottom border. Session controls never go here.
+   **Content:** like items scanned top to bottom are a `.list` (one surface, hairline rows, whole row is the link, live state first in the meta) — not a card grid, which leaves a hole at any count that isn't a multiple of three.
 3. **App footer** — `--bg-surface`, top border, `padding: 16px 48px`, mono `--text-dim` uppercase. Left `// PRODUCT · BUILD <date> · <sha>`; right ≤ 3 links + the rising.company backlink last. Pinned to the bottom by `.app { display:flex; flex-direction:column; min-height:100vh }`.
 
 Chrome is surface, content is base. Both bars full-bleed (`.shell` goes *inside* `.app-main` if a view wants the 1080px column). Corner brackets stay off the shell. **Mobile, ≤ 768px — one form for every product:** two-row bar (brand + session, then the nav as a 44px touch row bleeding to the edges, scrolling sideways with a 24px edge fade, active rule on the bar's border), 24px gutters; below 640px byline, context and the trigger's email hide (chip stays), footer centers. Sidebar products (os, safe) keep a 260px `.app-sidebar` on desktop (`.app-sidebar-top` / `-nav` / `-bottom`, `<body class="app has-sidebar">`) and **below 768px hide it and render the ordinary `.app-bar.app-bar-mobile` + `.app-footer.app-footer-mobile`** — modules as the nav row, org switcher inside the user menu. No drawer. Worked example `patterns/app-shell-sidebar.html`.
@@ -381,8 +384,8 @@ Full spec: <https://design-system.rising.company/llms.txt> → "Link Preview Car
 Identical in both themes. Daylight is lighter in *value*, not in tone.
 
 - `//` opens a region, once — the eyebrow over a title, the label over a group, the footer ident. Never on data (`OPEN · 5 REPLIES`), items in a set (card tags, list items, field labels), controls, or anything already framed. More than ~4 per viewport means some are decorating data.
-- Uppercase: eyebrows, section labels, page/hero titles, stat labels, buttons
-- Normal case: card titles, body, descriptions, ledes, help text
+- Uppercase: eyebrows, section labels, page/hero titles, stat labels, card tags, list meta
+- Sentence case: buttons, nav links, field labels, card and list titles, body, descriptions, ledes, help text
 - Terse technical fragments for chrome; **plain sentences for anything a stranger reads** — landing ledes, help text and error messages are written for humans, not operators
 - Em dashes (—) over commas. Middle dot (·) as separator.
 - No exclamation marks. No emoji. No casual language.
@@ -393,9 +396,10 @@ Identical in both themes. Daylight is lighter in *value*, not in tone.
 - Sparse grids: `repeat(auto-fill, minmax(280px, 1fr))`, 16px gap
 - Layered depth: Base → Surface → Surface Hover. Daylight adds one hairline shadow, never more.
 - Motion is designed, not added — see "Motion". Springs with `bounce: 0`; nothing bounces or jumps
-- Scanlines and brackets are Mission-only
+- Scanlines and brackets are Mission-only, and sit behind content
+- A card's framing is one border and a hover bar. Tags are gray readouts, badges have no border — the title is what the eye finds first
 
 ## Component Patterns
 
-For detailed component HTML/CSS anatomy (card, badge, stats, tooltip, header, footer, HUD overlay, grid, buttons, fields, landing, auth), read:
+For detailed component HTML/CSS anatomy (card, badge, list, stats, tooltip, header, footer, HUD overlay, grid, buttons, fields, landing, auth), read:
 `skills/rising-design/components.md`

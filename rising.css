@@ -151,14 +151,16 @@ body {
   border-radius: 2px;
 }
 
-/* Scanlines — inert in Daylight, where --chrome-scanline is transparent */
+/* Scanlines — inert in Daylight, where --chrome-scanline is transparent.
+   Behind everything (z-index -1): texture sits under the words, never over
+   them, and any surface — card, list, input — covers it. */
 body::before {
   content: "";
   position: fixed;
   inset: 0;
   background: repeating-linear-gradient(to bottom, transparent 0px, transparent 3px, var(--chrome-scanline) 3px, var(--chrome-scanline) 4px);
   pointer-events: none;
-  z-index: 100;
+  z-index: -1;
 }
 
 /* Atmosphere — faint structural grid + accent glow. Reads as texture in
@@ -236,6 +238,9 @@ body::before {
   font-family: var(--font-mono);
   font-size: var(--type-lead); letter-spacing: 0.06em; color: var(--accent-ink);
 }
+/* In a proof strip the number is the claim, so it outranks the lede.
+   Panels keep the 20px readout; .stat-lg is for a row of headline figures. */
+.stat-value.stat-lg { font-size: var(--type-section); line-height: 1.1; letter-spacing: 0.04em; }
 
 /* ══════════════ BUTTONS ══════════════ */
   /* A control is something a person reads and presses, so it speaks in the
@@ -334,10 +339,11 @@ a.card { color: inherit; text-decoration: none; }
 a.card:hover, .card.is-interactive:hover { border-color: var(--border-hover); background: var(--bg-surface-hover); }
 a.card:hover::before, .card.is-interactive:hover::before { opacity: 1; }
 
+/* The tag is a readout, so it is gray: the title is what you see first. */
 .card-tag {
   font-family: var(--font-mono);
   font-size: var(--type-label); letter-spacing: 0.15em; text-transform: uppercase;
-  color: var(--accent-ink);
+  color: var(--text-dim);
 }
 
 /* ══════════════ BADGE ══════════════ */
@@ -346,8 +352,51 @@ a.card:hover::before, .card.is-interactive:hover::before { opacity: 1; }
   font-family: var(--font-mono);
   font-size: var(--type-label); letter-spacing: 0.05em;
   background: var(--bg-inset); color: var(--text-dim);
-  border: 1px solid var(--border-subtle); border-radius: 3px;
+  border-radius: 3px;
   padding: 4px 8px;
+}
+
+/* ══════════════ LIST ══════════════ */
+/* Rows of like things — a person's huddles, invoices, runs. One surface,
+   a hairline between rows, the whole row is the link. Reach for it over a
+   card grid whenever the items share a shape and the person scans them
+   top to bottom: a list fills the width at any count; three cards leave a
+   hole where the fourth would be. */
+.list {
+  list-style: none; margin: 0; padding: 0;
+  background: var(--bg-surface);
+  border: 1px solid var(--border); border-radius: 6px;
+  box-shadow: var(--card-shadow); overflow: hidden;
+}
+.list > * + * { border-top: 1px solid var(--border-subtle); }
+
+.list-row {
+  display: flex; align-items: center; gap: 24px;
+  min-height: 44px; padding: 16px 24px;
+  color: inherit; text-decoration: none;
+  transition: background 0.2s;
+}
+a.list-row:hover { background: var(--bg-surface-hover); }
+/* Press: the row darkens the instant it is touched — a fill, not a transform,
+   so it holds under reduced motion too. */
+a.list-row:active { background: var(--bg-inset); transition-duration: 0s; }
+
+.list-main { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 4px; }
+.list-title { font-size: var(--type-body); font-weight: 600; color: var(--text-heading); }
+.list-desc { font-size: var(--type-small); color: var(--text-muted); margin: 0; }
+
+/* Readouts on the right: status first, then the facts. */
+.list-meta {
+  display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 4px 16px;
+  font-family: var(--font-mono); font-size: var(--type-label);
+  letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-dim);
+  white-space: nowrap;
+}
+.list-meta .is-live { color: var(--accent-ink); }
+
+@media (max-width: 640px) {
+  .list-row { flex-direction: column; align-items: flex-start; gap: 8px; padding: 16px; }
+  .list-meta { justify-content: flex-start; }
 }
 
 /* ══════════════ GRID ══════════════ */
@@ -764,11 +813,17 @@ a.card:hover::before, .card.is-interactive:hover::before { opacity: 1; }
 }
 .auth-points li::before { content: "+"; color: var(--accent-ink); margin-right: 10px; }
 
+/* Pitch and form meet at the seam: each column pushes its content toward the
+   middle, so the eye reads one composition rather than two islands. */
+.auth-pitch { align-items: flex-end; }
+.auth-pitch > * { width: 100%; max-width: 420px; }
+.auth-panel { align-items: flex-start; }
+
 .auth-card { max-width: 400px; width: 100%; display: flex; flex-direction: column; gap: 24px; }
 
 @media (max-width: 900px) {
   .auth { grid-template-columns: 1fr; min-height: 0; }
-  .auth-pitch { border-right: none; border-bottom: 1px solid var(--border-subtle); padding: 64px 24px 48px; }
+  .auth-pitch { border-right: none; border-bottom: 1px solid var(--border-subtle); padding: 64px 24px 48px; align-items: stretch; }
   .auth-panel { padding: 48px 24px 64px; align-items: center; }
 }
 
