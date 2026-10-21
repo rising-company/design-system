@@ -7,12 +7,6 @@
 <link rel="icon" type="image/svg+xml" href="../branding/favicon.svg">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=Share+Tech+Mono&family=Rajdhani:wght@500;700&display=swap">
 <link rel="stylesheet" href="../rising.css">
-<style>
-  /* Page-specific only — everything else comes from rising.css */
-  .huddle-card { display: flex; flex-direction: column; gap: 12px; }
-  .huddle-card .card-meta { display: flex; flex-wrap: wrap; gap: 12px; margin-top: auto; }
-  .huddle-card .body { margin: 0; }
-</style>
 </head>
 <body class="app">
 
@@ -72,35 +66,35 @@
     <p class="subtitle">3 open &middot; 12 closed &middot; last reply 4 min ago</p>
   </div>
 
-  <div class="grid">
-    <a class="card is-interactive huddle-card" href="#">
-      <div class="card-tag">Open &middot; 5 replies</div>
-      <div class="card-title">Q4 planning offsite</div>
-      <p class="body">Three days proposed. Two people still to answer.</p>
-      <div class="card-meta">
-        <span class="badge">Oct 6&ndash;8</span>
-        <span class="badge">7 invited</span>
-      </div>
-    </a>
-    <a class="card is-interactive huddle-card" href="#">
-      <div class="card-tag">Open &middot; 2 replies</div>
-      <div class="card-title">Venue walkthrough</div>
-      <p class="body">Waiting on the venue team. Closes Friday.</p>
-      <div class="card-meta">
-        <span class="badge">Sep 22</span>
-        <span class="badge">4 invited</span>
-      </div>
-    </a>
-    <a class="card is-interactive huddle-card" href="#">
-      <div class="card-tag">Open &middot; 0 replies</div>
-      <div class="card-title">Board update</div>
-      <p class="body">Sent an hour ago. No replies yet.</p>
-      <div class="card-meta">
-        <span class="badge">Sep 30</span>
-        <span class="badge">3 invited</span>
-      </div>
-    </a>
-  </div>
+  <ul class="list" aria-label="Open huddles">
+    <li>
+      <a class="list-row" href="#">
+        <div class="list-main">
+          <div class="list-title">Q4 planning offsite</div>
+          <p class="list-desc">Three days proposed. Two people still to answer.</p>
+        </div>
+        <div class="list-meta"><span class="is-live">Open</span><span>5 replies</span><span>Oct 6&ndash;8</span><span>7 invited</span></div>
+      </a>
+    </li>
+    <li>
+      <a class="list-row" href="#">
+        <div class="list-main">
+          <div class="list-title">Venue walkthrough</div>
+          <p class="list-desc">Waiting on the venue team. Closes Friday.</p>
+        </div>
+        <div class="list-meta"><span class="is-live">Open</span><span>2 replies</span><span>Sep 22</span><span>4 invited</span></div>
+      </a>
+    </li>
+    <li>
+      <a class="list-row" href="#">
+        <div class="list-main">
+          <div class="list-title">Board update</div>
+          <p class="list-desc">Sent an hour ago. No replies yet.</p>
+        </div>
+        <div class="list-meta"><span class="is-live">Open</span><span>0 replies</span><span>Sep 30</span><span>3 invited</span></div>
+      </a>
+    </li>
+  </ul>
 </main>
 
 <footer class="app-footer">

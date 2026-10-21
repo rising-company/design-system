@@ -9,12 +9,11 @@
 <link rel="stylesheet" href="../rising.css">
 <style>
   .auth-card { gap: 24px; }
+  /* A sentence with a link in it — text, not a readout. */
   .auth-alt {
-    font-family: "Share Tech Mono", monospace;
-    font-size: 0.75rem; letter-spacing: 0.1em; text-transform: uppercase;
-    color: var(--text-dim); text-align: center;
+    font-size: var(--type-small); color: var(--text-muted); text-align: center; margin: 0;
   }
-  .auth-alt a { color: var(--accent-ink); text-decoration: none; }
+  .auth-alt a { color: var(--accent-ink); font-weight: 500; text-decoration: none; }
   .auth-alt a:hover { text-decoration: underline; }
   .auth-foot { display: flex; justify-content: center; margin-top: 8px; }
 </style>
@@ -25,8 +24,8 @@
 
   <!-- ── Left: the pitch. Says what this is before asking for an address. ── -->
   <section class="auth-pitch">
-    <div style="max-width: 420px;">
-      <div class="eyebrow">// Rising Company</div>
+    <div>
+      <div class="eyebrow">// Group scheduling</div>
       <h1 class="hero-title" style="margin: 12px 0 16px;">Huddle</h1>
       <p class="lede">Find a meeting time without the back-and-forth. Share one link.</p>
       <ul class="auth-points">

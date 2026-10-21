@@ -76,7 +76,7 @@ This is the full anchor-card recipe: it layers `display: block` / `text-decorati
   font-family: var(--font-mono);
   font-size: 0.75rem;
   letter-spacing: 0.15em;
-  color: var(--accent-ink);
+  color: var(--text-dim);      /* a gray readout: the title is seen first */
   text-transform: uppercase;
   margin-bottom: 10px;
 }
@@ -139,10 +139,69 @@ Small mono-text label used for metadata tags. Use inside `.card-meta` to display
   font-size: 0.75rem;
   letter-spacing: 0.05em;
   color: var(--text-dim);
-  background: var(--bg-inset);
-  border: 1px solid var(--border-subtle);
+  background: var(--bg-inset);  /* no border: the fill groups the word */
   border-radius: 3px;
-  padding: 3px 7px;
+  padding: 4px 8px;
+}
+```
+
+---
+
+## List
+
+Rows of like things — a person's huddles, invoices, runs. One surface, a hairline between rows, the whole row is the link. Use it instead of a card grid whenever the items share a shape and the person scans them top to bottom: a list fills the width at any count, where three cards leave a hole.
+
+### HTML
+
+```html
+<ul class="list" aria-label="Open huddles">
+  <li>
+    <a class="list-row" href="/h/q4">
+      <div class="list-main">
+        <div class="list-title">Q4 planning offsite</div>
+        <p class="list-desc">Three days proposed. Two people still to answer.</p>
+      </div>
+      <div class="list-meta"><span class="is-live">Open</span><span>5 replies</span><span>Oct 6–8</span></div>
+    </a>
+  </li>
+</ul>
+```
+
+### CSS
+
+```css
+.list {
+  list-style: none; margin: 0; padding: 0;
+  background: var(--bg-surface);
+  border: 1px solid var(--border); border-radius: 6px;
+  box-shadow: var(--card-shadow); overflow: hidden;
+}
+.list > * + * { border-top: 1px solid var(--border-subtle); }
+
+.list-row {
+  display: flex; align-items: center; gap: 24px;
+  min-height: 44px; padding: 16px 24px;
+  color: inherit; text-decoration: none;
+  transition: background 0.2s;
+}
+a.list-row:hover { background: var(--bg-surface-hover); }
+a.list-row:active { background: var(--bg-inset); transition-duration: 0s; }
+
+.list-main { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 4px; }
+.list-title { font-size: var(--type-body); font-weight: 600; color: var(--text-heading); }
+.list-desc { font-size: var(--type-small); color: var(--text-muted); margin: 0; }
+
+.list-meta {
+  display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 4px 16px;
+  font-family: var(--font-mono); font-size: var(--type-label);
+  letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-dim);
+  white-space: nowrap;
+}
+.list-meta .is-live { color: var(--accent-ink); }
+
+@media (max-width: 640px) {
+  .list-row { flex-direction: column; align-items: flex-start; gap: 8px; padding: 16px; }
+  .list-meta { justify-content: flex-start; }
 }
 ```
 
@@ -200,6 +259,9 @@ Vertical stack of label/value pairs for displaying key metrics. Used in HUD over
   color: var(--accent-ink);
   letter-spacing: 0.06em;
 }
+
+/* Proof strip on a landing page: the figure is the claim, so it outranks the lede. */
+.stat-value.stat-lg { font-size: var(--type-section); line-height: 1.1; letter-spacing: 0.04em; }
 ```
 
 ---
@@ -782,7 +844,7 @@ A user-facing product needs a landing page before it needs a login box.
 
 <section class="shell">
   <div class="hero">
-    <div class="eyebrow">// Rising Company</div>
+    <div class="eyebrow">// Group scheduling</div>
     <h1 class="hero-title">Huddle</h1>
     <p class="lede">Find a meeting time without the back-and-forth. Share one link.</p>
     <div class="hero-actions">
@@ -868,7 +930,7 @@ Worked example: `patterns/landing.html` in the design-system repo.
 ```html
 <main class="auth">
   <section class="auth-pitch">
-    <div class="eyebrow">// Rising Company</div>
+    <div class="eyebrow">// Group scheduling</div>
     <h1 class="hero-title">Huddle</h1>
     <p class="lede">Find a meeting time without the back-and-forth.</p>
     <ul class="auth-points">
@@ -903,6 +965,11 @@ Worked example: `patterns/landing.html` in the design-system repo.
 
 .auth-pitch { background: var(--bg-inset); border-right: 1px solid var(--border-subtle); }
 
+/* Pitch and form meet at the seam: each column pushes its content toward the middle. */
+.auth-pitch { align-items: flex-end; }
+.auth-pitch > * { width: 100%; max-width: 420px; }
+.auth-panel { align-items: flex-start; }
+
 .auth-points {
   list-style: none; padding: 0; margin: 32px 0 0;
   display: flex; flex-direction: column; gap: 12px;
@@ -915,7 +982,7 @@ Worked example: `patterns/landing.html` in the design-system repo.
 
 @media (max-width: 900px) {
   .auth { grid-template-columns: 1fr; min-height: 0; }
-  .auth-pitch { border-right: none; border-bottom: 1px solid var(--border-subtle); padding: 64px 24px 48px; }
+  .auth-pitch { border-right: none; border-bottom: 1px solid var(--border-subtle); padding: 64px 24px 48px; align-items: stretch; }
   .auth-panel { padding: 48px 24px 64px; align-items: center; }
 }
 ```

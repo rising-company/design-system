@@ -478,7 +478,7 @@
     font-family: "Share Tech Mono", monospace;
     font-size: 0.75rem;
     letter-spacing: 0.15em;
-    color: var(--accent-ink);
+    color: var(--text-dim);
     text-transform: uppercase;
     margin-bottom: 10px;
   }
@@ -507,9 +507,8 @@
     letter-spacing: 0.05em;
     color: var(--text-dim);
     background: var(--bg-inset);
-    border: 1px solid var(--border-subtle);
     border-radius: 3px;
-    padding: 3px 7px;
+    padding: 4px 8px;
   }
 
   /* Side-by-side demos */
@@ -1068,7 +1067,7 @@
     <tbody>
       <tr><td class="t-name">--border</td><td><span class="chip"><i style="background: #1a2a20;"></i>#1a2a20</span></td><td><span class="chip"><i style="background: #dde5e0;"></i>#dde5e0</span></td><td class="t-use">card borders · dividers</td></tr>
       <tr><td class="t-name">--border-hover</td><td><span class="chip"><i style="background: #2a4a38;"></i>#2a4a38</span></td><td><span class="chip"><i style="background: #9dc4b0;"></i>#9dc4b0</span></td><td class="t-use">card hover border</td></tr>
-      <tr><td class="t-name">--border-subtle</td><td><span class="chip"><i style="background: #1a3020;"></i>#1a3020</span></td><td><span class="chip"><i style="background: #e6ede9;"></i>#e6ede9</span></td><td class="t-use">badge borders · faint rules</td></tr>
+      <tr><td class="t-name">--border-subtle</td><td><span class="chip"><i style="background: #1a3020;"></i>#1a3020</span></td><td><span class="chip"><i style="background: #e6ede9;"></i>#e6ede9</span></td><td class="t-use">faint rules · list row rules</td></tr>
       <tr><td class="t-name">--border-grid</td><td><span class="chip"><i style="background: #111820;"></i>#111820</span></td><td><span class="chip"><i style="background: #e9efeb;"></i>#e9efeb</span></td><td class="t-use">background structure</td></tr>
     </tbody>
   </table>
@@ -1241,6 +1240,28 @@
       <div class="card-arrow">&#8594;</div>
     </a>
   </div>
+
+  <div class="section-label">// List &mdash; like items, scanned top to bottom</div>
+  <ul class="list" aria-label="Diagrams" style="margin-bottom: 32px;">
+    <li>
+      <a class="list-row" href="#components">
+        <div class="list-main">
+          <div class="list-title">Battery box structure</div>
+          <p class="list-desc">Exploded view of the dual LiFePO4 bank &mdash; frame, padding, terminals.</p>
+        </div>
+        <div class="list-meta"><span class="is-live">Live</span><span>12V / 24V</span><span>2x 100Ah</span></div>
+      </a>
+    </li>
+    <li>
+      <a class="list-row" href="#components">
+        <div class="list-main">
+          <div class="list-title">Shore power inlet</div>
+          <p class="list-desc">30A connection with transfer switch and converter wiring.</p>
+        </div>
+        <div class="list-meta"><span>Draft</span><span>120V AC</span><span>30A</span></div>
+      </a>
+    </li>
+  </ul>
 
   <div class="section-label">// Stats Panel · Tooltip · Badges</div>
   <div class="demo-row">
@@ -1748,7 +1769,7 @@
     <div class="demo-panel">
       <div class="fx-label">Scanlines <span class="fx-theme">Mission only</span></div>
       <div data-theme="mission" class="fx-stage fx-scan"></div>
-      <div class="fx-desc">Fixed overlay on every Mission page — <code>--chrome-scanline</code> lines, 4px rhythm. The token is <code>transparent</code> in Daylight, so the same rule goes inert. Shown exaggerated.</div>
+      <div class="fx-desc">Fixed layer behind every Mission page — <code>--chrome-scanline</code> lines, 4px rhythm, at <code>z-index: -1</code> so it sits under the words, never over them. The token is <code>transparent</code> in Daylight, so the same rule goes inert. Shown exaggerated.</div>
     </div>
     <div class="demo-panel">
       <div class="fx-label">Corner Brackets <span class="fx-theme">Mission only</span></div>
