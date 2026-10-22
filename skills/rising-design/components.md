@@ -403,6 +403,87 @@ function toast({ text, kind = "success", action }) {
 
 ---
 
+## Dialog & Sheet
+
+One blocking question or a short form. Native `<dialog class="dialog" closedby="any">` opened by `<button commandfor command="show-modal">`, closed by `<form method="dialog">`; focus on the first field or Cancel; `.card-title` question, short body, `.dialog-actions` with the primary last; 480px, 6px, 70% `--bg-base` scrim; a bottom sheet at ≤ 640px. Rules and the fallback script: `llms.txt` → "Dialog & Sheet".
+
+```html
+<button class="btn btn-danger" type="button" commandfor="delete-huddle" command="show-modal">Delete huddle</button>
+
+<dialog class="dialog" id="delete-huddle" closedby="any" aria-labelledby="delete-huddle-title">
+  <form method="dialog">
+    <button class="btn btn-ghost btn-icon dialog-close" value="cancel" aria-label="Close">
+      <svg class="icon" aria-hidden="true"><use href="/icons.svg#x"/></svg></button>
+    <h2 class="card-title" id="delete-huddle-title">Delete this huddle?</h2>
+    <p>“Q4 planning offsite” and its 5 replies will be gone for everyone invited. This can’t be undone.</p>
+    <div class="dialog-actions">
+      <button class="btn btn-ghost" value="cancel" autofocus>Cancel</button>
+      <button class="btn btn-danger" value="delete">Delete huddle</button>
+    </div>
+  </form>
+</dialog>
+```
+
+```css
+.dialog {
+  width: min(480px, calc(100% - 32px)); max-width: none; max-height: calc(100% - 32px);
+  margin: auto; padding: 24px; overflow: auto;
+  background: var(--bg-surface); color: var(--text-body);
+  border: 1px solid var(--border-hover); border-radius: 6px;
+  box-shadow: 0 24px 64px rgba(0, 0, 0, 0.4);
+  opacity: 0; transform: translateY(8px);
+  /* Base tier in; Quick out. display/overlay keep it on screen while it leaves. */
+  transition: opacity 0.2s, transform 0.2s, overlay 0.2s allow-discrete, display 0.2s allow-discrete;
+}
+.dialog[open] { opacity: 1; transform: none; transition-duration: 0.3s; transition-timing-function: cubic-bezier(0.2, 0, 0, 1); }
+@starting-style { .dialog[open] { opacity: 0; transform: translateY(8px); } }
+.dialog::backdrop {
+  background: color-mix(in srgb, var(--bg-base) 70%, transparent); opacity: 0;
+  transition: opacity 0.2s, overlay 0.2s allow-discrete, display 0.2s allow-discrete;
+}
+.dialog[open]::backdrop { opacity: 1; }
+@starting-style { .dialog[open]::backdrop { opacity: 0; } }
+html:has(.dialog:modal) { overflow: hidden; }
+.dialog .card-title { padding-right: 40px; }
+.dialog p { margin-top: 8px; font-size: var(--type-body); line-height: 1.6; }
+.dialog .field { margin-top: 16px; }
+.dialog-close { position: absolute; top: 6px; right: 6px; border-color: transparent; }
+.dialog-actions { display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 12px; margin-top: 24px; }
+@media (max-width: 640px) {
+  /* The sheet: full width from the bottom, top corners rounded, actions stacked
+     with the primary on top, clear of the home indicator. Slides on Slow. */
+  .dialog {
+    width: 100%; max-height: calc(100% - 48px); margin: auto 0 0;
+    padding: 24px 16px calc(16px + env(safe-area-inset-bottom));
+    border-width: 1px 0 0; border-radius: 12px 12px 0 0;
+    transform: translateY(100%);
+  }
+  .dialog[open] { transition-duration: 0.5s; }
+  @starting-style { .dialog[open] { transform: translateY(100%); } }
+  .dialog-actions { flex-direction: column-reverse; }
+  .dialog-actions .btn { width: 100%; }
+}
+/* Reduced motion: opacity only. */
+@media (prefers-reduced-motion: reduce) { .dialog { transform: none; } }
+```
+
+For browsers without invoker commands or `closedby` (check `"command" in HTMLButtonElement.prototype`
+and `"closedBy" in HTMLDialogElement.prototype`), a few lines restore both:
+
+```js
+document.addEventListener("click", (e) => {
+  const b = e.target.closest('[command="show-modal"][commandfor]');
+  if (b && !("command" in HTMLButtonElement.prototype)) document.getElementById(b.getAttribute("commandfor"))?.showModal();
+  const d = e.target.closest?.("dialog.dialog[open]");
+  if (d && e.target === d && !("closedBy" in HTMLDialogElement.prototype)) {
+    const r = d.getBoundingClientRect();   // the padding is the dialog too: close only outside it
+    if (e.clientX < r.left || e.clientX > r.right || e.clientY < r.top || e.clientY > r.bottom) d.close("cancel");
+  }
+});
+```
+
+---
+
 ## Stats Panel
 
 Vertical stack of label/value pairs for displaying key metrics. Used in HUD overlays to surface spec data at a glance. Positioned top-right by default.
