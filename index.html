@@ -1270,6 +1270,49 @@
     </li>
   </ul>
 
+  <div class="section-label">// Table &mdash; values compared across rows</div>
+  <div class="table-wrap" role="region" aria-label="Circuit readings" tabindex="0">
+    <table class="table">
+      <thead>
+        <tr>
+          <th scope="col">Reading</th>
+          <th scope="col"><button class="th-sort" type="button">Circuit <svg class="icon icon-sm" aria-hidden="true"><use href="branding/icons.svg#arrow-up-down"/></svg></button></th>
+          <th scope="col" aria-sort="descending"><button class="th-sort" type="button">Logged <svg class="icon icon-sm" aria-hidden="true"><use href="branding/icons.svg#arrow-down"/></svg></button></th>
+          <th scope="col" class="num"><button class="th-sort" type="button">Volts <svg class="icon icon-sm" aria-hidden="true"><use href="branding/icons.svg#arrow-up-down"/></svg></button></th>
+          <th scope="col" class="num"><button class="th-sort" type="button">Draw (A) <svg class="icon icon-sm" aria-hidden="true"><use href="branding/icons.svg#arrow-up-down"/></svg></button></th>
+          <th scope="col">State</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td class="mono">RD-0418</td><td>House bank</td><td>Oct 21 · 18:40</td><td class="num">13.28</td><td class="num">4.2</td><td><span class="badge">Live</span></td></tr>
+        <tr><td class="mono">RD-0417</td><td>Starter</td><td>Oct 21 · 18:40</td><td class="num">12.61</td><td class="num">0.0</td><td><span class="badge">Idle</span></td></tr>
+        <tr><td class="mono">RD-0416</td><td>Solar input</td><td>Oct 21 · 18:35</td><td class="num">18.94</td><td class="num">11.7</td><td><span class="badge">Live</span></td></tr>
+        <tr><td class="mono">RD-0415</td><td>Shore inlet</td><td>Oct 21 · 18:30</td><td class="num">121.40</td><td class="num">2.3</td><td><span class="badge">Live</span></td></tr>
+        <tr><td class="mono">RD-0414</td><td>Inverter</td><td>Oct 21 · 18:25</td><td class="num">12.97</td><td class="num">38.5</td><td><span class="badge">Load</span></td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="component-grid" style="margin-top: 16px; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); align-items: start;">
+    <div class="table-wrap" role="region" aria-label="Readings, loading" tabindex="0">
+      <table class="table">
+        <thead><tr><th scope="col">Reading</th><th scope="col">Circuit</th><th scope="col" class="num">Volts</th></tr></thead>
+        <tbody>
+          <tr><td><span class="skeleton"></span></td><td><span class="skeleton" style="width: 12ch;"></span></td><td class="num"><span class="skeleton" style="width: 5ch;"></span></td></tr>
+          <tr><td><span class="skeleton"></span></td><td><span class="skeleton" style="width: 9ch;"></span></td><td class="num"><span class="skeleton" style="width: 5ch;"></span></td></tr>
+          <tr><td><span class="skeleton"></span></td><td><span class="skeleton" style="width: 11ch;"></span></td><td class="num"><span class="skeleton" style="width: 5ch;"></span></td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="table-wrap" role="region" aria-label="Readings, none yet" tabindex="0">
+      <table class="table">
+        <thead><tr><th scope="col">Reading</th><th scope="col">Circuit</th><th scope="col" class="num">Volts</th></tr></thead>
+        <tbody>
+          <tr><td colspan="3"><div class="empty-state"><div class="eyebrow">// No readings</div><p class="body">Readings appear here once a monitor is connected.</p><a class="btn btn-secondary btn-sm" href="#components">Connect a monitor</a></div></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
   <div class="section-label">// Stats Panel · Tooltip · Badges</div>
   <div class="demo-row">
     <div class="demo-panel">

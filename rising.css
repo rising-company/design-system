@@ -530,6 +530,70 @@ a.list-row:active { background: var(--bg-inset); transition-duration: 0s; }
   .list-meta { justify-content: flex-start; }
 }
 
+/* ══════════════ TABLE ══════════════ */
+/* For comparing values across rows. If each row is a thing you open, it's a
+   .list. The frame scrolls sideways on its own; the page never does. Header is
+   a readout (mono caps on the inset ground), cells are text, numbers line up
+   in tabular figures. Hairlines between rows, no zebra. */
+.table-wrap {
+  overflow-x: auto; background: var(--bg-surface);
+  border: 1px solid var(--border); border-radius: 6px; box-shadow: var(--card-shadow);
+}
+.table { width: 100%; border-collapse: collapse; font-family: var(--font-text); font-size: var(--type-small); line-height: 1.4; color: var(--text-body); }
+.table th {
+  position: sticky; top: 0; z-index: 1; height: 2.5rem; padding: 0 16px;
+  background: var(--bg-inset); border-bottom: 1px solid var(--border);
+  font-family: var(--font-mono); font-size: var(--type-label); font-weight: 400;
+  letter-spacing: 0.05em; text-transform: uppercase; text-align: left; white-space: nowrap;
+  color: var(--text-dim);
+}
+.table th[aria-sort] { color: var(--text-heading); }
+.table td { height: 2.75rem; padding: 10px 16px; vertical-align: middle; border-top: 1px solid var(--border-subtle); }
+.table tbody tr:first-child td { border-top: 0; }
+.table .num { text-align: right; font-variant-numeric: tabular-nums; }
+.table td.mono { font-family: var(--font-mono); letter-spacing: 0.02em; white-space: nowrap; }
+/* Hover only when the row does something. */
+.table tbody tr:has(a[href]):hover td { background: var(--bg-surface-hover); }
+/* Sortable header: the label is a button; aria-sort goes on the th. */
+.th-sort {
+  display: inline-flex; align-items: center; gap: 6px; min-height: 2.5rem; padding: 0; margin: 0;
+  font: inherit; letter-spacing: inherit; text-transform: inherit; color: inherit;
+  background: none; border: 0; cursor: pointer;
+}
+.th-sort:hover { color: var(--text-heading); }
+.th-sort .icon { opacity: 0.6; }
+th[aria-sort] .th-sort .icon { opacity: 1; color: var(--accent-ink); }
+/* Inside a table the empty state keeps to the frame. */
+.table .empty-state { padding-block: 48px; }
+/* Loading: placeholder bars that breathe on opacity, at Ambient. */
+.skeleton {
+  display: inline-block; height: 0.75em; width: 8ch; vertical-align: middle;
+  border-radius: 2px; background: var(--border);
+  animation: skeleton-breathe 2.4s ease-in-out infinite alternate;
+}
+@keyframes skeleton-breathe { from { opacity: 1; } to { opacity: 0.4; } }
+@media (max-width: 640px) {
+  /* A phone scrolls the frame, not the page; cells keep to one line and the
+     last column pads clear of the edge fade. The empty state still wraps. */
+  .table { width: max-content; min-width: 100%; }
+  .table td { white-space: nowrap; }
+  .table:has(.empty-state) { width: 100%; }
+  .table td:has(.empty-state) { white-space: normal; }
+  .table th:last-child, .table td:last-child { padding-right: 40px; }
+}
+/* "There's more": a 24px fade at the right edge, only while the frame can
+   scroll further. A scroll-driven timeline runs --fade from 24px to 0 as the
+   reader reaches the end; a frame that fits has no timeline, so no fade. */
+@property --fade { syntax: "<length>"; inherits: false; initial-value: 0px; }
+.table-wrap {
+  mask-image: linear-gradient(to right, #000 calc(100% - var(--fade)), transparent);
+  -webkit-mask-image: linear-gradient(to right, #000 calc(100% - var(--fade)), transparent);
+}
+@supports (animation-timeline: scroll()) {
+  .table-wrap { animation: table-more linear both; animation-timeline: scroll(self inline); }
+}
+@keyframes table-more { from { --fade: 24px; } 95% { --fade: 24px; } to { --fade: 0px; } }
+
 /* ══════════════ GRID ══════════════ */
 .grid {
   display: grid;
@@ -1055,4 +1119,10 @@ a.list-row:active { background: var(--bg-inset); transition-duration: 0s; }
   *, *::before, *::after { animation: none !important; transition: none !important; }
   /* Transforms off, opacity kept: the press dims instead of shrinking. */
   .btn:active:not([disabled]):not([aria-busy="true"]) { transform: none; opacity: 0.8; }
+}
+/* The table's edge fade follows the scroll, not the clock, so it stays. */
+@media (prefers-reduced-motion: reduce) {
+  @supports (animation-timeline: scroll()) {
+    .table-wrap { animation: table-more linear both !important; animation-timeline: scroll(self inline) !important; }
+  }
 }

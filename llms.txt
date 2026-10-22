@@ -1018,6 +1018,95 @@ share one shape and are scanned top to bottom, use a **List**, not a grid of car
   is enough to group the word; a border would add a frame inside the card's frame
 - Color: `var(--text-dim)`
 
+### Table
+
+For **comparing values across rows**. If each row is a thing the person opens, it is a `.list`.
+
+- **Frame:** `.table-wrap` is a named, focusable region (`role="region"`, `aria-label`,
+  `tabindex="0"`) so a keyboard can scroll it. It scrolls sideways on its own; the page never does.
+- **Header:** a readout — Share Tech Mono 12px caps in `--text-dim` on `--bg-inset`, sticky to the
+  top of its frame (give the frame a `max-height` to scroll a long table inside it). Every `th`
+  has `scope="col"`.
+- **Sorting:** the header's label is a `button.th-sort` with a 16px icon; `aria-sort` goes on the
+  `th` of the one sorted column (`arrow-down` / `arrow-up`, in `--accent-ink`); other sortable
+  columns show `arrow-up-down`, dimmed. The system sorts nothing itself — the product does.
+- **Cells:** the text face at 14px. Numbers are `.num`: right-aligned, `tabular-nums`, header too.
+  IDs and hashes are `td.mono`. Rows are at least 44px, on `--border-subtle` hairlines, with no
+  zebra stripes. Hover lights a row only when it holds a link.
+- **Phones (≤ 640px):** cells keep to one line and the frame scrolls. A 24px fade at the right edge
+  says there is more, only while there is: a scroll-driven timeline removes it at the end, and
+  a frame that fits has none. If a phone reader needs two columns, show a `.list` instead.
+- **Loading:** `.skeleton` bars in the cells, breathing on opacity at Ambient (2.4s) — the one
+  loop besides the status pulse. **Empty:** the `.empty-state` in one full-width cell.
+
+```html
+<div class="table-wrap" role="region" aria-label="Circuit readings" tabindex="0">
+  <table class="table">
+    <thead>
+      <tr>
+        <th scope="col">Reading</th>
+        <th scope="col" aria-sort="descending">
+          <button class="th-sort" type="button">Logged
+            <svg class="icon icon-sm" aria-hidden="true"><use href="/icons.svg#arrow-down"/></svg></button>
+        </th>
+        <th scope="col" class="num">
+          <button class="th-sort" type="button">Volts
+            <svg class="icon icon-sm" aria-hidden="true"><use href="/icons.svg#arrow-up-down"/></svg></button>
+        </th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr><td class="mono">RD-0418</td><td>Oct 21 · 18:40</td><td class="num">13.28</td></tr>
+    </tbody>
+  </table>
+</div>
+<!-- Loading: <td><span class="skeleton" style="width: 12ch"></span></td> -->
+<!-- Empty:   <tr><td colspan="3"><div class="empty-state">…</div></td></tr> -->
+```
+
+```css
+.table-wrap { overflow-x: auto; background: var(--bg-surface); border: 1px solid var(--border); border-radius: 6px; box-shadow: var(--card-shadow); }
+.table { width: 100%; border-collapse: collapse; font-family: var(--font-text); font-size: var(--type-small); line-height: 1.4; color: var(--text-body); }
+.table th {
+  position: sticky; top: 0; z-index: 1; height: 2.5rem; padding: 0 16px;
+  background: var(--bg-inset); border-bottom: 1px solid var(--border);
+  font-family: var(--font-mono); font-size: var(--type-label); font-weight: 400;
+  letter-spacing: 0.05em; text-transform: uppercase; text-align: left; white-space: nowrap; color: var(--text-dim);
+}
+.table th[aria-sort] { color: var(--text-heading); }
+.table td { height: 2.75rem; padding: 10px 16px; vertical-align: middle; border-top: 1px solid var(--border-subtle); }
+.table tbody tr:first-child td { border-top: 0; }
+.table .num { text-align: right; font-variant-numeric: tabular-nums; }
+.table td.mono { font-family: var(--font-mono); letter-spacing: 0.02em; white-space: nowrap; }
+.table tbody tr:has(a[href]):hover td { background: var(--bg-surface-hover); }
+.th-sort { display: inline-flex; align-items: center; gap: 6px; min-height: 2.5rem; padding: 0; margin: 0;
+  font: inherit; letter-spacing: inherit; text-transform: inherit; color: inherit; background: none; border: 0; cursor: pointer; }
+.th-sort:hover { color: var(--text-heading); }
+.th-sort .icon { opacity: 0.6; }
+th[aria-sort] .th-sort .icon { opacity: 1; color: var(--accent-ink); }
+.table .empty-state { padding-block: 48px; }
+.skeleton { display: inline-block; height: 0.75em; width: 8ch; vertical-align: middle; border-radius: 2px;
+  background: var(--border); animation: skeleton-breathe 2.4s ease-in-out infinite alternate; }
+@keyframes skeleton-breathe { from { opacity: 1; } to { opacity: 0.4; } }
+@media (max-width: 640px) {
+  .table { width: max-content; min-width: 100%; }
+  .table td { white-space: nowrap; }
+  .table:has(.empty-state) { width: 100%; }
+  .table td:has(.empty-state) { white-space: normal; }
+  .table th:last-child, .table td:last-child { padding-right: 40px; }
+}
+/* The right-edge fade, only while the frame can scroll further. */
+@property --fade { syntax: "<length>"; inherits: false; initial-value: 0px; }
+.table-wrap {
+  mask-image: linear-gradient(to right, #000 calc(100% - var(--fade)), transparent);
+  -webkit-mask-image: linear-gradient(to right, #000 calc(100% - var(--fade)), transparent);
+}
+@supports (animation-timeline: scroll()) {
+  .table-wrap { animation: table-more linear both; animation-timeline: scroll(self inline); }
+}
+@keyframes table-more { from { --fade: 24px; } 95% { --fade: 24px; } to { --fade: 0px; } }
+```
+
 ### Stats Panel
 Vertical stack of stat rows:
 - Label: Share Tech Mono, 12px, letter-spacing 0.1em, uppercase, `var(--text-dim)`
