@@ -876,6 +876,55 @@ fieldset.field > .field-help, fieldset.field > .field-error { margin-top: 4px; }
 
 ---
 
+## Switch
+
+For a setting that takes effect at once (otherwise a checkbox). Native `input[type=checkbox][role=switch]` drawn in CSS, at the end of a 44px `label.setting`; 40×24, 4px corners; on = thumb moves 16px + `--accent-ink` track. Rules: `llms.txt` → "Switch".
+
+```html
+<label class="setting">
+  <span>Show weekends</span>
+  <input class="switch" type="checkbox" role="switch" name="weekends" checked>
+</label>
+<label class="setting">
+  <span>Sync to calendar<small class="field-help">Connect a calendar first.</small></span>
+  <input class="switch" type="checkbox" role="switch" disabled>
+</label>
+```
+
+```css
+.setting {
+  display: flex; align-items: center; justify-content: space-between; gap: 16px; min-height: 2.75rem;
+  font-family: var(--font-text); font-size: var(--type-body); line-height: 1.4;
+  color: var(--text-body); cursor: pointer;
+}
+.setting > span { display: flex; flex-direction: column; gap: 2px; }
+.setting:has(.switch:disabled) { color: var(--text-dim); cursor: not-allowed; }
+.switch {
+  appearance: none; -webkit-appearance: none; position: relative; flex: none; margin: 0;
+  width: 2.5rem; height: 1.5rem; border-radius: 4px; cursor: inherit;
+  background: var(--bg-inset); border: 1px solid var(--text-dim);
+  transition: background 0.2s, border-color 0.2s;
+}
+.switch::before {
+  content: ""; position: absolute; top: 3px; left: 3px; width: 1rem; height: 1rem;
+  border-radius: 2px; background: var(--text-muted);
+  transition: transform 0.2s, background 0.2s;
+}
+.switch:checked { background: var(--accent-ink); border-color: var(--accent-ink); }
+.switch:checked::before { transform: translateX(1rem); background: var(--bg-surface); }
+.switch:disabled { border-color: var(--border-hover); }
+.switch:disabled::before { background: var(--border-hover); }
+@media (forced-colors: active) {   /* drawn, so it names its own system colours */
+  .switch, .switch::before { forced-color-adjust: none; }
+  .switch { background: Canvas; border-color: ButtonText; }
+  .switch::before { background: ButtonText; }
+  .switch:checked { background: Highlight; border-color: Highlight; }
+  .switch:checked::before { background: HighlightText; }
+}
+```
+
+---
+
 ## Landing Page
 
 A user-facing product needs a landing page before it needs a login box.

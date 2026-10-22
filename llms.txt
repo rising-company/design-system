@@ -889,6 +889,66 @@ fieldset.field > .field-help, fieldset.field > .field-error { margin-top: 4px; }
 .check:has(input:disabled) { color: var(--text-dim); cursor: not-allowed; }
 ```
 
+### Switch
+
+A setting that **takes effect the moment it flips**: the view, a notification, a sync. If nothing
+happens until the person presses Save, it is a checkbox.
+
+- **A native checkbox with `role="switch"`,** drawn in CSS. No script, it posts with its form,
+  Space toggles it, and screen readers announce "switch, on".
+- **The row is the `<label class="setting">`**, 44px: words on the left, the switch at the end.
+  Help goes under the words as `<small class="field-help">`.
+- **40 × 24, with the corners of the buttons and fields** (4px track, 2px thumb), not a pill.
+- **On moves the thumb 16px and fills the track** in `--accent-ink`, so the state never rests on
+  colour alone. Off is an outlined track (`--text-dim`, 3:1 or better on either surface) with a
+  `--text-muted` thumb. The thumb slides on the Quick tier (0.2s, CSS transform).
+- **Forced colours:** the switch names its own system colours (`ButtonText`, `Highlight`), or its
+  thumb would vanish into the forced background.
+- Label it with what turns on (`Show weekends`), not with a question or "Enable…".
+
+```html
+<label class="setting">
+  <span>Show weekends</span>
+  <input class="switch" type="checkbox" role="switch" name="weekends" checked>
+</label>
+<label class="setting">
+  <span>Sync to calendar<small class="field-help">Connect a calendar first.</small></span>
+  <input class="switch" type="checkbox" role="switch" disabled>
+</label>
+```
+
+```css
+.setting {
+  display: flex; align-items: center; justify-content: space-between; gap: 16px; min-height: 2.75rem;
+  font-family: var(--font-text); font-size: var(--type-body); line-height: 1.4;
+  color: var(--text-body); cursor: pointer;
+}
+.setting > span { display: flex; flex-direction: column; gap: 2px; }
+.setting:has(.switch:disabled) { color: var(--text-dim); cursor: not-allowed; }
+.switch {
+  appearance: none; -webkit-appearance: none; position: relative; flex: none; margin: 0;
+  width: 2.5rem; height: 1.5rem; border-radius: 4px; cursor: inherit;
+  background: var(--bg-inset); border: 1px solid var(--text-dim);
+  transition: background 0.2s, border-color 0.2s;
+}
+.switch::before {
+  content: ""; position: absolute; top: 3px; left: 3px; width: 1rem; height: 1rem;
+  border-radius: 2px; background: var(--text-muted);
+  transition: transform 0.2s, background 0.2s;
+}
+.switch:checked { background: var(--accent-ink); border-color: var(--accent-ink); }
+.switch:checked::before { transform: translateX(1rem); background: var(--bg-surface); }
+.switch:disabled { border-color: var(--border-hover); }
+.switch:disabled::before { background: var(--border-hover); }
+@media (forced-colors: active) {   /* drawn, so it names its own system colours */
+  .switch, .switch::before { forced-color-adjust: none; }
+  .switch { background: Canvas; border-color: ButtonText; }
+  .switch::before { background: ButtonText; }
+  .switch:checked { background: Highlight; border-color: Highlight; }
+  .switch:checked::before { background: HighlightText; }
+}
+```
+
 ### Card
 Structure: tag (category · subcategory, no `//`) → title → description → badge row
 - Container: `background: var(--bg-surface)`, `border: 1px solid var(--border)`, radius 6px, padding 24px

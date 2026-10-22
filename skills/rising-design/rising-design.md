@@ -281,6 +281,7 @@ animate(".card", { opacity: [0, 1], y: [8, 0] }, { type: "spring", visualDuratio
 - Placeholders use `--text-dim`, and never stand in for the label.
 - Help and error copy are plain English sentences, not terse operator fragments.
 - **Checkbox & radio** are native inputs tinted with `accent-color: var(--accent-ink)`, never redrawn. Each row is a `<label class="check">` (44px, 16px text face); a group is `<fieldset class="field">` + `<legend class="field-label">`. Radios: one of 2–5 (more → select). Checkbox: takes effect on submit. Anatomy in `components.md` → "Checkbox & Radio".
+- **Switch** is for a setting that takes effect the moment it flips; if nothing happens until Save, use a checkbox. `<label class="setting"><span>Show weekends</span><input class="switch" type="checkbox" role="switch"></label>` — 40×24 with 4px corners, on moves the thumb and fills the track in `--accent-ink`. Anatomy in `components.md` → "Switch".
 
 ## Page Patterns
 
