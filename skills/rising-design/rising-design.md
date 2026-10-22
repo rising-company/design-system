@@ -292,6 +292,10 @@ For comparing values across rows; if each row is a thing you open, use `.list`. 
 
 Confirms something the person just did, with an optional Undo — never something they must act on (that's the page, or a dialog). One at a time in `.toast-region`, bottom-right (bottom-centre on phones). Status icon + one 14px sentence + at most one `.btn-ghost.btn-sm`; no title. Success/info: `role="status"`, 5s, paused while pointer or focus is on it. Error: `role="alert"`, stays until dismissed. Focus never moves. Anatomy and JS recipe in `components.md` → "Toast".
 
+## Dialog & Sheet
+
+One question that blocks the task, or a short form; a long flow is a page. Native `<dialog class="dialog" closedby="any">`, opened by `<button commandfor="id" command="show-modal">`, closed by `<form method="dialog">` — no script. Focus starts on the first field, or Cancel when destructive. `.card-title` question → 1–2 sentences → `.dialog-actions` (primary last; destructive = `btn-danger` naming the action). 480px max, 6px corners, 70% `--bg-base` scrim; at ≤ 640px it's a bottom sheet. Errors stay inside; success closes and toasts. Anatomy in `components.md` → "Dialog & Sheet".
+
 ## Page Patterns
 
 ### Landing page (Daylight)

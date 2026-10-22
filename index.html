@@ -1328,6 +1328,47 @@
     </div>
   </div>
 
+  <div class="section-label">// Dialog &amp; sheet &mdash; one question that blocks the task</div>
+  <div class="control-grid">
+    <div>
+      <div class="btn-row">
+        <button class="btn btn-danger" type="button" commandfor="demo-delete" command="show-modal">Delete huddle</button>
+        <button class="btn btn-ghost" type="button" commandfor="demo-rename" command="show-modal">Rename huddle</button>
+      </div>
+      <div class="vc-body" style="margin-top: 12px;">Opened and closed by markup alone: <code>commandfor</code> + <code>command="show-modal"</code>, <code>closedby="any"</code>, <code>&lt;form method="dialog"&gt;</code>. Escape, the scrim or Cancel closes it; focus returns here. Narrow the window for the sheet.</div>
+    </div>
+    <div>
+      <div class="vc-label">Dialog or page</div>
+      <div class="vc-body">A dialog asks one question that blocks the task, or holds a short form. A long flow gets its own page. A destructive button names the action &mdash; &ldquo;Delete huddle&rdquo;, never &ldquo;OK&rdquo; &mdash; and focus starts on Cancel.</div>
+    </div>
+  </div>
+
+  <dialog class="dialog" id="demo-delete" closedby="any" aria-labelledby="demo-delete-title">
+    <form method="dialog">
+      <button class="btn btn-ghost btn-icon dialog-close" value="cancel" aria-label="Close"><svg class="icon" aria-hidden="true"><use href="branding/icons.svg#x"/></svg></button>
+      <h2 class="card-title" id="demo-delete-title">Delete this huddle?</h2>
+      <p>&ldquo;Q4 planning offsite&rdquo; and its 5 replies will be gone for everyone invited. This can&rsquo;t be undone.</p>
+      <div class="dialog-actions">
+        <button class="btn btn-ghost" value="cancel" autofocus>Cancel</button>
+        <button class="btn btn-danger" value="delete">Delete huddle</button>
+      </div>
+    </form>
+  </dialog>
+  <dialog class="dialog" id="demo-rename" closedby="any" aria-labelledby="demo-rename-title">
+    <form method="dialog">
+      <button class="btn btn-ghost btn-icon dialog-close" value="cancel" aria-label="Close" formnovalidate><svg class="icon" aria-hidden="true"><use href="branding/icons.svg#x"/></svg></button>
+      <h2 class="card-title" id="demo-rename-title">Rename this huddle?</h2>
+      <div class="field">
+        <label class="field-label" for="demo-rename-name">Name</label>
+        <input class="input" id="demo-rename-name" name="name" value="Q4 planning offsite" required autofocus>
+      </div>
+      <div class="dialog-actions">
+        <button class="btn btn-ghost" value="cancel" formnovalidate>Cancel</button>
+        <button class="btn btn-primary" value="save">Save name</button>
+      </div>
+    </form>
+  </dialog>
+
   <div class="section-label">// Stats Panel · Tooltip · Badges</div>
   <div class="demo-row">
     <div class="demo-panel">
