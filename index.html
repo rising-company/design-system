@@ -1313,6 +1313,21 @@
     </div>
   </div>
 
+  <div class="section-label">// Toast &mdash; confirms what just happened</div>
+  <div class="control-grid">
+    <div>
+      <div class="btn-row">
+        <button class="btn btn-secondary" type="button" data-toast-demo="success">Delete a huddle</button>
+        <button class="btn btn-ghost" type="button" data-toast-demo="error">Fail to save</button>
+      </div>
+      <div class="vc-body" style="margin-top: 12px;">Bottom-right, one at a time. A success stays 5s and pauses while the pointer or focus is on it; an error stays until it&rsquo;s dismissed. Focus never moves to a toast.</div>
+    </div>
+    <div>
+      <div class="vc-label">Toast or not</div>
+      <div class="vc-body">A toast confirms something the person just did and may offer Undo. Anything they must read or act on belongs in the page, or in a dialog &mdash; a toast is gone in five seconds.</div>
+    </div>
+  </div>
+
   <div class="section-label">// Stats Panel · Tooltip · Badges</div>
   <div class="demo-row">
     <div class="demo-panel">
@@ -2167,6 +2182,57 @@
     if (entries.some(function (e) { return e.isIntersecting; })) { replay(); once.disconnect(); }
   }, { threshold: 0.4 });
   once.observe(document.getElementById("mo-list"));
+</script>
+<div class="toast-region"></div>
+<script>
+  // Toast: the reference recipe from llms.txt. One at a time; success and info
+  // leave after 5s, paused while pointer or focus is on them; errors stay until
+  // dismissed; focus never moves.
+  (() => {
+    const region = document.querySelector(".toast-region");
+    const svg = (n) => `<svg class="icon" aria-hidden="true"><use href="branding/icons.svg#${n}"/></svg>`;
+    let timer = null;
+    function dismiss(t) {
+      clearTimeout(timer);
+      t.classList.add("is-leaving");
+      setTimeout(() => t.remove(), 200);
+    }
+    function toast({ text, kind = "success", action }) {
+      region.querySelectorAll(".toast").forEach((old) => old.remove());
+      const t = document.createElement("div");
+      t.className = "toast" + (kind === "error" ? " is-error" : "");
+      t.setAttribute("role", kind === "error" ? "alert" : "status");
+      t.innerHTML = svg(kind === "error" ? "circle-alert" : kind === "info" ? "info" : "circle-check") + "<p></p>";
+      t.querySelector("p").textContent = text;
+      if (action) {
+        const b = document.createElement("button");
+        b.type = "button"; b.className = "btn btn-ghost btn-sm"; b.textContent = action.label;
+        b.addEventListener("click", () => { action.run(); dismiss(t); });
+        t.append(b);
+      }
+      if (kind === "error") {
+        const x = document.createElement("button");
+        x.type = "button"; x.className = "btn btn-ghost btn-icon"; x.setAttribute("aria-label", "Dismiss"); x.innerHTML = svg("x");
+        x.addEventListener("click", () => dismiss(t));
+        t.append(x);
+      }
+      region.append(t);
+      if (kind === "error") return;
+      let left = 5000, start = 0;
+      const run = () => { start = Date.now(); timer = setTimeout(() => dismiss(t), left); };
+      const hold = () => { clearTimeout(timer); left -= Date.now() - start; };
+      const over = () => t.matches(":hover, :focus-within");
+      t.addEventListener("pointerenter", hold);
+      t.addEventListener("focusin", () => { if (!t.matches(":hover")) hold(); });
+      t.addEventListener("pointerleave", () => { if (!over()) run(); });
+      t.addEventListener("focusout", () => setTimeout(() => { if (!over()) run(); }));
+      run();
+    }
+    document.querySelector('[data-toast-demo="success"]')?.addEventListener("click", () =>
+      toast({ text: "Huddle deleted.", action: { label: "Undo", run: () => toast({ text: "Huddle restored.", kind: "info" }) } }));
+    document.querySelector('[data-toast-demo="error"]')?.addEventListener("click", () =>
+      toast({ text: "Couldn’t save. Check your connection and try again.", kind: "error" }));
+  })();
 </script>
 </body>
 </html>

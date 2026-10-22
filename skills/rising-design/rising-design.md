@@ -288,6 +288,10 @@ animate(".card", { opacity: [0, 1], y: [8, 0] }, { type: "spring", visualDuratio
 
 For comparing values across rows; if each row is a thing you open, use `.list`. `.table-wrap` (a named, focusable region that scrolls sideways on its own) around `table.table`. Header: mono 12px caps, `--text-dim` on `--bg-inset`, sticky. Cells: 14px text face; numbers `.num` (right, `tabular-nums`); IDs `td.mono`. 44px rows on `--border-subtle` hairlines, no zebra, hover only on rows with a link. Sorting: `button.th-sort` + 16px icon, `aria-sort` on the one sorted `th`. Loading: `.skeleton`; empty: `.empty-state` in one cell. Anatomy in `components.md` → "Table".
 
+## Toast
+
+Confirms something the person just did, with an optional Undo — never something they must act on (that's the page, or a dialog). One at a time in `.toast-region`, bottom-right (bottom-centre on phones). Status icon + one 14px sentence + at most one `.btn-ghost.btn-sm`; no title. Success/info: `role="status"`, 5s, paused while pointer or focus is on it. Error: `role="alert"`, stays until dismissed. Focus never moves. Anatomy and JS recipe in `components.md` → "Toast".
+
 ## Page Patterns
 
 ### Landing page (Daylight)

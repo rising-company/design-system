@@ -307,6 +307,102 @@ th[aria-sort] .th-sort .icon { opacity: 1; color: var(--accent-ink); }
 
 ---
 
+## Toast
+
+Confirms what the person just did (+ optional Undo); never something they must act on. One at a time in `.toast-region` (bottom-right / bottom-centre on phones); icon + one 14px sentence + optional `.btn-ghost.btn-sm`; success/info `role="status"` 5s, paused under pointer or focus; errors `role="alert"` until dismissed; focus never moves. Rules and the JS recipe: `llms.txt` → "Toast".
+
+```html
+<!-- Once per page, last in <body> -->
+<div class="toast-region"></div>
+<!-- What the script puts in it -->
+<div class="toast" role="status">
+  <svg class="icon" aria-hidden="true"><use href="/icons.svg#circle-check"/></svg>
+  <p>Huddle deleted.</p>
+  <button class="btn btn-ghost btn-sm" type="button">Undo</button>
+</div>
+<div class="toast is-error" role="alert">
+  <svg class="icon" aria-hidden="true"><use href="/icons.svg#circle-alert"/></svg>
+  <p>Couldn’t save. Check your connection and try again.</p>
+  <button class="btn btn-ghost btn-icon" type="button" aria-label="Dismiss">
+    <svg class="icon" aria-hidden="true"><use href="/icons.svg#x"/></svg></button>
+</div>
+```
+
+```css
+.toast-region {
+  position: fixed; z-index: 90; right: 24px; bottom: calc(24px + env(safe-area-inset-bottom));
+  display: flex; flex-direction: column; align-items: flex-end; pointer-events: none;
+}
+.toast {
+  pointer-events: auto; display: flex; align-items: center; gap: 12px;
+  max-width: 420px; min-height: 3.5rem; padding: 6px 6px 6px 16px;
+  background: var(--bg-surface); border: 1px solid var(--border-hover); border-radius: 6px;
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.28);
+  font-family: var(--font-text); font-size: var(--type-small); line-height: 1.4; color: var(--text-heading);
+  /* Enters rising 8px on the Base tier; leaves faster, fading only. */
+  transition: opacity 0.3s cubic-bezier(0.2, 0, 0, 1), transform 0.3s cubic-bezier(0.2, 0, 0, 1);
+}
+@starting-style { .toast { opacity: 0; transform: translateY(8px); } }
+.toast.is-leaving { opacity: 0; transition-duration: 0.18s; }
+.toast > p { flex: 1; padding-block: 8px; }
+.toast > .icon { color: var(--accent-ink); }
+.toast.is-error > .icon { color: var(--danger-ink); }
+.toast.is-error { border-color: var(--danger-ink); }
+.toast .btn-icon { border-color: transparent; }
+.toast > :last-child:not(p):not(.icon) { margin-left: -4px; }
+@media (max-width: 640px) {
+  .toast-region { left: 16px; right: 16px; bottom: calc(16px + env(safe-area-inset-bottom)); align-items: stretch; }
+  .toast { max-width: none; }
+}
+```
+
+The behaviour, in plain JS (port it to the product's framework; with Motion, enter on the
+Base spring instead of the CSS transition):
+
+```js
+const region = document.querySelector(".toast-region");
+const svg = (n) => `<svg class="icon" aria-hidden="true"><use href="/icons.svg#${n}"/></svg>`;
+let timer = null;
+function dismiss(t) {
+  clearTimeout(timer);
+  t.classList.add("is-leaving");
+  setTimeout(() => t.remove(), 200);
+}
+function toast({ text, kind = "success", action }) {
+  region.querySelectorAll(".toast").forEach((old) => old.remove());
+  const t = document.createElement("div");
+  t.className = "toast" + (kind === "error" ? " is-error" : "");
+  t.setAttribute("role", kind === "error" ? "alert" : "status");
+  t.innerHTML = svg(kind === "error" ? "circle-alert" : kind === "info" ? "info" : "circle-check") + "<p></p>";
+  t.querySelector("p").textContent = text;
+  if (action) {
+    const b = document.createElement("button");
+    b.type = "button"; b.className = "btn btn-ghost btn-sm"; b.textContent = action.label;
+    b.addEventListener("click", () => { action.run(); dismiss(t); });
+    t.append(b);
+  }
+  if (kind === "error") {
+    const x = document.createElement("button");
+    x.type = "button"; x.className = "btn btn-ghost btn-icon"; x.setAttribute("aria-label", "Dismiss"); x.innerHTML = svg("x");
+    x.addEventListener("click", () => dismiss(t));
+    t.append(x);
+  }
+  region.append(t);
+  if (kind === "error") return;
+  let left = 5000, start = 0;
+  const run = () => { start = Date.now(); timer = setTimeout(() => dismiss(t), left); };
+  const hold = () => { clearTimeout(timer); left -= Date.now() - start; };
+  const over = () => t.matches(":hover, :focus-within");
+  t.addEventListener("pointerenter", hold);
+  t.addEventListener("focusin", () => { if (!t.matches(":hover")) hold(); });
+  t.addEventListener("pointerleave", () => { if (!over()) run(); });
+  t.addEventListener("focusout", () => setTimeout(() => { if (!over()) run(); }));
+  run();
+}
+```
+
+---
+
 ## Stats Panel
 
 Vertical stack of label/value pairs for displaying key metrics. Used in HUD overlays to surface spec data at a glance. Positioned top-right by default.

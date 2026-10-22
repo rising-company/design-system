@@ -594,6 +594,37 @@ th[aria-sort] .th-sort .icon { opacity: 1; color: var(--accent-ink); }
 }
 @keyframes table-more { from { --fade: 24px; } 95% { --fade: 24px; } to { --fade: 0px; } }
 
+/* ══════════════ TOAST ══════════════ */
+/* Confirms what the person just did, and may offer to undo it. Never something
+   they must act on: that belongs in the page or a dialog. One at a time, in a
+   fixed region; a sentence, no title. Behaviour (timer, pause, replace) is the
+   product's; the recipe is in llms.txt. */
+.toast-region {
+  position: fixed; z-index: 90; right: 24px; bottom: calc(24px + env(safe-area-inset-bottom));
+  display: flex; flex-direction: column; align-items: flex-end; pointer-events: none;
+}
+.toast {
+  pointer-events: auto; display: flex; align-items: center; gap: 12px;
+  max-width: 420px; min-height: 3.5rem; padding: 6px 6px 6px 16px;
+  background: var(--bg-surface); border: 1px solid var(--border-hover); border-radius: 6px;
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.28);
+  font-family: var(--font-text); font-size: var(--type-small); line-height: 1.4; color: var(--text-heading);
+  /* Enters rising 8px on the Base tier; leaves faster, fading only. */
+  transition: opacity 0.3s cubic-bezier(0.2, 0, 0, 1), transform 0.3s cubic-bezier(0.2, 0, 0, 1);
+}
+@starting-style { .toast { opacity: 0; transform: translateY(8px); } }
+.toast.is-leaving { opacity: 0; transition-duration: 0.18s; }
+.toast > p { flex: 1; padding-block: 8px; }
+.toast > .icon { color: var(--accent-ink); }
+.toast.is-error > .icon { color: var(--danger-ink); }
+.toast.is-error { border-color: var(--danger-ink); }
+.toast .btn-icon { border-color: transparent; }
+.toast > :last-child:not(p):not(.icon) { margin-left: -4px; }
+@media (max-width: 640px) {
+  .toast-region { left: 16px; right: 16px; bottom: calc(16px + env(safe-area-inset-bottom)); align-items: stretch; }
+  .toast { max-width: none; }
+}
+
 /* ══════════════ GRID ══════════════ */
 .grid {
   display: grid;
@@ -761,9 +792,9 @@ th[aria-sort] .th-sort .icon { opacity: 1; color: var(--accent-ink); }
   background: var(--bg-surface); border: 1px solid var(--border-hover);
   border-radius: 6px; box-shadow: 0 12px 32px rgba(0, 0, 0, 0.28);
 }
-[data-theme="daylight"] .user-menu-panel { box-shadow: 0 12px 32px rgba(11, 26, 20, 0.12); }
+[data-theme="daylight"] :is(.user-menu-panel, .toast) { box-shadow: 0 12px 32px rgba(11, 26, 20, 0.12); }
 @media (prefers-color-scheme: light) {
-  :root[data-theme="auto"] .user-menu-panel { box-shadow: 0 12px 32px rgba(11, 26, 20, 0.12); }
+  :root[data-theme="auto"] :is(.user-menu-panel, .toast) { box-shadow: 0 12px 32px rgba(11, 26, 20, 0.12); }
 }
 
 .user-menu-head {

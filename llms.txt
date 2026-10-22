@@ -1107,6 +1107,114 @@ th[aria-sort] .th-sort .icon { opacity: 1; color: var(--accent-ink); }
 @keyframes table-more { from { --fade: 24px; } 95% { --fade: 24px; } to { --fade: 0px; } }
 ```
 
+### Toast
+
+Confirms something the person **just did**, and may offer to undo it. It never carries
+anything they must read or act on — that belongs in the page, or in a dialog.
+
+- **One at a time,** in a fixed `.toast-region`: bottom-right, 24px from the edges, on desktop;
+  bottom-centre with 16px gutters on phones, above the safe area. A new toast replaces the old.
+- **Anatomy:** a status icon (`circle-check`, `info`, `circle-alert`), one sentence in the text
+  face at 14px, and at most one action — `Undo` as `.btn-ghost.btn-sm`. No title. A 1px
+  `--border-hover` frame on `--bg-surface`; an error takes `--danger-ink` on its frame and icon.
+- **Timing:** success and info leave after 5s; the timer pauses while the pointer or focus is on
+  the toast, so nobody loses an Undo mid-reach. An error stays until dismissed, and has a
+  labelled dismiss button.
+- **Accessibility:** success and info are `role="status"` (polite); errors are `role="alert"`.
+  Focus never moves to a toast.
+- **Motion:** enters rising 8px with opacity on the Base tier (CSS `@starting-style`, or Motion's
+  Base spring); leaves faster, fading only (0.18s). Reduced motion: it appears and goes, no move.
+
+```html
+<!-- Once per page, last in <body> -->
+<div class="toast-region"></div>
+<!-- What the script puts in it -->
+<div class="toast" role="status">
+  <svg class="icon" aria-hidden="true"><use href="/icons.svg#circle-check"/></svg>
+  <p>Huddle deleted.</p>
+  <button class="btn btn-ghost btn-sm" type="button">Undo</button>
+</div>
+<div class="toast is-error" role="alert">
+  <svg class="icon" aria-hidden="true"><use href="/icons.svg#circle-alert"/></svg>
+  <p>Couldn’t save. Check your connection and try again.</p>
+  <button class="btn btn-ghost btn-icon" type="button" aria-label="Dismiss">
+    <svg class="icon" aria-hidden="true"><use href="/icons.svg#x"/></svg></button>
+</div>
+```
+
+```css
+.toast-region {
+  position: fixed; z-index: 90; right: 24px; bottom: calc(24px + env(safe-area-inset-bottom));
+  display: flex; flex-direction: column; align-items: flex-end; pointer-events: none;
+}
+.toast {
+  pointer-events: auto; display: flex; align-items: center; gap: 12px;
+  max-width: 420px; min-height: 3.5rem; padding: 6px 6px 6px 16px;
+  background: var(--bg-surface); border: 1px solid var(--border-hover); border-radius: 6px;
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.28);
+  font-family: var(--font-text); font-size: var(--type-small); line-height: 1.4; color: var(--text-heading);
+  /* Enters rising 8px on the Base tier; leaves faster, fading only. */
+  transition: opacity 0.3s cubic-bezier(0.2, 0, 0, 1), transform 0.3s cubic-bezier(0.2, 0, 0, 1);
+}
+@starting-style { .toast { opacity: 0; transform: translateY(8px); } }
+.toast.is-leaving { opacity: 0; transition-duration: 0.18s; }
+.toast > p { flex: 1; padding-block: 8px; }
+.toast > .icon { color: var(--accent-ink); }
+.toast.is-error > .icon { color: var(--danger-ink); }
+.toast.is-error { border-color: var(--danger-ink); }
+.toast .btn-icon { border-color: transparent; }
+.toast > :last-child:not(p):not(.icon) { margin-left: -4px; }
+@media (max-width: 640px) {
+  .toast-region { left: 16px; right: 16px; bottom: calc(16px + env(safe-area-inset-bottom)); align-items: stretch; }
+  .toast { max-width: none; }
+}
+```
+
+The behaviour, in plain JS (port it to the product's framework; with Motion, enter on the
+Base spring instead of the CSS transition):
+
+```js
+const region = document.querySelector(".toast-region");
+const svg = (n) => `<svg class="icon" aria-hidden="true"><use href="/icons.svg#${n}"/></svg>`;
+let timer = null;
+function dismiss(t) {
+  clearTimeout(timer);
+  t.classList.add("is-leaving");
+  setTimeout(() => t.remove(), 200);
+}
+function toast({ text, kind = "success", action }) {
+  region.querySelectorAll(".toast").forEach((old) => old.remove());
+  const t = document.createElement("div");
+  t.className = "toast" + (kind === "error" ? " is-error" : "");
+  t.setAttribute("role", kind === "error" ? "alert" : "status");
+  t.innerHTML = svg(kind === "error" ? "circle-alert" : kind === "info" ? "info" : "circle-check") + "<p></p>";
+  t.querySelector("p").textContent = text;
+  if (action) {
+    const b = document.createElement("button");
+    b.type = "button"; b.className = "btn btn-ghost btn-sm"; b.textContent = action.label;
+    b.addEventListener("click", () => { action.run(); dismiss(t); });
+    t.append(b);
+  }
+  if (kind === "error") {
+    const x = document.createElement("button");
+    x.type = "button"; x.className = "btn btn-ghost btn-icon"; x.setAttribute("aria-label", "Dismiss"); x.innerHTML = svg("x");
+    x.addEventListener("click", () => dismiss(t));
+    t.append(x);
+  }
+  region.append(t);
+  if (kind === "error") return;
+  let left = 5000, start = 0;
+  const run = () => { start = Date.now(); timer = setTimeout(() => dismiss(t), left); };
+  const hold = () => { clearTimeout(timer); left -= Date.now() - start; };
+  const over = () => t.matches(":hover, :focus-within");
+  t.addEventListener("pointerenter", hold);
+  t.addEventListener("focusin", () => { if (!t.matches(":hover")) hold(); });
+  t.addEventListener("pointerleave", () => { if (!over()) run(); });
+  t.addEventListener("focusout", () => setTimeout(() => { if (!over()) run(); }));
+  run();
+}
+```
+
 ### Stats Panel
 Vertical stack of stat rows:
 - Label: Share Tech Mono, 12px, letter-spacing 0.1em, uppercase, `var(--text-dim)`
