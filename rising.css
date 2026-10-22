@@ -197,6 +197,18 @@ body {
 
 ::selection { background: var(--accent); color: var(--accent-on); }
 
+/* A link in running text: the accent ink, underlined, so it doesn't rest on
+   colour alone (in Daylight the ink is too close to body grey to). The same
+   colour once visited. Zero specificity, so any classed or nav/footer link
+   keeps its own look. */
+:where(a:not([class])) {
+  color: var(--accent-ink);
+  text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: 0.2em;
+  text-decoration-color: color-mix(in srgb, currentColor 45%, transparent);
+  transition: text-decoration-color 0.2s;
+}
+:where(a:not([class])):hover { text-decoration-color: currentColor; }
+
 :focus-visible {
   outline: 1px solid var(--accent-ink);
   outline-offset: 3px;

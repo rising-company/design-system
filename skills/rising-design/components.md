@@ -38,6 +38,22 @@ Lucide icon, or `lucide-react`, takes the same class. Rules and the full list: `
 
 ---
 
+## Link
+
+A bare `<a href>` in running text: `--accent-ink`, underlined (ink alone is under 3:1 against body text), same colour once visited. Zero specificity, so classed and nav/footer links keep their own look. In `rising.css`.
+
+```css
+:where(a:not([class])) {
+  color: var(--accent-ink);
+  text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: 0.2em;
+  text-decoration-color: color-mix(in srgb, currentColor 45%, transparent);
+  transition: text-decoration-color 0.2s;
+}
+:where(a:not([class])):hover { text-decoration-color: currentColor; }
+```
+
+---
+
 ## Card
 
 A clickable container with eyebrow tag, title, description, badge row, and arrow indicator. Use for navigation links to pages, diagrams, or sections. Features a gradient top-border that appears on hover.
