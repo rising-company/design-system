@@ -1053,7 +1053,8 @@ three cards leave a hole the fourth would have filled.
   `--accent-ink` (`.is-live`). Below 640px the meta drops under the title, left-aligned
 
 ### Tooltip
-- `background: color-mix(in srgb, var(--bg-base) 92%, transparent)`, `border: 1px solid var(--accent-line)`, radius 4px, padding 8px 12px
+`.tooltip` in `rising.css`; the product positions it and toggles it on hover.
+- `background: color-mix(in srgb, var(--bg-base) 92%, transparent)` — the theme's own base, never a fixed dark, so it reads in Daylight too — `border: 1px solid var(--accent-line)`, radius 4px, padding 8px 12px, max-width 240px
 - Name: Rajdhani, 16px, weight 700, `var(--text-heading)`, letter-spacing 1px
 - Material line: Share Tech Mono, 12px, `var(--accent-ink)`, letter-spacing 0.1em
 - Description: IBM Plex Sans, 14px, `var(--text-muted)`, line-height 1.5

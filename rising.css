@@ -530,6 +530,19 @@ a.list-row:active { background: var(--bg-inset); transition-duration: 0s; }
   .list-meta { justify-content: flex-start; }
 }
 
+/* ══════════════ TOOLTIP ══════════════ */
+/* Name · material · description, floating over a diagram. The ground is the
+   theme's own base, so it reads in Daylight as well as Mission. Placement and
+   show/hide are the product's (position it absolutely, toggle display). */
+.tooltip {
+  max-width: 240px; padding: 8px 12px; pointer-events: none;
+  background: color-mix(in srgb, var(--bg-base) 92%, transparent);
+  border: 1px solid var(--accent-line); border-radius: 4px;
+}
+.tooltip .tt-name { font-family: var(--font-display); font-size: 1rem; font-weight: 700; letter-spacing: 1px; color: var(--text-heading); }
+.tooltip .tt-mat { font-family: var(--font-mono); font-size: var(--type-label); letter-spacing: 0.1em; color: var(--accent-ink); margin-top: 3px; }
+.tooltip .tt-desc { font-family: var(--font-text); font-size: var(--type-small); line-height: 1.5; color: var(--text-muted); margin-top: 4px; }
+
 /* ══════════════ GRID ══════════════ */
 .grid {
   display: grid;

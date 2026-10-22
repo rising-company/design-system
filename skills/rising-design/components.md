@@ -294,7 +294,7 @@ Vertical stack of label/value pairs for displaying key metrics. Used in HUD over
 
 ## Tooltip
 
-Floating overlay that appears on hover, showing name, category/material, and description. Positioned absolutely via JavaScript. Hidden by default (`display: none`), shown on mouseover.
+Floating overlay that appears on hover, showing name, category/material, and description. Its ground is the theme's own `--bg-base`, so it reads in both themes. The product positions it and shows it on hover.
 
 ### HTML
 
@@ -308,40 +308,17 @@ Floating overlay that appears on hover, showing name, category/material, and des
 
 ### CSS
 
+In `rising.css`. Placement and show/hide are the product's: position it absolutely and toggle `display`.
+
 ```css
 .tooltip {
-  position: absolute;
-  background: color-mix(in srgb, var(--bg-base) 92%, transparent);
-  border: 1px solid var(--accent-line);
-  border-radius: 4px;
-  padding: 8px 12px;
-  pointer-events: none;
-  display: none;
-  max-width: 200px;
+  max-width: 240px; padding: 8px 12px; pointer-events: none;
+  background: color-mix(in srgb, var(--bg-base) 92%, transparent);   /* the theme's own base */
+  border: 1px solid var(--accent-line); border-radius: 4px;
 }
-
-.tooltip .tt-name {
-  font-family: var(--font-display);
-  font-size: 1rem;
-  font-weight: 700;
-  color: var(--text-heading);
-  letter-spacing: 1px;
-}
-
-.tooltip .tt-mat {
-  font-family: var(--font-mono);
-  font-size: 0.75rem;
-  color: var(--accent-ink);
-  letter-spacing: 0.1em;
-  margin-top: 3px;
-}
-
-.tooltip .tt-desc {
-  font-size: 0.875rem;
-  color: var(--text-muted);
-  margin-top: 4px;
-  line-height: 1.5;
-}
+.tooltip .tt-name { font-family: var(--font-display); font-size: 1rem; font-weight: 700; letter-spacing: 1px; color: var(--text-heading); }
+.tooltip .tt-mat { font-family: var(--font-mono); font-size: var(--type-label); letter-spacing: 0.1em; color: var(--accent-ink); margin-top: 3px; }
+.tooltip .tt-desc { font-family: var(--font-text); font-size: var(--type-small); line-height: 1.5; color: var(--text-muted); margin-top: 4px; }
 ```
 
 ---
