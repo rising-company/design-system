@@ -949,6 +949,55 @@ happens until the person presses Save, it is a checkbox.
 }
 ```
 
+### Segmented Control
+
+Two to four views of **the same content** — Day · Week · Month, Mission · Daylight · Auto.
+Not navigation: if choosing a segment changes the URL or loads another page, use the nav. More
+than four choices, or labels longer than a word or two, call for a select.
+
+- **Native radios behind their labels** (`role="radiogroup"` + an `aria-label`), so Tab lands on
+  the choice and the arrow keys move it, with no script and with the form. A control a script
+  already drives may use `<button aria-pressed>` in a `role="group"` instead — the showcase theme
+  switch is that build.
+- Labels are the text face at 14px / 500 in `--text-muted`; the chosen segment is
+  `--accent-wash` with `--accent-ink`. One 1px `--border` frame, hairline dividers, 4px corners.
+  36px tall, 44px on touch screens.
+- Keyboard focus draws the ring inside the segment. In forced colours the chosen segment
+  takes `Highlight`, or it would look like the rest.
+
+```html
+<!-- No script: native radios, arrows move the choice -->
+<div class="segmented" role="radiogroup" aria-label="Calendar view">
+  <label><input type="radio" name="view" value="day">Day</label>
+  <label><input type="radio" name="view" value="week" checked>Week</label>
+  <label><input type="radio" name="view" value="month">Month</label>
+</div>
+<!-- Script-driven: buttons with aria-pressed (the showcase theme switch) -->
+<div class="segmented" role="group" aria-label="Preview theme">
+  <button type="button" aria-pressed="true">Mission</button>
+  <button type="button" aria-pressed="false">Daylight</button>
+</div>
+```
+
+```css
+.segmented { display: inline-flex; border: 1px solid var(--border); border-radius: 4px; overflow: hidden; }
+.segmented > label, .segmented > button {
+  position: relative; display: inline-flex; align-items: center; justify-content: center;
+  min-height: 2.25rem; padding: 0 14px; margin: 0;            /* 44px on touch screens */
+  font-family: var(--font-text); font-size: var(--type-small); font-weight: 500; line-height: 1.25;
+  color: var(--text-muted); background: transparent; border: 0; cursor: pointer; white-space: nowrap;
+  transition: background 0.2s, color 0.2s;
+}
+.segmented > :is(label, button) + :is(label, button) { border-left: 1px solid var(--border); }
+.segmented > :hover { color: var(--text-heading); }
+.segmented > label:has(input:checked), .segmented > button[aria-pressed="true"] { background: var(--accent-wash); color: var(--accent-ink); }
+.segmented input { position: absolute; width: 1px; height: 1px; margin: 0; opacity: 0; pointer-events: none; }
+.segmented > label:has(input:focus-visible), .segmented > button:focus-visible { outline: 1px solid var(--accent-ink); outline-offset: -4px; }
+@media (forced-colors: active) {
+  .segmented > label:has(input:checked), .segmented > button[aria-pressed="true"] { forced-color-adjust: none; background: Highlight; color: HighlightText; }
+}
+```
+
 ### Card
 Structure: tag (category · subcategory, no `//`) → title → description → badge row
 - Container: `background: var(--bg-surface)`, `border: 1px solid var(--border)`, radius 6px, padding 24px
