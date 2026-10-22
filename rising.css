@@ -398,6 +398,52 @@ fieldset.field > .field-help, fieldset.field > .field-error { margin-top: 4px; }
 .check input { width: 1.25rem; height: 1.25rem; margin: 0; flex: none; accent-color: var(--accent-ink); cursor: inherit; }
 .check:has(input:disabled) { color: var(--text-dim); cursor: not-allowed; }
 
+/* Switch: a setting that takes effect the moment it flips; if nothing happens
+   until Save, it's a checkbox. A native checkbox with role="switch", drawn here,
+   so it needs no script and still posts with its form. Corners match the
+   buttons and fields. On moves the thumb as well as filling the track, so the
+   state never rests on colour alone. */
+.setting {
+  display: flex; align-items: center; justify-content: space-between; gap: 16px; min-height: 2.75rem;
+  font-family: var(--font-text); font-size: var(--type-body); line-height: 1.4;
+  color: var(--text-body); cursor: pointer;
+}
+.setting > span { display: flex; flex-direction: column; gap: 2px; }
+.setting:has(.switch:disabled) { color: var(--text-dim); cursor: not-allowed; }
+.switch {
+  appearance: none; -webkit-appearance: none; position: relative; flex: none; margin: 0;
+  width: 2.5rem; height: 1.5rem; border-radius: 4px; cursor: inherit;
+  background: var(--bg-inset); border: 1px solid var(--text-dim);
+  transition: background 0.2s, border-color 0.2s;
+}
+.switch::before {
+  content: ""; position: absolute; top: 3px; left: 3px; width: 1rem; height: 1rem;
+  border-radius: 2px; background: var(--text-muted);
+  transition: transform 0.2s, background 0.2s;
+}
+.switch:checked { background: var(--accent-ink); border-color: var(--accent-ink); }
+.switch:checked::before { transform: translateX(1rem); background: var(--bg-surface); }
+.switch:disabled { border-color: var(--border-hover); }
+.switch:disabled::before { background: var(--border-hover); }
+
+/* Segmented control: two to four views of the same content (Day · Week · Month).
+   Not navigation: if the URL changes, it's the nav. Native radios hidden behind
+   their labels, so arrows move the choice with no script; a script-driven control
+   may use buttons with aria-pressed instead. One frame, hairline dividers. */
+.segmented { display: inline-flex; border: 1px solid var(--border); border-radius: 4px; overflow: hidden; }
+.segmented > label, .segmented > button {
+  position: relative; display: inline-flex; align-items: center; justify-content: center;
+  min-height: 2.25rem; padding: 0 14px; margin: 0;
+  font-family: var(--font-text); font-size: var(--type-small); font-weight: 500; line-height: 1.25;
+  color: var(--text-muted); background: transparent; border: 0; cursor: pointer; white-space: nowrap;
+  transition: background 0.2s, color 0.2s;
+}
+.segmented > :is(label, button) + :is(label, button) { border-left: 1px solid var(--border); }
+.segmented > :hover { color: var(--text-heading); }
+.segmented > label:has(input:checked), .segmented > button[aria-pressed="true"] { background: var(--accent-wash); color: var(--accent-ink); }
+.segmented input { position: absolute; width: 1px; height: 1px; margin: 0; opacity: 0; pointer-events: none; }
+.segmented > label:has(input:focus-visible), .segmented > button:focus-visible { outline: 1px solid var(--accent-ink); outline-offset: -4px; }
+
 .control-grid {
   display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
   gap: 24px; padding: 24px; border: 1px solid var(--border);
@@ -938,7 +984,7 @@ a.list-row:active { background: var(--bg-inset); transition-duration: 0s; }
 /* A finger needs 44px. Desktop keeps its density; a touch screen gets the
    full target, whatever the viewport width (an iPad shows the sidebar). */
 @media (pointer: coarse) {
-  .btn, .user-menu-trigger, .user-menu-item, .app-sidebar-nav a { min-height: 44px; }
+  .btn, .user-menu-trigger, .user-menu-item, .app-sidebar-nav a, .segmented > label, .segmented > button { min-height: 44px; }
 }
 
 /* ══════════════ CONTRAST ══════════════ */
@@ -992,6 +1038,15 @@ a.list-row:active { background: var(--bg-inset); transition-duration: 0s; }
   /* A transparent border is painted in forced colours; only the current link keeps its rule. */
   .app-nav a { border-bottom-color: Canvas; }
   .app-nav a[aria-current="page"] { border-bottom-color: Highlight; }
+  /* The switch is drawn, so it names its own system colours. */
+  .switch, .switch::before { forced-color-adjust: none; }
+  .switch { background: Canvas; border-color: ButtonText; }
+  .switch::before { background: ButtonText; }
+  .switch:checked { background: Highlight; border-color: Highlight; }
+  .switch:checked::before { background: HighlightText; }
+  .switch:disabled { border-color: GrayText; }
+  .switch:disabled::before { background: GrayText; }
+  .segmented > label:has(input:checked), .segmented > button[aria-pressed="true"] { forced-color-adjust: none; background: Highlight; color: HighlightText; }
 }
 
 /* ══════════════ MOTION ══════════════ */

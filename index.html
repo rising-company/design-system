@@ -104,17 +104,7 @@
 
 
   /* ══════════════ THEME TOGGLE ══════════════ */
-  .theme-toggle { display: inline-flex; border: 1px solid var(--border); border-radius: 4px; overflow: hidden; }
-
-  .theme-toggle button {
-    font-family: var(--font-text);
-    font-size: var(--type-small); font-weight: 500;
-    padding: 8px 14px; background: transparent; color: var(--text-muted);
-    border: none; cursor: pointer; transition: background 0.2s, color 0.2s;
-  }
-  .theme-toggle button + button { border-left: 1px solid var(--border); }
-  .theme-toggle button:hover { color: var(--text-heading); }
-  .theme-toggle button[aria-pressed="true"] { background: var(--accent-wash); color: var(--accent-ink); }
+  /* The reference .segmented build, from rising.css: buttons with aria-pressed. */
 
   /* ══════════════ THEME COMPARISON PANES ══════════════ */
   .theme-compare { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
@@ -967,7 +957,7 @@
     </div>
     <div class="stat-row" style="margin-top: 16px;">
       <div class="stat-label" style="margin-bottom: 6px;">Theme</div>
-      <div class="theme-toggle" role="group" aria-label="Preview theme">
+      <div class="theme-toggle segmented" role="group" aria-label="Preview theme">
         <button type="button" data-set-theme="mission" aria-pressed="true">Mission</button>
         <button type="button" data-set-theme="daylight" aria-pressed="false">Daylight</button>
         <button type="button" data-set-theme="auto" aria-pressed="false">Auto</button>
@@ -1514,6 +1504,35 @@
       <label class="check"><input type="checkbox" aria-invalid="true">I agree to the terms of use</label>
       <p class="field-error" id="demo-terms-err">Agree to the terms to continue.</p>
     </fieldset>
+  </div>
+
+  <div class="section-label">// Switch &mdash; takes effect at once</div>
+  <div class="control-grid">
+    <div>
+      <label class="setting"><span>Show weekends</span><input class="switch" type="checkbox" role="switch" checked></label>
+      <label class="setting"><span>Compact rows</span><input class="switch" type="checkbox" role="switch"></label>
+      <label class="setting"><span>Sync to calendar<small class="field-help">Connect a calendar first.</small></span><input class="switch" type="checkbox" role="switch" disabled></label>
+    </div>
+    <div>
+      <div class="vc-label">Switch or checkbox</div>
+      <div class="vc-body">A switch changes something the moment it flips: the view, a notification, a sync. If nothing happens until the person presses Save, it&rsquo;s a checkbox. The label sits on the left, the switch at the end of its 44px row, and the whole row is the target. On moves the thumb as well as filling the track.</div>
+    </div>
+  </div>
+
+  <div class="section-label">// Segmented control &mdash; views of the same thing</div>
+  <div class="control-grid">
+    <div>
+      <div class="segmented" role="radiogroup" aria-label="Calendar view">
+        <label><input type="radio" name="demo-view" value="day">Day</label>
+        <label><input type="radio" name="demo-view" value="week" checked>Week</label>
+        <label><input type="radio" name="demo-view" value="month">Month</label>
+      </div>
+      <div class="vc-body" style="margin-top: 12px;">Native radios behind their labels: Tab lands on the choice, arrows move it. The theme switch at the top of this page is the same class on <code>aria-pressed</code> buttons.</div>
+    </div>
+    <div>
+      <div class="vc-label">Segments or tabs</div>
+      <div class="vc-body">Two to four ways of looking at the same content. If choosing one changes the URL or loads a different page, it&rsquo;s navigation, not a segmented control. More than four, or long labels: a select.</div>
+    </div>
   </div>
 
   <div class="section-label">// Field rules</div>

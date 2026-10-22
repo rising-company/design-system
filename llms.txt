@@ -889,6 +889,115 @@ fieldset.field > .field-help, fieldset.field > .field-error { margin-top: 4px; }
 .check:has(input:disabled) { color: var(--text-dim); cursor: not-allowed; }
 ```
 
+### Switch
+
+A setting that **takes effect the moment it flips**: the view, a notification, a sync. If nothing
+happens until the person presses Save, it is a checkbox.
+
+- **A native checkbox with `role="switch"`,** drawn in CSS. No script, it posts with its form,
+  Space toggles it, and screen readers announce "switch, on".
+- **The row is the `<label class="setting">`**, 44px: words on the left, the switch at the end.
+  Help goes under the words as `<small class="field-help">`.
+- **40 × 24, with the corners of the buttons and fields** (4px track, 2px thumb), not a pill.
+- **On moves the thumb 16px and fills the track** in `--accent-ink`, so the state never rests on
+  colour alone. Off is an outlined track (`--text-dim`, 3:1 or better on either surface) with a
+  `--text-muted` thumb. The thumb slides on the Quick tier (0.2s, CSS transform).
+- **Forced colours:** the switch names its own system colours (`ButtonText`, `Highlight`), or its
+  thumb would vanish into the forced background.
+- Label it with what turns on (`Show weekends`), not with a question or "Enable…".
+
+```html
+<label class="setting">
+  <span>Show weekends</span>
+  <input class="switch" type="checkbox" role="switch" name="weekends" checked>
+</label>
+<label class="setting">
+  <span>Sync to calendar<small class="field-help">Connect a calendar first.</small></span>
+  <input class="switch" type="checkbox" role="switch" disabled>
+</label>
+```
+
+```css
+.setting {
+  display: flex; align-items: center; justify-content: space-between; gap: 16px; min-height: 2.75rem;
+  font-family: var(--font-text); font-size: var(--type-body); line-height: 1.4;
+  color: var(--text-body); cursor: pointer;
+}
+.setting > span { display: flex; flex-direction: column; gap: 2px; }
+.setting:has(.switch:disabled) { color: var(--text-dim); cursor: not-allowed; }
+.switch {
+  appearance: none; -webkit-appearance: none; position: relative; flex: none; margin: 0;
+  width: 2.5rem; height: 1.5rem; border-radius: 4px; cursor: inherit;
+  background: var(--bg-inset); border: 1px solid var(--text-dim);
+  transition: background 0.2s, border-color 0.2s;
+}
+.switch::before {
+  content: ""; position: absolute; top: 3px; left: 3px; width: 1rem; height: 1rem;
+  border-radius: 2px; background: var(--text-muted);
+  transition: transform 0.2s, background 0.2s;
+}
+.switch:checked { background: var(--accent-ink); border-color: var(--accent-ink); }
+.switch:checked::before { transform: translateX(1rem); background: var(--bg-surface); }
+.switch:disabled { border-color: var(--border-hover); }
+.switch:disabled::before { background: var(--border-hover); }
+@media (forced-colors: active) {   /* drawn, so it names its own system colours */
+  .switch, .switch::before { forced-color-adjust: none; }
+  .switch { background: Canvas; border-color: ButtonText; }
+  .switch::before { background: ButtonText; }
+  .switch:checked { background: Highlight; border-color: Highlight; }
+  .switch:checked::before { background: HighlightText; }
+}
+```
+
+### Segmented Control
+
+Two to four views of **the same content** — Day · Week · Month, Mission · Daylight · Auto.
+Not navigation: if choosing a segment changes the URL or loads another page, use the nav. More
+than four choices, or labels longer than a word or two, call for a select.
+
+- **Native radios behind their labels** (`role="radiogroup"` + an `aria-label`), so Tab lands on
+  the choice and the arrow keys move it, with no script and with the form. A control a script
+  already drives may use `<button aria-pressed>` in a `role="group"` instead — the showcase theme
+  switch is that build.
+- Labels are the text face at 14px / 500 in `--text-muted`; the chosen segment is
+  `--accent-wash` with `--accent-ink`. One 1px `--border` frame, hairline dividers, 4px corners.
+  36px tall, 44px on touch screens.
+- Keyboard focus draws the ring inside the segment. In forced colours the chosen segment
+  takes `Highlight`, or it would look like the rest.
+
+```html
+<!-- No script: native radios, arrows move the choice -->
+<div class="segmented" role="radiogroup" aria-label="Calendar view">
+  <label><input type="radio" name="view" value="day">Day</label>
+  <label><input type="radio" name="view" value="week" checked>Week</label>
+  <label><input type="radio" name="view" value="month">Month</label>
+</div>
+<!-- Script-driven: buttons with aria-pressed (the showcase theme switch) -->
+<div class="segmented" role="group" aria-label="Preview theme">
+  <button type="button" aria-pressed="true">Mission</button>
+  <button type="button" aria-pressed="false">Daylight</button>
+</div>
+```
+
+```css
+.segmented { display: inline-flex; border: 1px solid var(--border); border-radius: 4px; overflow: hidden; }
+.segmented > label, .segmented > button {
+  position: relative; display: inline-flex; align-items: center; justify-content: center;
+  min-height: 2.25rem; padding: 0 14px; margin: 0;            /* 44px on touch screens */
+  font-family: var(--font-text); font-size: var(--type-small); font-weight: 500; line-height: 1.25;
+  color: var(--text-muted); background: transparent; border: 0; cursor: pointer; white-space: nowrap;
+  transition: background 0.2s, color 0.2s;
+}
+.segmented > :is(label, button) + :is(label, button) { border-left: 1px solid var(--border); }
+.segmented > :hover { color: var(--text-heading); }
+.segmented > label:has(input:checked), .segmented > button[aria-pressed="true"] { background: var(--accent-wash); color: var(--accent-ink); }
+.segmented input { position: absolute; width: 1px; height: 1px; margin: 0; opacity: 0; pointer-events: none; }
+.segmented > label:has(input:focus-visible), .segmented > button:focus-visible { outline: 1px solid var(--accent-ink); outline-offset: -4px; }
+@media (forced-colors: active) {
+  .segmented > label:has(input:checked), .segmented > button[aria-pressed="true"] { forced-color-adjust: none; background: Highlight; color: HighlightText; }
+}
+```
+
 ### Card
 Structure: tag (category · subcategory, no `//`) → title → description → badge row
 - Container: `background: var(--bg-surface)`, `border: 1px solid var(--border)`, radius 6px, padding 24px
