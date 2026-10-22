@@ -233,6 +233,176 @@ a.list-row:active { background: var(--bg-inset); transition-duration: 0s; }
 
 ---
 
+## Table
+
+For comparing values across rows (a row you open is a `.list`). Mono caps header on `--bg-inset`, 14px text cells, `.num` right-aligned tabular, `td.mono` IDs, 44px rows on hairlines, no zebra; the frame scrolls on phones with a right-edge fade only while there's more. Rules: `llms.txt` → "Table".
+
+```html
+<div class="table-wrap" role="region" aria-label="Circuit readings" tabindex="0">
+  <table class="table">
+    <thead>
+      <tr>
+        <th scope="col">Reading</th>
+        <th scope="col" aria-sort="descending">
+          <button class="th-sort" type="button">Logged
+            <svg class="icon icon-sm" aria-hidden="true"><use href="/icons.svg#arrow-down"/></svg></button>
+        </th>
+        <th scope="col" class="num">
+          <button class="th-sort" type="button">Volts
+            <svg class="icon icon-sm" aria-hidden="true"><use href="/icons.svg#arrow-up-down"/></svg></button>
+        </th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr><td class="mono">RD-0418</td><td>Oct 21 · 18:40</td><td class="num">13.28</td></tr>
+    </tbody>
+  </table>
+</div>
+<!-- Loading: <td><span class="skeleton" style="width: 12ch"></span></td> -->
+<!-- Empty:   <tr><td colspan="3"><div class="empty-state">…</div></td></tr> -->
+```
+
+```css
+.table-wrap { overflow-x: auto; background: var(--bg-surface); border: 1px solid var(--border); border-radius: 6px; box-shadow: var(--card-shadow); }
+.table { width: 100%; border-collapse: collapse; font-family: var(--font-text); font-size: var(--type-small); line-height: 1.4; color: var(--text-body); }
+.table th {
+  position: sticky; top: 0; z-index: 1; height: 2.5rem; padding: 0 16px;
+  background: var(--bg-inset); border-bottom: 1px solid var(--border);
+  font-family: var(--font-mono); font-size: var(--type-label); font-weight: 400;
+  letter-spacing: 0.05em; text-transform: uppercase; text-align: left; white-space: nowrap; color: var(--text-dim);
+}
+.table th[aria-sort] { color: var(--text-heading); }
+.table td { height: 2.75rem; padding: 10px 16px; vertical-align: middle; border-top: 1px solid var(--border-subtle); }
+.table tbody tr:first-child td { border-top: 0; }
+.table .num { text-align: right; font-variant-numeric: tabular-nums; }
+.table td.mono { font-family: var(--font-mono); letter-spacing: 0.02em; white-space: nowrap; }
+.table tbody tr:has(a[href]):hover td { background: var(--bg-surface-hover); }
+.th-sort { display: inline-flex; align-items: center; gap: 6px; min-height: 2.5rem; padding: 0; margin: 0;
+  font: inherit; letter-spacing: inherit; text-transform: inherit; color: inherit; background: none; border: 0; cursor: pointer; }
+.th-sort:hover { color: var(--text-heading); }
+.th-sort .icon { opacity: 0.6; }
+th[aria-sort] .th-sort .icon { opacity: 1; color: var(--accent-ink); }
+.table .empty-state { padding-block: 48px; }
+.skeleton { display: inline-block; height: 0.75em; width: 8ch; vertical-align: middle; border-radius: 2px;
+  background: var(--border); animation: skeleton-breathe 2.4s ease-in-out infinite alternate; }
+@keyframes skeleton-breathe { from { opacity: 1; } to { opacity: 0.4; } }
+@media (max-width: 640px) {
+  .table { width: max-content; min-width: 100%; }
+  .table td { white-space: nowrap; }
+  .table:has(.empty-state) { width: 100%; }
+  .table td:has(.empty-state) { white-space: normal; }
+  .table th:last-child, .table td:last-child { padding-right: 40px; }
+}
+/* The right-edge fade, only while the frame can scroll further. */
+@property --fade { syntax: "<length>"; inherits: false; initial-value: 0px; }
+.table-wrap {
+  mask-image: linear-gradient(to right, #000 calc(100% - var(--fade)), transparent);
+  -webkit-mask-image: linear-gradient(to right, #000 calc(100% - var(--fade)), transparent);
+}
+@supports (animation-timeline: scroll()) {
+  .table-wrap { animation: table-more linear both; animation-timeline: scroll(self inline); }
+}
+@keyframes table-more { from { --fade: 24px; } 95% { --fade: 24px; } to { --fade: 0px; } }
+```
+
+---
+
+## Toast
+
+Confirms what the person just did (+ optional Undo); never something they must act on. One at a time in `.toast-region` (bottom-right / bottom-centre on phones); icon + one 14px sentence + optional `.btn-ghost.btn-sm`; success/info `role="status"` 5s, paused under pointer or focus; errors `role="alert"` until dismissed; focus never moves. Rules and the JS recipe: `llms.txt` → "Toast".
+
+```html
+<!-- Once per page, last in <body> -->
+<div class="toast-region"></div>
+<!-- What the script puts in it -->
+<div class="toast" role="status">
+  <svg class="icon" aria-hidden="true"><use href="/icons.svg#circle-check"/></svg>
+  <p>Huddle deleted.</p>
+  <button class="btn btn-ghost btn-sm" type="button">Undo</button>
+</div>
+<div class="toast is-error" role="alert">
+  <svg class="icon" aria-hidden="true"><use href="/icons.svg#circle-alert"/></svg>
+  <p>Couldn’t save. Check your connection and try again.</p>
+  <button class="btn btn-ghost btn-icon" type="button" aria-label="Dismiss">
+    <svg class="icon" aria-hidden="true"><use href="/icons.svg#x"/></svg></button>
+</div>
+```
+
+```css
+.toast-region {
+  position: fixed; z-index: 90; right: 24px; bottom: calc(24px + env(safe-area-inset-bottom));
+  display: flex; flex-direction: column; align-items: flex-end; pointer-events: none;
+}
+.toast {
+  pointer-events: auto; display: flex; align-items: center; gap: 12px;
+  max-width: 420px; min-height: 3.5rem; padding: 6px 6px 6px 16px;
+  background: var(--bg-surface); border: 1px solid var(--border-hover); border-radius: 6px;
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.28);
+  font-family: var(--font-text); font-size: var(--type-small); line-height: 1.4; color: var(--text-heading);
+  /* Enters rising 8px on the Base tier; leaves faster, fading only. */
+  transition: opacity 0.3s cubic-bezier(0.2, 0, 0, 1), transform 0.3s cubic-bezier(0.2, 0, 0, 1);
+}
+@starting-style { .toast { opacity: 0; transform: translateY(8px); } }
+.toast.is-leaving { opacity: 0; transition-duration: 0.18s; }
+.toast > p { flex: 1; padding-block: 8px; }
+.toast > .icon { color: var(--accent-ink); }
+.toast.is-error > .icon { color: var(--danger-ink); }
+.toast.is-error { border-color: var(--danger-ink); }
+.toast .btn-icon { border-color: transparent; }
+.toast > :last-child:not(p):not(.icon) { margin-left: -4px; }
+@media (max-width: 640px) {
+  .toast-region { left: 16px; right: 16px; bottom: calc(16px + env(safe-area-inset-bottom)); align-items: stretch; }
+  .toast { max-width: none; }
+}
+```
+
+The behaviour, in plain JS (port it to the product's framework; with Motion, enter on the
+Base spring instead of the CSS transition):
+
+```js
+const region = document.querySelector(".toast-region");
+const svg = (n) => `<svg class="icon" aria-hidden="true"><use href="/icons.svg#${n}"/></svg>`;
+let timer = null;
+function dismiss(t) {
+  clearTimeout(timer);
+  t.classList.add("is-leaving");
+  setTimeout(() => t.remove(), 200);
+}
+function toast({ text, kind = "success", action }) {
+  region.querySelectorAll(".toast").forEach((old) => old.remove());
+  const t = document.createElement("div");
+  t.className = "toast" + (kind === "error" ? " is-error" : "");
+  t.setAttribute("role", kind === "error" ? "alert" : "status");
+  t.innerHTML = svg(kind === "error" ? "circle-alert" : kind === "info" ? "info" : "circle-check") + "<p></p>";
+  t.querySelector("p").textContent = text;
+  if (action) {
+    const b = document.createElement("button");
+    b.type = "button"; b.className = "btn btn-ghost btn-sm"; b.textContent = action.label;
+    b.addEventListener("click", () => { action.run(); dismiss(t); });
+    t.append(b);
+  }
+  if (kind === "error") {
+    const x = document.createElement("button");
+    x.type = "button"; x.className = "btn btn-ghost btn-icon"; x.setAttribute("aria-label", "Dismiss"); x.innerHTML = svg("x");
+    x.addEventListener("click", () => dismiss(t));
+    t.append(x);
+  }
+  region.append(t);
+  if (kind === "error") return;
+  let left = 5000, start = 0;
+  const run = () => { start = Date.now(); timer = setTimeout(() => dismiss(t), left); };
+  const hold = () => { clearTimeout(timer); left -= Date.now() - start; };
+  const over = () => t.matches(":hover, :focus-within");
+  t.addEventListener("pointerenter", hold);
+  t.addEventListener("focusin", () => { if (!t.matches(":hover")) hold(); });
+  t.addEventListener("pointerleave", () => { if (!over()) run(); });
+  t.addEventListener("focusout", () => setTimeout(() => { if (!over()) run(); }));
+  run();
+}
+```
+
+---
+
 ## Stats Panel
 
 Vertical stack of label/value pairs for displaying key metrics. Used in HUD overlays to surface spec data at a glance. Positioned top-right by default.

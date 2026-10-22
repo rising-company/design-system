@@ -8,7 +8,7 @@ import json, pathlib, re, sys
 import xml.etree.ElementTree as ET
 
 NAMES = [
-    "arrow-left", "arrow-right", "arrow-up", "arrow-down", "arrow-up-right",
+    "arrow-left", "arrow-right", "arrow-up", "arrow-down", "arrow-up-right", "arrow-up-down",
     "chevron-down", "chevron-right", "plus", "minus", "check", "x", "menu", "search",
     "info", "circle-check", "circle-alert", "triangle-alert",
     "external-link", "copy", "settings", "user", "log-out",

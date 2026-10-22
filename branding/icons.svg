@@ -5,6 +5,7 @@
 <symbol id="arrow-up" viewBox="0 0 24 24"><path d="m5 12 7-7 7 7" vector-effect="non-scaling-stroke"/><path d="M12 19V5" vector-effect="non-scaling-stroke"/></symbol>
 <symbol id="arrow-down" viewBox="0 0 24 24"><path d="M12 5v14" vector-effect="non-scaling-stroke"/><path d="m19 12-7 7-7-7" vector-effect="non-scaling-stroke"/></symbol>
 <symbol id="arrow-up-right" viewBox="0 0 24 24"><path d="M7 7h10v10" vector-effect="non-scaling-stroke"/><path d="M7 17 17 7" vector-effect="non-scaling-stroke"/></symbol>
+<symbol id="arrow-up-down" viewBox="0 0 24 24"><path d="m21 16-4 4-4-4" vector-effect="non-scaling-stroke"/><path d="M17 20V4" vector-effect="non-scaling-stroke"/><path d="m3 8 4-4 4 4" vector-effect="non-scaling-stroke"/><path d="M7 4v16" vector-effect="non-scaling-stroke"/></symbol>
 <symbol id="chevron-down" viewBox="0 0 24 24"><path d="m6 9 6 6 6-6" vector-effect="non-scaling-stroke"/></symbol>
 <symbol id="chevron-right" viewBox="0 0 24 24"><path d="m9 18 6-6-6-6" vector-effect="non-scaling-stroke"/></symbol>
 <symbol id="plus" viewBox="0 0 24 24"><path d="M5 12h14" vector-effect="non-scaling-stroke"/><path d="M12 5v14" vector-effect="non-scaling-stroke"/></symbol>
