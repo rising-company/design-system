@@ -733,6 +733,27 @@ CSS overrides the component's own stroke attributes.
 .btn-icon { width: 2.75rem; height: 2.75rem; padding: 0; gap: 0; }
 ```
 
+### Link
+
+A link in running text — a sentence, help text, a table cell — is `--accent-ink` and
+**underlined**. The underline isn't decoration: the ink against body text is 2.45:1 in Daylight
+and 1.02:1 in Mission, under the 3:1 that lets colour alone mark a link (WCAG 1.4.1). The
+underline is 1px, sits 0.2em below, at 45% of the ink, and firms to full ink on hover. A visited
+link keeps the same colour. Write it as a bare `<a href>`; nothing else to add.
+
+The rule has zero specificity and skips any link with a class, so navigation, footers, the
+backlink, buttons, cards and list rows keep their own look. Don't restyle a prose link locally.
+
+```css
+:where(a:not([class])) {
+  color: var(--accent-ink);
+  text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: 0.2em;
+  text-decoration-color: color-mix(in srgb, currentColor 45%, transparent);
+  transition: text-decoration-color 0.2s;
+}
+:where(a:not([class])):hover { text-decoration-color: currentColor; }
+```
+
 ### Button
 
 IBM Plex Sans 600, sentence case, at body size — a control is something a person reads and

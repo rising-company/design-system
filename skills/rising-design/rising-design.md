@@ -262,6 +262,10 @@ animate(".card", { opacity: [0, 1], y: [8, 0] }, { type: "spring", visualDuratio
 
 **Lucide**, squared: `stroke-linecap: square; stroke-linejoin: miter`, 1.5px at every size (non-scaling stroke), `currentColor`. `.icon-sm` 16px beside 14px text · `.icon` 20px beside 16px · `.icon-lg` 24px for icon-only and the nav. Decorative → `aria-hidden="true"`; icon-only → `.btn-icon` (44px) with `aria-label` and a matching `title`. Sprite `branding/icons.svg` — copy it into the product. Never draw an icon with CSS borders or type it as a glyph (`←`, `+`). Anatomy in `components.md` → "Icon".
 
+## Links
+
+A link in running text is a bare `<a href>`: `--accent-ink`, underlined (1px, 0.2em offset), same colour once visited. The underline is required — the ink alone is under 3:1 against body text in both themes. Don't restyle prose links locally; classed, nav and footer links keep their own look.
+
 ## Buttons
 
 `btn` + one of `btn-primary` / `btn-secondary` / `btn-ghost` / `btn-danger`; sizes `btn-sm` (34px, 14px type) / default (44px, 16px) / `btn-lg` (52px, 16px); `btn-block` for full width. IBM Plex Sans 600, **sentence case written in the markup** — no `text-transform`.
