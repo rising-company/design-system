@@ -925,6 +925,45 @@ For a setting that takes effect at once (otherwise a checkbox). Native `input[ty
 
 ---
 
+## Segmented Control
+
+2–4 views of the same content; not navigation. Native radios hidden behind labels in `role="radiogroup"` (arrows move the choice), or `aria-pressed` buttons when a script drives it. Rules: `llms.txt` → "Segmented Control".
+
+```html
+<!-- No script: native radios, arrows move the choice -->
+<div class="segmented" role="radiogroup" aria-label="Calendar view">
+  <label><input type="radio" name="view" value="day">Day</label>
+  <label><input type="radio" name="view" value="week" checked>Week</label>
+  <label><input type="radio" name="view" value="month">Month</label>
+</div>
+<!-- Script-driven: buttons with aria-pressed (the showcase theme switch) -->
+<div class="segmented" role="group" aria-label="Preview theme">
+  <button type="button" aria-pressed="true">Mission</button>
+  <button type="button" aria-pressed="false">Daylight</button>
+</div>
+```
+
+```css
+.segmented { display: inline-flex; border: 1px solid var(--border); border-radius: 4px; overflow: hidden; }
+.segmented > label, .segmented > button {
+  position: relative; display: inline-flex; align-items: center; justify-content: center;
+  min-height: 2.25rem; padding: 0 14px; margin: 0;            /* 44px on touch screens */
+  font-family: var(--font-text); font-size: var(--type-small); font-weight: 500; line-height: 1.25;
+  color: var(--text-muted); background: transparent; border: 0; cursor: pointer; white-space: nowrap;
+  transition: background 0.2s, color 0.2s;
+}
+.segmented > :is(label, button) + :is(label, button) { border-left: 1px solid var(--border); }
+.segmented > :hover { color: var(--text-heading); }
+.segmented > label:has(input:checked), .segmented > button[aria-pressed="true"] { background: var(--accent-wash); color: var(--accent-ink); }
+.segmented input { position: absolute; width: 1px; height: 1px; margin: 0; opacity: 0; pointer-events: none; }
+.segmented > label:has(input:focus-visible), .segmented > button:focus-visible { outline: 1px solid var(--accent-ink); outline-offset: -4px; }
+@media (forced-colors: active) {
+  .segmented > label:has(input:checked), .segmented > button[aria-pressed="true"] { forced-color-adjust: none; background: Highlight; color: HighlightText; }
+}
+```
+
+---
+
 ## Landing Page
 
 A user-facing product needs a landing page before it needs a login box.
