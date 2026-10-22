@@ -280,6 +280,7 @@ animate(".card", { opacity: [0, 1], y: [8, 0] }, { type: "spring", visualDuratio
 - Field labels are IBM Plex Sans 14px / 500 in `--text-body` — they name what to type, for a stranger. Errors are IBM Plex Sans 14px / 500 in `--danger-ink`.
 - Placeholders use `--text-dim`, and never stand in for the label.
 - Help and error copy are plain English sentences, not terse operator fragments.
+- **Checkbox & radio** are native inputs tinted with `accent-color: var(--accent-ink)`, never redrawn. Each row is a `<label class="check">` (44px, 16px text face); a group is `<fieldset class="field">` + `<legend class="field-label">`. Radios: one of 2–5 (more → select). Checkbox: takes effect on submit. Anatomy in `components.md` → "Checkbox & Radio".
 
 ## Page Patterns
 
