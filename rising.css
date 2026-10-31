@@ -882,11 +882,11 @@ html:has(.dialog:modal) { overflow: hidden; }
   color: var(--text-body); background: none; border: 0; cursor: pointer;
   text-decoration: none; transition: background 0.2s, color 0.2s;
 }
-.user-menu-item:hover { background: var(--bg-surface-hover); color: var(--text-heading); }
+.user-menu-item:hover, .user-menu-item[data-highlighted] { background: var(--bg-surface-hover); color: var(--text-heading); }
 
 /* Sign out is always the last item, ruled off from the rest. */
 .user-menu-signout { margin-top: 6px; border-top: 1px solid var(--border); border-radius: 0 0 4px 4px; padding-top: 12px; }
-.user-menu-signout:hover { color: var(--danger-ink); }
+.user-menu-signout:hover, .user-menu-signout[data-highlighted] { color: var(--danger-ink); }
 
 /* Plain links in the session cluster (help, docs) share the nav-link voice. */
 .app-session > a {

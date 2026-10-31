@@ -18,6 +18,7 @@ Stack-agnostic: adapt these tokens and patterns to whatever framework the target
 
 Full spec: https://design-system.rising.company/llms.txt
 Drop-in stylesheet: https://design-system.rising.company/rising.css
+React components: `@rising/ui` — in a React product, install it and use its `UserMenu` and motion scale instead of rebuilding them; build anything new that needs focus or keyboard handling on [Base UI](https://base-ui.com). See "React components" in `llms.txt`.
 
 ## Step 1: Pick the theme
 
