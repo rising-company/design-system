@@ -191,7 +191,7 @@ stateDiagram-v2
     <p><strong>1. Icon set: Lucide, with squared ends.</strong> It's the largest well-maintained set, and the squared ends give it our shape.
     Phosphor, Tabler and a custom set were considered and set aside.</p>
     <p><strong>2. CSS and markup only.</strong> The system ships classes, tokens and markup recipes in <code>llms.txt</code>; each product wires behaviour in its own framework.
-    There is no shared React package. A product on React uses <code>lucide-react</code> itself, and the <code>.icon</code> class squares the ends, because CSS properties override SVG presentation attributes.</p>
+    There is no shared React package. <strong>Superseded 2026-10-31 by ADR-0016:</strong> React products now share <code>@rising/ui</code> for the components that carry behaviour, built on Base UI; the native-first rule above still decides which ones those are. A product on React uses <code>lucide-react</code> itself, and the <code>.icon</code> class squares the ends, because CSS properties override SVG presentation attributes.</p>
   </div>
 </main>
 <script type="module">import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.esm.min.mjs'; mermaid.initialize({ startOnLoad: true, theme: matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'default' });</script>

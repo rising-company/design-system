@@ -1,0 +1,54 @@
+{
+  "name": "@rising/ui",
+  "version": "0.1.0",
+  "description": "Rising Company design system — the React components with behaviour, rendering rising.css markup.",
+  "license": "MIT",
+  "type": "module",
+  "sideEffects": false,
+  "files": [
+    "dist",
+    "README.md"
+  ],
+  "exports": {
+    "./motion": {
+      "types": "./dist/motion.d.ts",
+      "default": "./dist/motion.js"
+    },
+    "./motion-components": {
+      "types": "./dist/motion-components.d.ts",
+      "default": "./dist/motion-components.js"
+    },
+    "./user-menu": {
+      "types": "./dist/user-menu.d.ts",
+      "default": "./dist/user-menu.js"
+    }
+  },
+  "scripts": {
+    "build": "rm -rf dist && tsc -p tsconfig.build.json",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "release": "node scripts/release.mjs"
+  },
+  "peerDependencies": {
+    "motion": "^13.4.0 || ^14.0.0",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0"
+  },
+  "dependencies": {
+    "@base-ui/react": "^1.9.0"
+  },
+  "devDependencies": {
+    "@testing-library/react": "^16.3.3",
+    "@testing-library/user-event": "^14.6.8",
+    "@types/react": "^19.2.0",
+    "@types/react-dom": "^19.2.0",
+    "axe-core": "^4.14.0",
+    "jsdom": "^27.0.0",
+    "motion": "13.4.0",
+    "react": "19.2.4",
+    "react-dom": "19.2.4",
+    "typescript": "^5.9.0",
+    "vitest": "^4.1.11"
+  }
+}

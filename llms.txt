@@ -684,6 +684,44 @@ it to `none`, where elevation is background shift only. One rule, both themes.
 
 ---
 
+## React components (`@rising/ui`)
+
+The system is CSS and markup first: every component above works from `rising.css` and the
+markup in this file. A **React** product also installs `@rising/ui`, which ships the parts
+that carry behaviour, so each product doesn't rebuild them (ADR-0016 in the agent handbook).
+
+```bash
+npm i https://design-system.rising.company/ui/rising-ui-0.1.0.tgz
+```
+
+| Import | What it is |
+|---|---|
+| `@rising/ui/motion` | The motion scale: `base`, `slow`, `quick`, `exitTween`, and the `panel`, `enter`, `reveal`, `revealItem` recipes. Plain values, safe in a server component. |
+| `@rising/ui/motion-components` | `MotionProvider` (wrap the app root once), `Reveal` and `RevealItem` (the load reveal). |
+| `@rising/ui/user-menu` | `UserMenu`, `UserMenuLink`, `UserMenuItem`, `initials` — the App Shell user menu on Base UI's Menu. |
+
+```tsx
+import Link from "next/link";
+import { UserMenu, UserMenuLink } from "@rising/ui/user-menu";
+
+<UserMenu email={email} onSignOut={signOut}>
+  <UserMenuLink render={<Link href="/settings" />}>Settings</UserMenuLink>
+</UserMenu>
+```
+
+- **The components render this file's markup and classes.** They ship no CSS: the product
+  carries the matching `rising.css` rules (or the whole file), as it does today.
+- **Native first, then Base UI.** Where the platform already does the job, the component is
+  the native element (`<dialog>`, a checkbox with `role="switch"`, radios) and needs no React
+  wrapper. Where it doesn't (menus, popovers, tooltips, toasts, select, combobox), the
+  component is built on [Base UI](https://base-ui.com) (`@base-ui/react`) for focus, keyboard
+  and ARIA, and animated with Motion through Base UI's `render` prop.
+- **Versions are immutable URLs.** A new release is a new `rising-ui-<version>.tgz`; bump the
+  URL in the product to upgrade. `motion`, `react` and `react-dom` are peer dependencies, so
+  the product's `MotionProvider` drives the package's animations too.
+- A component that isn't in the package yet is built in the product from this file, as before.
+  When a second product needs it, it moves into the package.
+
 ## Components
 
 ### Icon
@@ -1593,9 +1631,10 @@ pieces so that moving between products feels like moving between rooms of one bu
      (Settings, Switch organization, …), then **Sign out** last, ruled off, `--danger-ink` on
      hover. Sign-out is always the bottom item so muscle memory carries across products. Status
      stays outside the menu — it is system state, not user state. The reference build is
-     `<details>`/`<summary>` (no JS needed; add light-dismiss on outside click and Escape); a
-     framework uses its own popover — a button with `aria-expanded` and the Motion panel
-     recipe — but keeps the classes and the item order.
+     `<details>`/`<summary>` (no JS needed; add light-dismiss on outside click and Escape). A
+     React product uses `UserMenu` from `@rising/ui/user-menu` (see "React components"),
+     which keeps these classes and this item order; another framework builds its own popover —
+     a button with `aria-expanded` and the Motion panel recipe — the same way.
 2. **Page header** — inside `.app-main`, one per view. See the component entry above.
 3. **App footer** — `background: var(--bg-surface)`, `border-top: 1px solid var(--border)`,
    `padding: 16px 48px`, mono 12px `--text-dim` uppercase. Left: `// PRODUCT · BUILD <date> ·
@@ -1773,9 +1812,9 @@ and a sidebar product uses it too:
   color: var(--text-body); background: none; border: 0; cursor: pointer; text-decoration: none;
   transition: background 0.2s, color 0.2s;
 }
-.user-menu-item:hover { background: var(--bg-surface-hover); color: var(--text-heading); }
+.user-menu-item:hover, .user-menu-item[data-highlighted] { background: var(--bg-surface-hover); color: var(--text-heading); }
 .user-menu-signout { margin-top: 6px; border-top: 1px solid var(--border); border-radius: 0 0 4px 4px; padding-top: 12px; }
-.user-menu-signout:hover { color: var(--danger-ink); }
+.user-menu-signout:hover, .user-menu-signout[data-highlighted] { color: var(--danger-ink); }
 
 .status {
   display: inline-flex; align-items: center; gap: 8px;
